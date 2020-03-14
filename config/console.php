@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$dbLocal = require __DIR__ . '/db-local.php';
 
 $config = [
     'id' => 'basic-console',
@@ -25,7 +26,7 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => array_merge($db + $dbLocal),
     ],
     'params' => $params,
     /*
