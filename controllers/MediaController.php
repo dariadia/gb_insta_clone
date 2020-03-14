@@ -47,7 +47,7 @@ class MediaController extends Controller
     }
 
     /**
-     * Просмотр определенного контента - возможно это уйдет на плечи фронта
+     * Имитация возможности поставить лайк, через асинхронный запрос
      * @example
      *   const data = await fetch('http://localhost/media/like', {
      *   method: 'POST',
