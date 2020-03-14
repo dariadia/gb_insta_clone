@@ -6,8 +6,15 @@
       </figure>
       <span class="username">{{media.username}}</span>
     </div>
-    <div class="image-container" :style="{ backgroundImage: 'url(' + media.mediaImage + ')' }">
-      <!-- @dblclick="like"-->
+    <div
+      v-if="media.type === 'image'"
+      class="image-container"
+      :style="{ backgroundImage: 'url(' + media.mediaImage + ')' }"
+    ></div>
+    <div v-else class="video-container">
+      <video controls>
+        <source :src="media.src" type="video/mp4" />Your browser does not support HTML5 video.
+      </video>
     </div>
     <div class="content">
       <div class="heart">
@@ -81,6 +88,10 @@ export default {
     height: 330px;
     background-repeat: no-repeat;
     background-position: center center;
+    background-size: cover;
+  }
+  .video-container {
+    height: 330px;
     background-size: cover;
   }
   .content {
