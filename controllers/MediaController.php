@@ -13,6 +13,7 @@ use yii\web\Controller;
 */
 class MediaController extends Controller
 {
+    const MEDIA_PAGING_LIMIT = 20;
     /**
      * По хорошему нужно сделать модуль User -> в него вынести меди контроллер, и будет имитация перехода на страницу
      * http://site/user/:id/media
@@ -48,6 +49,7 @@ class MediaController extends Controller
 
     /**
      * Имитация возможности поставить лайк, через асинхронный запрос
+     * @method POST
      * @example
      *   const data = await fetch('http://localhost/media/like', {
      *   method: 'POST',
@@ -73,6 +75,43 @@ class MediaController extends Controller
             }
             /// ставим лайк записе которая соответвует id === $data['mediaId']
             return /* $model->update(); */ true;
+        }
+        return $this->redirect('/media');
+    }
+
+
+    /**
+     * Получить весь список Media ( данный метод будет расширен, для получение списка для конкретного пользователя
+     *  и пагинаций
+     * )
+     * @method GET
+     * @param int $userId пользователь медиа ленту которого запрашиваем
+     * @param int $offset указатель на страницу медиа ( для пагинации если будем реализовывать )
+     * @param int $limit необязательный параметр, указывает на колличество записей в ленте
+     * @example
+     *     const response = await fetch('http://localhost/media/list?userId=1&offset=5', {
+     *           method: 'GET',
+     *           headers: {
+     *               "Content-Type": "application/json",
+     *               "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+     *               "X-Requested-With": "XMLHttpRequest",
+     *            },
+     *       });
+     *     const data = await data.json()
+     * @return string
+     */
+    public function actionList($userId, $offset = 1, $limit = self::MEDIA_PAGING_LIMIT )
+    {
+        if ( Yii::$app->request->isAjax ) {
+            /* Набросок запроса для пагинаций
+                $querry = (new Media())->find()
+                    ->where([ 'user_id' => $userId ])
+                    ->limit( $limit )
+                    ->offset( $offset )
+                    ->all()
+            */
+
+            return $this->asJson( /* $querry*/ []);
         }
         return $this->redirect('/media');
     }

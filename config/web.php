@@ -53,6 +53,9 @@ $config = [
             'showScriptName' => false,
         ],
     ],
+    'modules' => [
+
+    ],
     'params' => $params,
 ];
 
