@@ -35,6 +35,7 @@ tests/_support/_generated
 
 #docker/database
 /docker/database
+/docker/docker-compose.yml
 
 #local params
 /config/params-local.php
