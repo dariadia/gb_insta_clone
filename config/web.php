@@ -54,12 +54,6 @@ $config = [
             'rules' => [
             ],
         ],
-
-    ],
-    'modules' => [
-        'api' => [
-            'class' => \app\modules\api\Module::class
-        ],
     ],
     'params' => $params,
 ];
