@@ -19,7 +19,7 @@ class m200314_122301_create_media_table extends Migration
             'body' => $this->text(),
             'filename' => $this->string(255)->comment('Прикрепленный файл'),
             'size' => $this->integer(),
-            'metadata' => $this->json(),
+            'metadata' => $this->text()->comment('Сериализованные данные либо json'),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ]);
