@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "media".
@@ -95,5 +96,20 @@ class Media extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function extraFields()
+    {
+        return [
+            'username' => function () {
+                return $this->user->username;
+            },
+            'type' => function () {
+                return $this->mediaType->name;
+            },
+            'src' => function () {
+                return Url::to('/uploads/media/' . $this->filename);
+            }
+        ];
     }
 }
