@@ -34,17 +34,14 @@ class MediaController extends Controller
      */
     public function actionLike()
     {
-        if ( Yii::$app->request->isAjax ) {
-            $data = \Yii::$app->request->post();
-            if ( !Yii::$app->request->isPost || isset( $data['mediaId']) ) {
-                throw new BadRequestHttpException();
-            }
-            /// ставим лайк записе которая соответвует id === $data['mediaId']
-            return /* $model->update(); */ true;
+        $data = \Yii::$app->request->post();
+        if ( !Yii::$app->request->isPost || isset( $data['mediaId']) ) {
+            throw new BadRequestHttpException();
         }
-        return $this->redirect('/media');
+        /// ставим лайк записе которая соответвует id === $data['mediaId']
+        return /* $model->update(); */ true;
+        return false;
     }
-
 
     /**
      * Получить весь список Media ( данный метод будет расширен, для получение списка для конкретного пользователя
@@ -65,17 +62,14 @@ class MediaController extends Controller
      * @return string
      */
     public function actionList($userId, $offset = 1, $limit = self::MEDIA_PAGING_LIMIT )
-    {
-        if ( Yii::$app->request->isAjax ) {
-            /* Набросок запроса для пагинаций
-                $querry = (new Media())->find()
-                    ->where([ 'user_id' => $userId ])
-                    ->limit( $limit )
-                    ->offset( $offset )
-                    ->all()
-            */
-            return $this->asJson( /* $querry*/ []);
-        }
-        return $this->redirect('/media');
+{
+        /* Набросок запроса для пагинаций
+            $querry = (new Media())->find()
+                ->where([ 'user_id' => $userId ])
+                ->limit( $limit )
+                ->offset( $offset )
+                ->all()
+        */
+        return $this->asJson( /* $querry*/ []);
     }
 }
