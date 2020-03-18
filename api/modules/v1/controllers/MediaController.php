@@ -14,6 +14,7 @@ class MediaController extends Controller
 {
     const MEDIA_PAGING_LIMIT = 20;
 
+    public $modelClass = \api\common\models\Media::class;
     /**
      * Имитация возможности поставить лайк, через асинхронный запрос
      * @method POST

@@ -40,7 +40,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: blog
+      MYSQL_DATABASE: geekgram
       MYSQL_USER: mysqluser
       MYSQL_PASSWORD: mysqluser
     volumes:
