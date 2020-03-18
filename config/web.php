@@ -47,12 +47,22 @@ $config = [
                 ],
             ],
         ],
-        'db' => array_merge($db + $dbLocal),
+        'db' => array_merge($db, $dbLocal),
         'urlManager' => [
             'enablePrettyUrl' => true,
+//            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    'controller' => ['v1/media'],
+                    'class' => \yii\rest\UrlRule::class,
+                ],
             ],
+        ],
+    ],
+    'modules' => [
+        'v1' => [
+            'class' => \app\modules\v1\Module::class
         ],
     ],
     'params' => $params,

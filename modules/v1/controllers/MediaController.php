@@ -1,20 +1,20 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace app\modules\v1\controllers;
 
 use Yii;
+use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 
 /**
  * Контроллер работы с media
  * не реализовывал метод для получения данных на клиен в виде json ( для реализации пагинаций, на клиенте) так как пока не ясно как отрисовка страниц будет
  */
-class MediaController extends Controller
+class MediaController extends ActiveController
 {
     const MEDIA_PAGING_LIMIT = 20;
 
-    public $modelClass = \api\common\models\Media::class;
+    public $modelClass = \app\models\Media::class;
     /**
      * Имитация возможности поставить лайк, через асинхронный запрос
      * @method POST
