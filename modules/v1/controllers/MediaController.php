@@ -15,6 +15,31 @@ class MediaController extends ActiveController
     const MEDIA_PAGING_LIMIT = 20;
 
     public $modelClass = \app\models\Media::class;
+
+    public function behaviors()
+    {
+        $parent = parent::behaviors();
+        return array_merge($parent, [
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::class,
+                'cors' => [
+                    // restrict access to
+                    'Origin' => ['http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082'],
+                    // Allow only POST and PUT methods
+//                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET'],
+                    // Allow only headers 'X-Wsse'
+//                    'Access-Control-Request-Headers' => ['X-Wsse'],
+                    // Allow credentials (cookies, authorization headers, etc.) to be exposed to the browser
+//                    'Access-Control-Allow-Credentials' => true,
+                    // Allow OPTIONS caching
+//                    'Access-Control-Max-Age' => 3600,
+                    // Allow the X-Pagination-Current-Page header to be exposed to the browser.
+//                    'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
+                ],
+            ]
+        ]);
+    }
+
     /**
      * Имитация возможности поставить лайк, через асинхронный запрос
      * @method POST
