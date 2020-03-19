@@ -38,7 +38,7 @@
 export default {
   name: "Media",
   props: {
-    media: Array
+    media: Object
   }
   // methods: {
   //   like() {
