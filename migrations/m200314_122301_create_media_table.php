@@ -20,8 +20,8 @@ class m200314_122301_create_media_table extends Migration
             'filename' => $this->string(255)->comment('Прикрепленный файл'),
             'size' => $this->integer(),
             'metadata' => $this->text()->comment('Сериализованные данные либо json'),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_at' => $this->timestamp()->defaultExpression('now()')->notNull(),
+            'updated_at' => $this->timestamp()->defaultExpression('now()')->notNull(),
         ]);
 
         $this->createIndex('media_user_index', '{{%media}}', 'user_id');

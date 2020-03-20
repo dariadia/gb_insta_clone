@@ -10,25 +10,21 @@ use yii\db\ActiveRecord;
  * This is the model class for table "media".
  *
  * @property int $id
- * @property int|null $media_type_id
- * @property int|null $user_id
- * @property string|null $body
- * @property string|null $filename Прикрепленный файл
- * @property int|null $size
- * @property string|null $metadata Сериализованные данные либо json
+ * @property int $author_id
+ * @property int $media_id
+ * @property string $comment
  * @property int $created_at
+ * @property User $author
  * @property int $updated_at
- * @property MediaTypes $mediaType
- * @property User $user
  */
-class Media extends \yii\db\ActiveRecord
+class Comment extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'media';
+        return 'comments';
     }
 
     /**
@@ -37,19 +33,13 @@ class Media extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['media_type_id', 'user_id', 'size', 'created_at', 'updated_at'], 'integer'],
-            [['body', 'metadata'], 'string'],
+            [['author_id'], 'integer'],
             [['created_at', 'updated_at'], 'required'],
-            [['filename'], 'string', 'max' => 255],
-            [['media_type_id'], 'exist',
-                'skipOnError' => true,
-                'targetClass' => MediaTypes::class,
-                'targetAttribute' => ['media_type_id' => 'id']
-            ],
-            [['user_id'], 'exist',
-                'skipOnError' => true,
+            [['comment'], 'string', 'max' => 255],
+            [['author_id'], 'exist',
+                'skipOnError' => false,
                 'targetClass' => User::class,
-                'targetAttribute' => ['user_id' => 'id']
+                'targetAttribute' => ['author_id' => 'id']
             ],
         ];
     }
@@ -78,25 +68,11 @@ class Media extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'media_type_id' => 'Media Type ID',
-            'user_id' => 'User ID',
-            'body' => 'Body',
-            'filename' => 'Filename',
-            'size' => 'Size',
-            'metadata' => 'Metadata',
+            'author_id' => 'Автор',
+            'comment' => 'Комментарий',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
-    }
-
-    /**
-     * Gets query for [[MediaType]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMediaType()
-    {
-        return $this->hasOne(MediaTypes::class, ['id' => 'media_type_id']);
     }
 
     /**
@@ -104,8 +80,8 @@ class Media extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getAuthor()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'author_id']);
     }
 }

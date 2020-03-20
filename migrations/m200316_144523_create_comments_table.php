@@ -15,17 +15,25 @@ class m200316_144523_create_comments_table extends Migration
     {
         $this->createTable('{{%comments}}', [
             'id' => $this->primaryKey(),
-            'author_id' => $this->bigInteger()->notNull(),
-            'media_id' => $this->bigInteger()->notNull(),
+            'author_id' => $this->integer()->notNull(),
+            'media_id' => $this->integer()->notNull(),
             'comment' => $this->text()->notNull(),
             'created_at' => $this->timestamp()->defaultExpression('now()'),
             'updated_at' => $this->timestamp()->defaultExpression('now()'),
         ]);
-        $this->addForeignKey('fk_comments_media_id', '{{%comments}}', 'media_id',
-            '{{%media}}', 'id');
+        $this->addForeignKey(
+            'fk_comments_media_id',
+            '{{%comments}}',
+            'media_id',
+            '{{%media}}',
+            'id');
 
-        $this->addForeignKey('fk_comments_author_id', '{{%comments}}', 'author_id',
-            '{{%user}}', 'id');
+        $this->addForeignKey(
+            'fk_comments_author_id',
+            '{{%comments}}',
+            'author_id',
+            '{{%user}}',
+            'id');
     }
 
     /**
