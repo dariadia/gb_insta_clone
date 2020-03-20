@@ -9,7 +9,7 @@
     <div
       v-if="media.type === 'image'"
       class="image-container"
-      :style="{ backgroundImage: 'url(' + media.mediaImage + ')' }"
+      :style="{ backgroundImage: 'url(' + media.src + ')' }"
     ></div>
     <div v-else class="video-container">
       <video controls>
@@ -38,7 +38,7 @@
 export default {
   name: "Media",
   props: {
-    media: Array
+    media: Object
   }
   // methods: {
   //   like() {
