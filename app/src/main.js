@@ -10,8 +10,4 @@ const vueInitialState = {
   router, store, render: h => h(App)
 };
 
-// store.dispatch('LOGIN', {
-//   amount: 10
-// });
-
 new Vue( vueInitialState ).$mount("#app");
