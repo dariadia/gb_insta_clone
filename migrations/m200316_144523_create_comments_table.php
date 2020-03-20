@@ -21,11 +21,11 @@ class m200316_144523_create_comments_table extends Migration
             'created_at' => $this->timestamp()->defaultExpression('now()'),
             'updated_at' => $this->timestamp()->defaultExpression('now()'),
         ]);
-        /*$this->addForeignKey('fk_comments_media_id', '{{%comments}}', 'media_id',
-            '{{%media}}', 'id');*/
+        $this->addForeignKey('fk_comments_media_id', '{{%comments}}', 'media_id',
+            '{{%media}}', 'id');
 
-        /*$this->addForeignKey('fk_comments_author_id', '{{%comments}}', 'author_id',
-            '{{%users}}', 'id');*/
+        $this->addForeignKey('fk_comments_author_id', '{{%comments}}', 'author_id',
+            '{{%user}}', 'id');
     }
 
     /**
@@ -33,8 +33,8 @@ class m200316_144523_create_comments_table extends Migration
      */
     public function safeDown()
     {
-        //$this->dropForeignKey('fk_comments_media_id', '{{%comments}}');
-        //$this->dropForeignKey('fk_comments_author_id', '{{%comments}}');
+        $this->dropForeignKey('fk_comments_media_id', '{{%comments}}');
+        $this->dropForeignKey('fk_comments_author_id', '{{%comments}}');
 
         $this->dropTable('{{%comments}}');
     }
