@@ -1,3 +1,9 @@
 <template>
-  <div>HOME PAGE</div>
+  <div class="container">
+    home
+  </div>
 </template>
+
+<script>
+  console.log('home')
+</script>

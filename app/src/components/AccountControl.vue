@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import { login, logout } from '../../../../vuex/modules/userModule/actions';
+  import { login, logout } from '../vuex/modules/userModule/actions';
   export default {
     computed: {
       isGuest () {

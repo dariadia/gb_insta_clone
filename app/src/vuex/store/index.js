@@ -25,7 +25,7 @@ const store = new Vuex.Store({
   getters: {},
   setters: {},
   actions: {},
-  modules: { user: UserModule },
+  modules: { UserModule },
   plugins
 });
 
