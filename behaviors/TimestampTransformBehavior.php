@@ -1,7 +1,7 @@
 <?php
 
 
-namespace behaviors;
+namespace app\behaviors;
 
 
 use DateTime;

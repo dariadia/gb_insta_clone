@@ -1,9 +1,8 @@
 <?php
 
-namespace api\common\models;
+namespace app\models;
 
-use app\models\User;
-use behaviors\TimestampTransformBehavior;
+use app\behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
@@ -35,12 +34,17 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             [['author_id'], 'integer'],
-            [['created_at', 'updated_at'], 'required'],
+            //[['created_at', 'updated_at'], 'required'],
             [['comment'], 'string', 'max' => 255],
             [['author_id'], 'exist',
                 'skipOnError' => false,
                 'targetClass' => User::class,
                 'targetAttribute' => ['author_id' => 'id']
+            ],
+            [['media_id'], 'exist',
+                'skipOnError' => false,
+                'targetClass' => Media::class,
+                'targetAttribute' => ['media_id' => 'id']
             ],
         ];
     }

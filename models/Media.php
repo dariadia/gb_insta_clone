@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use behaviors\TimestampTransformBehavior;
+use app\behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
