@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import createLogger from 'vuex/dist/logger';
 import UserModule from '../modules/userModule';
+import MediaModule from '../modules/mediaModule';
 
 Vue.use( Vuex );
 
@@ -25,7 +26,7 @@ const store = new Vuex.Store({
   getters: {},
   setters: {},
   actions: {},
-  modules: { UserModule },
+  modules: { UserModule, MediaModule },
   plugins
 });
 
