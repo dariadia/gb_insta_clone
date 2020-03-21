@@ -2,6 +2,7 @@
 
 namespace api\common\models;
 
+use app\models\User;
 use behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
