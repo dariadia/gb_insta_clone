@@ -1,16 +1,24 @@
 <template>
   <div class="container">
     <div v-if="loading">
-    LOADING
+      <preloader size="big"/>
     </div>
-
     <div v-if="!loading">
-      NOT LOADING
+      <div v-if="mediaList && mediaList.length">
+        <div v-for="media in mediaList" :key="`media#${ media }`">
+          {{ media }}
+        </div>
+      </div>
+      <h3 v-else>Media not Found</h3>
     </div>
   </div>
 </template>
 
 <script>
+  /**
+   * @todo оставить доработку для задачи "Подключить компонент MEDIA"
+   **/
+  import Preloader from "../components/common/Preloader";
   import { getMedia } from '../vuex/modules/mediaModule/actions';
   export default {
     data() {
@@ -20,27 +28,19 @@
     },
     computed: {
       mediaList () {
-        const media = this.$store.getters[ 'mediaList' ];
-        console.log({ media, t: this.$attrs.loading });
-        return media;
+        return this.$store.getters[ 'mediaList' ];
       }
     },
 
     mounted () {
-      console.log( 'MOUNTED' );
       this.loading = true;
       setTimeout( () => {
-        console.log( 'timeout' );
          getMedia().then( () => {
           this.loading = false
          })
-      }, 10000)
+      }, 2000)
     },
 
-    methods: {
-      makeRequest () {
-
-      }
-    }
+    components: { Preloader }
   }
 </script>

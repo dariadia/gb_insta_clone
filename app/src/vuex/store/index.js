@@ -6,33 +6,32 @@ import MediaModule from '../modules/mediaModule';
 
 Vue.use( Vuex );
 
+/** Список плагинов приложения */
 const plugins = [];
 
+/** Подключаем все что нужно для разработки **/
 if ( process.env.NODE_ENV !== 'production' ) {
     plugins.push( createLogger() );
 }
 
 /**
- * Стандарнтый набор, изучаю...
+ * Состояние всего приложения, так как скорее всего разработка будет модульной, станарные ключи были убранны
+ * @type { object } Vuex.Store
  **/
 const store = new Vuex.Store({
-  state: {},
-  /**
-   * Мутации, Аля Reducer в Redux, служат для обновления состояния приложения от вызова какихто действий
-   * PS: мутации какоето неудачное название, удобнее они лиш в дом что ненужен громадный switch
-   *       разделил их по группам, чтоб не рос данный файл
-   **/
-  mutations: {},
-  getters: {},
-  setters: {},
-  actions: {},
   modules: { UserModule, MediaModule },
   plugins
 });
 
 /**
- * @return { void|Promise }
+ * Метод для вызова действий конкретного модуля ( или просто действия в store )
+ * Используется в actions, чтоб не тянуть за собой store, а инициировать лиш аргументами
+ * @param { object<{ type: string, payload: object }> } action
+ * @return { Promise }
  **/
-export const dispatch = ({ type, payload }) => store.dispatch( type, payload );
+export const dispatch = ( action ) => {
+  const { type, payload } = action;
+  return  store.dispatch( type, payload );
+};
 
 export default store;

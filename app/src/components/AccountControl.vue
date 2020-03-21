@@ -5,11 +5,10 @@
       <button class="btn-flat">Register</button>
     </div>
     <div v-if="!isGuest" class="user__buttons">
-        <button class="waves-effect waves-red btn-small" v-on:click="logout">
+        <button class="waves-effect waves-red btn-small red lighten-2" v-on:click="logout">
            <i class="material-icons">exit_to_app</i>
         </button>
     </div>
-    
   </div>
 </template>
 
@@ -18,7 +17,7 @@
   export default {
     computed: {
       isGuest () {
-        return this.$store.getters['isGuest'] /// магия ужас....
+        return this.$store.getters['isGuest']
       }
     },
     methods: { login, logout }

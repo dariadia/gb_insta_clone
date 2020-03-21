@@ -9,9 +9,9 @@
 </template>
 
 <script>
-  import Logo from './Logo';
-  import SearchButton from './SearchButton';
-  import AccountControl from './AccountControl';
+  import Logo from '../../../components/Logo';
+  import SearchButton from '../../../components/SearchButton';
+  import AccountControl from '../../../components/AccountControl';
 
   export default {
     name: "HeaderComponent",
