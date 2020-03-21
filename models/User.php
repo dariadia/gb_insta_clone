@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -20,7 +23,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Media[] $media
  */
-class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
@@ -34,7 +37,17 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::class => ['class' => TimestampBehavior::class],
+            TimestampBehavior::class => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+            TimestampTransformBehavior::class => [
+                'class' => TimestampTransformBehavior::class,
+                'attributes' => ['created_at', 'updated_at'],
+            ]
         ];
     }
 

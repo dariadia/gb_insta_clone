@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "media".
@@ -16,7 +18,6 @@ use yii\behaviors\TimestampBehavior;
  * @property string|null $metadata Сериализованные данные либо json
  * @property int $created_at
  * @property int $updated_at
- *
  * @property MediaTypes $mediaType
  * @property User $user
  */
@@ -52,10 +53,21 @@ class Media extends \yii\db\ActiveRecord
             ],
         ];
     }
+
     public function behaviors()
     {
         return [
-            TimestampBehavior::class => ['class' => TimestampBehavior::class]
+            TimestampBehavior::class => [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+            ],
+            TimestampTransformBehavior::class => [
+                'class' => TimestampTransformBehavior::class,
+                'attributes' => ['created_at', 'updated_at'],
+                ]
         ];
     }
 
