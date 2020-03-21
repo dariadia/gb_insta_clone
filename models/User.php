@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\behaviors\TimestampTransformBehavior;
+use yii\base\Exception;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -21,13 +22,15 @@ use yii\web\IdentityInterface;
  * @property int $updated_at
  * @property string|null $verification_token
  *
+ * @property mixed $password
+ * @property string $authKey
  * @property Media[] $media
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
-    const STATUS_ACTIVE = 10;
+    public const STATUS_DELETED = 0;
+    public const STATUS_INACTIVE = 9;
+    public const STATUS_ACTIVE = 10;
 
     public static function tableName()
     {
@@ -55,11 +58,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'auth_key', 'password_hash', 'email'], 'required'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['status'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
             [['username', 'password_hash', 'password_reset_token', 'email', 'verification_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['username'], 'unique'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
@@ -94,7 +98,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+    public static function findIdentityByAccessToken($token, $type = null): ?User
     {
         return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
     }
@@ -103,11 +107,59 @@ class User extends ActiveRecord implements IdentityInterface
      * Finds user by username
      *
      * @param string $username
-     * @return static|null
+     * @return User|null
      */
-    public static function findByUsername($username)
+    public static function findByUsername($username): ?User
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+    /**
+     * Finds user by password reset token
+     *
+     * @param string $token password reset token
+     * @return User|null
+     */
+    public static function findByPasswordResetToken($token): ?User
+    {
+        if (!static::isPasswordResetTokenValid($token)) {
+            return null;
+        }
+
+        return static::findOne([
+            'password_reset_token' => $token,
+            'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    /**
+     * Finds user by verification email token
+     *
+     * @param string $token verify email token
+     * @return User|null
+     */
+    public static function findByVerificationToken($token): ?User
+    {
+        return static::findOne([
+            'verification_token' => $token,
+            'status' => self::STATUS_INACTIVE
+        ]);
+    }
+
+    /**
+     * Finds out if password reset token is valid
+     *
+     * @param string $token password reset token
+     * @return bool
+     */
+    public static function isPasswordResetTokenValid($token): bool
+    {
+        if (empty($token)) {
+            return false;
+        }
+
+        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
+        $expire = \Yii::$app->params['user.passwordResetTokenExpire'];
+        return $timestamp + $expire >= time();
     }
 
     /**
@@ -148,7 +200,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generates password hash from password and sets it to the model
      * @param $password
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function setPassword($password)
     {
@@ -157,11 +209,37 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates "remember me" authentication key
-     * @throws \yii\base\Exception
+     * @throws Exception
      */
     public function generateAuthKey()
     {
         $this->auth_key = \Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Generates new token for email verification
+     * @throws Exception
+     */
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_token = \Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Generates new password reset token
+     * @throws Exception
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = \Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
     }
 
     /**

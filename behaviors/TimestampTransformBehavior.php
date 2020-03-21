@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 
 /**
  * Class TimestampTransformBehavior
- * @package behaviors
+ * @package app\components
  *
  * Behaviour works with the specified model attributes and transforms its date value either from unix timestamp or from
  * specified format into MySql Timestamp format.
@@ -51,15 +51,21 @@ class TimestampTransformBehavior extends Behavior
     {
         $this->_attributeFormats = $this->processProvidedParameters();
 
+        /** @var ActiveRecord $owningModel */
+        $owningModel = $this->owner;
+
         foreach ($this->_attributeFormats as $attributeName => $format) {
+            // If not changed, no need to transform
+            if (!$owningModel->isAttributeChanged($attributeName)) {
+                continue;
+            }
             if (!empty($format)) {
-                $createdDate = DateTime::createFromFormat($format, $this->owner->$attributeName);
-                $this->owner->$attributeName = $createdDate->format('Y-m-d H:i:s');
+                $createdDate = DateTime::createFromFormat($format, $owningModel->$attributeName);
+                $owningModel->$attributeName = $createdDate->format('Y-m-d H:i:s');
             } else {
-                $this->owner->$attributeName = date('Y-m-d H:i:s', $this->owner->$attributeName);
+                $owningModel->$attributeName = date('Y-m-d H:i:s', $owningModel->$attributeName);
             }
         }
-
     }
 
     /**
@@ -69,7 +75,8 @@ class TimestampTransformBehavior extends Behavior
      * @return null|string
      * @throws InvalidArgumentException
      */
-    private function getAttributeName(array $arr): ?string {
+    private function getAttributeName(array $arr): ?string
+    {
         if (count($arr) !== 1) {
             throw new InvalidArgumentException('Date / Time attribute setting must contain only one pair of attribute name and format for each attribute');
         }
@@ -81,7 +88,8 @@ class TimestampTransformBehavior extends Behavior
      * @param string $key - the key is used to access the value, which is format
      * @return string
      */
-    private function getAttributeFormat (array $arr, string $key):string {
+    private function getAttributeFormat(array $arr, string $key): string
+    {
         return $arr[$key];
     }
 
@@ -103,7 +111,7 @@ class TimestampTransformBehavior extends Behavior
                 $format = $this->getAttributeFormat($attribute, $modelAttribute);
             } else {
                 $modelAttribute = $attribute;
-                $format ='';
+                $format = '';
             }
             if (!empty($this->owner->$modelAttribute)) {
                 $_attributeFormats[$modelAttribute] = $format;
