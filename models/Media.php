@@ -22,6 +22,7 @@ use yii\helpers\Url;
  * @property MediaTypes $mediaType
  * @property User $user
  * @property Comment[] $comments
+ * @property Likes[] $likes
  */
 class Media extends \yii\db\ActiveRecord
 {
@@ -121,6 +122,16 @@ class Media extends \yii\db\ActiveRecord
         return $this->hasMany(Comment::class, ['media_id' => 'id']);
     }
 
+    /**
+     * Gets query for [[Likes]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLikes()
+    {
+        return $this->hasMany(Likes::class, ['media_id' => 'id']);
+    }
+
     public function fields()
     {
         return [
@@ -147,6 +158,9 @@ class Media extends \yii\db\ActiveRecord
             'comments' => function () {
                 return $this->comments;
             },
+            'likes' => function () {
+                return count($this->likes);
+            }
         ];
     }
 }
