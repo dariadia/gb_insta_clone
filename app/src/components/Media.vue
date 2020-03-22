@@ -2,7 +2,7 @@
   <div class="media">
     <div class="header level">
       <figure class="image is-32x32">
-        <img :src="media.userImage" />
+<!--        <img :src="media.userImage" />-->
       </figure>
       <span class="username">{{media.username}}</span>
     </div>
@@ -22,13 +22,13 @@
           <!-- @click="like"-->
         </i>
       </div>
-      <!--  <div>
-        <p class="likes">{{media.likes}} likes</p>
+      <div>
+<!--        <p class="likes">{{media.likes}} likes</p>-->
         <p class="comments">{{media.comments}} comments</p>
-      </div>-->
+      </div>
       <p class="caption">
         <span>{{media.username}}</span>
-        {{media.caption}}
+        {{media.body}} <!-- оно же caption, как понимаю -->
       </p>
     </div>
   </div>
