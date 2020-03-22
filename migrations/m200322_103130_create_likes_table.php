@@ -12,19 +12,18 @@ class m200322_103130_create_likes_table extends Migration
      */
     public function safeUp()
     {
-        /*
-         * id SERIAL primary key,
-	user_id BIGINT unsigned not null,
-	media_id BIGINT unsigned not null,
-	created_at DATETIME default current_timestamp,
-	foreign key (user_id) references users(id),
-	foreign key (media_id) references media(id)
-         */
         $this->createTable('{{%likes}}', [
             'id' => $this->primaryKey(),
-            'user_id' => $this->integer()->notNull()->comment('Юзер, который поставил лайк'),
-            'media_id' => $this->integer()->notNull()->comment('Медиа, которой поставили лайк'),
-            'created_at' => $this->timestamp()->defaultExpression('now()'),
+            'user_id' => $this->integer()
+                ->unsigned()
+                ->notNull()
+                ->comment('Юзер, который поставил лайк'),
+            'media_id' => $this->integer()
+                ->unsigned()
+                ->notNull()
+                ->comment('Медиа, которой поставили лайк'),
+            'created_at' => $this->timestamp()
+                ->defaultExpression('now()'),
         ]);
         $this->addForeignKey(
             'fk_likes_media_id',
@@ -34,7 +33,7 @@ class m200322_103130_create_likes_table extends Migration
             'id');
 
         $this->addForeignKey(
-            'fk_likes_author_id',
+            'fk_likes_user_id',
             '{{%likes}}',
             'user_id',
             '{{%user}}',
@@ -47,7 +46,7 @@ class m200322_103130_create_likes_table extends Migration
     public function safeDown()
     {
         $this->dropForeignKey('fk_likes_media_id', '{{%likes}}');
-        $this->dropForeignKey('fk_likes_author_id', '{{%likes}}');
+        $this->dropForeignKey('fk_likes_user_id', '{{%likes}}');
         $this->dropTable('{{%likes}}');
     }
 }
