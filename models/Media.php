@@ -20,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property int $updated_at
  * @property MediaTypes $mediaType
  * @property User $user
+ * @property Comment[] $comments
  */
 class Media extends \yii\db\ActiveRecord
 {
@@ -107,5 +108,15 @@ class Media extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * Gets query for [[Comment]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class, ['media_id' => 'id']);
     }
 }

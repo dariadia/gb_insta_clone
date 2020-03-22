@@ -15,6 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $comment
  * @property int $created_at
  * @property User $author
+ * @property Media $media
  * @property int $updated_at
  */
 class Comment extends \yii\db\ActiveRecord
@@ -88,5 +89,15 @@ class Comment extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::class, ['id' => 'author_id']);
+    }
+
+    /**
+     * Gets query for [[Media]]
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMedia()
+    {
+        return $this->hasOne(Media::class, ['id' => 'media_id']);
     }
 }
