@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import MainLayout from './layouts/MainLayout'
+  import MainLayout from './layouts/main/MainLayout'
   import 'materialize-css/dist/js/materialize.min';
 
   export default {
@@ -16,9 +16,7 @@
         return 'main-layout';
       }
     },
-    components: {
-      MainLayout
-    }
+    components: { MainLayout }
   }
 </script>
 
