@@ -2,13 +2,13 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\Media;
 use Yii;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 
 /**
  * Контроллер работы с media
- * не реализовывал метод для получения данных на клиен в виде json ( для реализации пагинаций, на клиенте) так как пока не ясно как отрисовка страниц будет
  */
 class MediaController extends ActiveController
 {
@@ -77,7 +77,7 @@ class MediaController extends ActiveController
      * @param int $offset указатель на страницу медиа ( для пагинации если будем реализовывать )
      * @param int $limit необязательный параметр, указывает на колличество записей в ленте
      * @example
-     *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=5', {
+     *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=0', {
      *           method: 'GET',
      *           headers: {
      *               "Content-Type": "application/json",
@@ -86,15 +86,12 @@ class MediaController extends ActiveController
      *     const data = await data.json()
      * @return string
      */
-    public function actionList($userId, $offset = 1, $limit = self::MEDIA_PAGING_LIMIT )
-{
-        /* Набросок запроса для пагинаций
-            $querry = (new Media())->find()
-                ->where([ 'user_id' => $userId ])
-                ->limit( $limit )
-                ->offset( $offset )
-                ->all()
-        */
-        return $this->asJson( /* $querry*/ []);
+    public function actionList(int $userId, int $offset = 0, int $limit = self::MEDIA_PAGING_LIMIT ) {
+        $mediaList = (new Media())->find()
+            ->where([ 'user_id' => $userId ])
+            ->limit( $limit )
+            ->offset( $offset )
+            ->all();
+        return $this->asJson( $mediaList );
     }
 }

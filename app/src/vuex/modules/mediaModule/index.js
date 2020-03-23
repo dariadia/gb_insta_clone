@@ -1,4 +1,5 @@
 import { FETCH_MEDIA } from "./constants";
+import { mediaApi } from "../../../common/request/MediaApi";
 const { freeze } = Object;
 
 /**
@@ -16,8 +17,8 @@ export default {
     [ FETCH_MEDIA ] : ( state, { mediaList } ) => state.mediaList = mediaList,
   },
   actions: {
-    [ FETCH_MEDIA ] : async ({ commit }) => {
-      const mediaList = /* await */ [ 1,2,3,4 ];
+    [ FETCH_MEDIA ] : async ({ commit }, payload ) => {
+      const mediaList = await mediaApi.getUserMedia( payload );
       commit( FETCH_MEDIA, { mediaList });
     },
   }
