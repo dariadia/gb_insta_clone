@@ -7,7 +7,7 @@
       </div>
       <div v-else>
         <div v-if="mediaList && mediaList.length">
-          <div v-for="media in mediaList" :key="`media#${ media }`">
+          <div v-for="media in mediaList" :key="`media#${ media.id }`">
             <media :media="media"/>
           </div>
         </div>
@@ -33,9 +33,6 @@
       }
     },
     computed: {
-      // userPage() {
-      //   return this.$route.params.userId
-      // },
       mediaList () {
         return this.$store.getters[ 'mediaList' ];
       }

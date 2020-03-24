@@ -23,6 +23,8 @@ class MediaController extends ActiveController
             'corsFilter' => [
                 'class' => \yii\filters\Cors::class,
                 'cors' => [
+                    'Access-Control-Expose-Headers' => [ '*' ],
+                    'Access-Control-Request-Headers' => [ '*' ],
                     // restrict access to
                     'Origin' => ['http://localhost:8080', 'http://localhost'],
                     // Allow only POST and PUT methods

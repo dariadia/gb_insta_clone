@@ -1,5 +1,5 @@
 import { dispatch } from "../../../store";
-import { FETCH_MEDIA } from "../constants";
+import { SET_MEDIA_REQUEST_DATE } from "../constants";
 
 /**
  * @param { int } userId
@@ -8,6 +8,6 @@ import { FETCH_MEDIA } from "../constants";
  * @return { function }
  **/
 export const getMedia = ( userId, offset = 0, limit = null ) => dispatch({
-  type: FETCH_MEDIA,
+  type: SET_MEDIA_REQUEST_DATE,
   payload: { userId, offset, limit }
 });

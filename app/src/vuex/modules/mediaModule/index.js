@@ -1,4 +1,4 @@
-import { FETCH_MEDIA } from "./constants";
+import { SET_MEDIA_REQUEST_DATE } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
 const { freeze } = Object;
 
@@ -6,7 +6,8 @@ const { freeze } = Object;
  * @type { object }
  * */
 export const mediaInitialState = freeze({
-  mediaList: []
+  mediaList: [],
+  mediaHeaders: []
 });
 
 export default {
@@ -14,12 +15,17 @@ export default {
   getters: { mediaList: ({ mediaList }) => mediaList },
   setters: {},
   mutations: {
-    [ FETCH_MEDIA ] : ( state, { mediaList } ) => state.mediaList = mediaList,
+    [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
+      const { headers, data } = response;
+      state.mediaList = data || mediaInitialState.mediaList;
+      /** @todo расспарсить */
+      state. mediaHeaders = headers;
+    },
   },
   actions: {
-    [ FETCH_MEDIA ] : async ({ commit }, payload ) => {
-      const mediaList = await mediaApi.getUserMedia( payload );
-      commit( FETCH_MEDIA, { mediaList });
+    [ SET_MEDIA_REQUEST_DATE ] : async ({ commit }, payload ) => {
+      const response = await mediaApi.getUserMedia( payload );
+      commit( SET_MEDIA_REQUEST_DATE, response );
     },
   }
 };
