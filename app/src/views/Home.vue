@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import Preloader from "../components/common/Preloader";
+  import Preloader from "../components/ui/Preloader";
   import Media from "../components/Media";
   import { getMedia } from '../vuex/modules/mediaModule/actions';
   export default {
