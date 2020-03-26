@@ -4,6 +4,7 @@ namespace app\modules\v1\controllers;
 
 use app\models\Media;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 
@@ -76,7 +77,7 @@ class MediaController extends ActiveController
      * )
      * @method GET
      * @param int $userId пользователь медиа ленту которого запрашиваем
-     * @param int $offset указатель на страницу медиа ( для пагинации если будем реализовывать )
+     * @param int $page указатель на страницу медиа ( для пагинации если будем реализовывать )
      * @param int $limit необязательный параметр, указывает на колличество записей в ленте
      * @example
      *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=0', {
@@ -88,12 +89,19 @@ class MediaController extends ActiveController
      *     const data = await data.json()
      * @return string
      */
-    public function actionList(int $userId, int $offset = 0, int $limit = self::MEDIA_PAGING_LIMIT ) {
-        $mediaList = (new Media())->find()
-            ->where([ 'user_id' => $userId ])
-            ->limit( $limit )
-            ->offset( $offset )
-            ->all();
-        return $this->asJson( $mediaList );
+    public function actionList( $userId, $page = 0, $limit = self::MEDIA_PAGING_LIMIT )
+    {
+        return new ActiveDataProvider([
+            'query' => Media::find()->where(['user_id' => $userId]),
+            'pagination' => [
+                'pageSize' => $limit,
+                'page' => $page
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'body' => SORT_DESC,
+                ]
+            ]
+        ]);
     }
 }

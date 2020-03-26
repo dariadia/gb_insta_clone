@@ -7,7 +7,7 @@ class MediaApi extends Api {
    * @param { object<{ userId: number, offset: number, limit: number|null }> } queryParams 
    **/
   getUserMedia( queryParams ) {
-    return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildQueryParams( queryParams ) }`)
+    return axios.get(`${ Api.getBaseUrl() }v1/media/list${ this.buildQueryParams( queryParams ) }`)
       .then( ( res ) => res )
       .catch( error => console.warn( error ) );
   }
