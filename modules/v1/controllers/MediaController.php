@@ -4,6 +4,8 @@ namespace app\modules\v1\controllers;
 
 use app\models\Media;
 use Yii;
+use yii\base\DynamicModel;
+use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
@@ -16,6 +18,26 @@ class MediaController extends ActiveController
     const MEDIA_PAGING_LIMIT = 20;
 
     public $modelClass = \app\models\Media::class;
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index'] = [
+            'class' => 'yii\rest\IndexAction',
+            'modelClass' => $this->modelClass,
+            'checkAccess' => [$this, 'checkAccess'],
+            'dataFilter' => [
+                'class' => ActiveDataFilter::class,
+                'searchModel' => function () {
+                    return (new DynamicModel(['id' => null, 'body' => null, 'user_id' => null]))
+                        ->addRule('id', 'integer')
+                        ->addRule('body', 'string')
+                        ->addRule('user_id', 'integer');
+                },
+            ]
+        ];
+        return $actions;
+    }
 
     public function behaviors()
     {
@@ -87,6 +109,7 @@ class MediaController extends ActiveController
      *            },
      *       });
      *     const data = await data.json()
+     * @deprecated
      * @return string
      */
     public function actionList( $userId, $page = 0, $limit = self::MEDIA_PAGING_LIMIT )

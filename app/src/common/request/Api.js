@@ -24,4 +24,22 @@ export class Api {
       return  value ?  acc + `${ symbol }${ key }=${ value }` : acc ;
     }, EMPTY_QUERY );
   }
+
+  /**
+   * Построение строки GET запросов для yii rest методов
+   * @param { object } params
+   * @param { array|null } extraFields
+   * @return { string }
+   *
+   * @todo добавить проверки
+   **/
+  buildYiiQuery( params, extraFields = null ) {
+    const { filter, query } = params;
+    const rawQueryParams = {
+      [ `filter[${ filter.key }]` ]: filter.value,
+      expand: extraFields,
+      ...query,
+    };
+    return this.buildQueryParams( rawQueryParams );
+  }
 }

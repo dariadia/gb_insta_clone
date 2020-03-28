@@ -12,7 +12,9 @@ export const mediaInitialState = freeze({
 
 export default {
   state: { ...mediaInitialState },
-  getters: { mediaList: ({ mediaList }) => mediaList },
+  getters: {
+    mediaList: ({ mediaList }) => Array.isArray( mediaList ) ? mediaList : [ mediaList ]
+  },
   setters: {},
   mutations: {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
