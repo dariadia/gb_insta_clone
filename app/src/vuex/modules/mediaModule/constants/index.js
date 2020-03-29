@@ -1,1 +1,1 @@
-export const FETCH_MEDIA = 'FETCH_MEDIA';
+export const SET_MEDIA_REQUEST_DATE = 'SET_MEDIA_REQUEST_DATE';
