@@ -5,6 +5,7 @@ namespace app\models;
 use app\behaviors\TimestampTransformBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "media".
@@ -21,6 +22,7 @@ use yii\db\ActiveRecord;
  * @property MediaTypes $mediaType
  * @property User $user
  * @property Comment[] $comments
+ * @property Likes[] $likes
  */
 class Media extends \yii\db\ActiveRecord
 {
@@ -118,5 +120,47 @@ class Media extends \yii\db\ActiveRecord
     public function getComments()
     {
         return $this->hasMany(Comment::class, ['media_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Likes]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLikes()
+    {
+        return $this->hasMany(Likes::class, ['media_id' => 'id']);
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'body',
+            'metadata',
+            'created_at',
+            'updated_at'
+        ];
+    }
+
+    public function extraFields()
+    {
+        return [
+            'username' => function () {
+                return $this->user->username;
+            },
+            'type' => function () {
+                return $this->mediaType->name;
+            },
+            'src' => function () {
+                return Url::to('/uploads/media/' . $this->filename);
+            },
+            'comments' => function () {
+                return $this->comments;
+            },
+            'likes' => function () {
+                return count($this->likes);
+            }
+        ];
     }
 }

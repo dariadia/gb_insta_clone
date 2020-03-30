@@ -2,19 +2,69 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\Media;
 use Yii;
+use yii\base\DynamicModel;
+use yii\data\ActiveDataFilter;
+use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 
 /**
  * Контроллер работы с media
- * не реализовывал метод для получения данных на клиен в виде json ( для реализации пагинаций, на клиенте) так как пока не ясно как отрисовка страниц будет
  */
 class MediaController extends ActiveController
 {
     const MEDIA_PAGING_LIMIT = 20;
 
     public $modelClass = \app\models\Media::class;
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        $actions['index'] = [
+            'class' => 'yii\rest\IndexAction',
+            'modelClass' => $this->modelClass,
+            'checkAccess' => [$this, 'checkAccess'],
+            'dataFilter' => [
+                'class' => ActiveDataFilter::class,
+                'searchModel' => function () {
+                    return (new DynamicModel(['id' => null, 'body' => null, 'user_id' => null]))
+                        ->addRule('id', 'integer')
+                        ->addRule('body', 'string')
+                        ->addRule('user_id', 'integer');
+                },
+            ]
+        ];
+        return $actions;
+    }
+
+    public function behaviors()
+    {
+        $parent = parent::behaviors();
+        return array_merge($parent, [
+            'corsFilter' => [
+                'class' => \yii\filters\Cors::class,
+                'cors' => [
+                    'Access-Control-Expose-Headers' => [ '*' ],
+                    'Access-Control-Request-Headers' => [ '*' ],
+                    // restrict access to
+                    'Origin' => ['http://localhost:8080', 'http://localhost'],
+                    // Allow only POST and PUT methods
+//                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET'],
+                    // Allow only headers 'X-Wsse'
+//                    'Access-Control-Request-Headers' => ['X-Wsse'],
+                    // Allow credentials (cookies, authorization headers, etc.) to be exposed to the browser
+//                    'Access-Control-Allow-Credentials' => true,
+                    // Allow OPTIONS caching
+//                    'Access-Control-Max-Age' => 3600,
+                    // Allow the X-Pagination-Current-Page header to be exposed to the browser.
+//                    'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
+                ],
+            ]
+        ]);
+    }
+
     /**
      * Имитация возможности поставить лайк, через асинхронный запрос
      * @method POST
@@ -49,27 +99,32 @@ class MediaController extends ActiveController
      * )
      * @method GET
      * @param int $userId пользователь медиа ленту которого запрашиваем
-     * @param int $offset указатель на страницу медиа ( для пагинации если будем реализовывать )
+     * @param int $page указатель на страницу медиа ( для пагинации если будем реализовывать )
      * @param int $limit необязательный параметр, указывает на колличество записей в ленте
      * @example
-     *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=5', {
+     *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=0', {
      *           method: 'GET',
      *           headers: {
      *               "Content-Type": "application/json",
      *            },
      *       });
      *     const data = await data.json()
+     * @deprecated
      * @return string
      */
-    public function actionList($userId, $offset = 1, $limit = self::MEDIA_PAGING_LIMIT )
-{
-        /* Набросок запроса для пагинаций
-            $querry = (new Media())->find()
-                ->where([ 'user_id' => $userId ])
-                ->limit( $limit )
-                ->offset( $offset )
-                ->all()
-        */
-        return $this->asJson( /* $querry*/ []);
+    public function actionList( $userId, $page = 0, $limit = self::MEDIA_PAGING_LIMIT )
+    {
+        return new ActiveDataProvider([
+            'query' => Media::find()->where(['user_id' => $userId]),
+            'pagination' => [
+                'pageSize' => $limit,
+                'page' => $page
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'body' => SORT_DESC,
+                ]
+            ]
+        ]);
     }
 }
