@@ -153,7 +153,7 @@ class Media extends \yii\db\ActiveRecord
                 return $this->mediaType->name;
             },
             'src' => function () {
-                return Url::to('/uploads/media/' . $this->filename);
+                return Url::to('/static/media/' . $this->filename);
             },
             'comments' => function () {
                 return $this->comments;

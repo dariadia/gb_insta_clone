@@ -1,22 +1,19 @@
 <template>
   <div class="container">
     <!-- большая вложенность, нужно разбить по компонентам -->
-    <div v-if="userId">
-      <div v-if="loading">
-        <preloader size="big"/>
+    <div v-if="userLogin">
+      <preloader v-if="loading" size="big"/>
+      <div v-if="mediaList && mediaList.length" class="media-container">
+          <media v-for="media in mediaList" :key="`media#${ media.id }`" :media="media"/>
       </div>
-      <div v-else>
-        <div v-if="mediaList && mediaList.length">
-          <div v-for="media in mediaList" :key="`media#${ media.id }`">
-            <media :media="media"/>
-          </div>
-        </div>
-        <h3 v-else>Media not Found</h3>
-      </div>
+      <h3 v-else>У вас нет записей.</h3>
     </div>
-    <div v-else>
-      ADD SITE HOME COMPONENT | REGISTER<br/>
-      TO SEE SOME USER PAGE TYPE http://localhost/1
+    <div v-else class="greetings">
+      <img class="greetings-image" src="/static/iphone.jpg" alt="Mobile">
+      <div class="greetings-title">
+        <p>Привет, это главная страница приложения GeekGram!</p>
+        <p>Чтобы использовать приложение, необходимо зарегистрироваться и войти в свой аккаунт</p>
+      </div>
     </div>
   </div>
 </template>
@@ -25,11 +22,12 @@
   import Preloader from "../components/ui/Preloader";
   import Media from "../components/Media";
   import { getMedia } from '../vuex/modules/mediaModule/actions';
+
   export default {
     data() {
       return {
         loading: false,
-        userId: this.$route.params.userId
+        userLogin: this.$route.params.userLogin
       }
     },
     computed: {
@@ -40,8 +38,8 @@
 
     mounted () {
       this.loading = true;
-      if ( this.userId ) {
-        getMedia( this.userId ).then( () => {
+      if ( this.userLogin ) {
+        getMedia( this.userLogin ).then( () => {
           this.loading = false
         });
       }
@@ -49,3 +47,27 @@
     components: { Preloader, Media }
   }
 </script>
+<style lang="scss" scoped>
+  .container {
+    height: 100%;
+  }
+
+  .media-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+  }
+
+  .greetings {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    &-image {
+      margin-right: 30px;
+    }
+    &-title {
+      font-size: 1.3rem;
+    }
+  }
+</style>

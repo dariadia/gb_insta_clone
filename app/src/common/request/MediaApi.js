@@ -8,7 +8,7 @@ class MediaApi extends Api {
   }
   /**
    * Получение списка медия, по запроосу
-   * @param { object<{ userId: number, offset: number, limit: number|null }> } queryParams 
+   * @param { object<{ user_login: string, offset: number, limit: number|null }> } queryParams
    **/
   getUserMedia( queryParams ) {
     return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)

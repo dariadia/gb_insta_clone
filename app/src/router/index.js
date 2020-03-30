@@ -5,7 +5,7 @@ import Home from "../views/Home.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  { path: "/:userId?", name: "Home", component: Home }
+  { path: "/:userLogin?", name: "Home", component: Home }
 ];
 
 const router = new VueRouter({ mode: "history", routes });

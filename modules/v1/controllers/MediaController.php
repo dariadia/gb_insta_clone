@@ -26,15 +26,36 @@ class MediaController extends ActiveController
             'class' => 'yii\rest\IndexAction',
             'modelClass' => $this->modelClass,
             'checkAccess' => [$this, 'checkAccess'],
-            'dataFilter' => [
-                'class' => ActiveDataFilter::class,
-                'searchModel' => function () {
-                    return (new DynamicModel(['id' => null, 'body' => null, 'user_id' => null]))
-                        ->addRule('id', 'integer')
-                        ->addRule('body', 'string')
-                        ->addRule('user_id', 'integer');
-                },
-            ]
+//            'dataFilter' => [
+//                'class' => ActiveDataFilter::class,
+//                'searchModel' => function () {
+//                    return (new DynamicModel(['id' => null, 'userLogin' => null, 'user_id' => null]))
+//                        ->addRule('id', 'integer')
+//                        ->addRule('userLogin', 'string')
+//                        ->addRule('user_id', 'integer');
+//                },
+//            ],
+            'prepareDataProvider' => function() {
+                $params = Yii::$app->request->queryParams;
+
+                $query = Media::find();
+
+                $dataProvider = new ActiveDataProvider([
+                    'query' => $query,
+                ]);
+
+                if (!empty($params['user_login'])) {
+                    $query->joinWith('user as user');
+                    $query->andWhere(['like', 'user.login', $params['user_login']]);
+                } else {
+                    $query->andFilterWhere([
+                        'id' => $params['id'] ?? null,
+                        'user_id' => $params['user_id'] ?? null,
+                    ]);
+                }
+
+                return $dataProvider;
+            },
         ];
         return $actions;
     }
