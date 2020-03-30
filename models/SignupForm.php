@@ -63,6 +63,8 @@ class SignupForm extends Model
         $isSaved = $user->save();
 
         if ($isSaved) {
+            $profile = new Profile(['user_id' => $user->id]);
+            $profile->save(false);
             $this->sendEmail($user);
         }
         return $isSaved;
