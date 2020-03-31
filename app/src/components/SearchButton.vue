@@ -9,7 +9,8 @@
       </div>
   
       <div v-else class="search__group flex items_center content_center" v-on:click="toggle">
-        <i class="material-icons">search</i> Search
+<!--        <i class="material-icons">search</i> Search-->
+          Search
       </div>
 
     </div>
@@ -44,11 +45,6 @@
     border: 1px solid #d1d1d1;
     border-radius: 3px;
     cursor: pointer;
-
-    .material-icons {
-      font-size: 1.2em;
-      padding: 5px;
-    }
   }
 
   .flex {
@@ -62,21 +58,26 @@
   }
 
   .search__group {
+     display: flex;
+     align-items: center;
+     padding: 5px;
      height: 100%;
      width: 100%;
+     font-size: .9rem;
     .material-icons {
-      font-size: 1.2em;
-      padding: 5px;
-      height: 100%;
+      font-size: 1.3em;
     }
     input.search_input {
-      height: 100%;
       border: unset;
-      margin: 0;
+      margin: 0 0 0 5px;
       outline: unset;
+      font-size: 1rem;
       &:active, &:focus {
         border-bottom: none !important;
         box-shadow: unset !important;
+      }
+      &::placeholder {
+        font-size: 1rem;
       }
     }
   }

@@ -1,34 +1,34 @@
 <template>
   <div class="media">
-    <div class="header level">
-      <figure class="image is-32x32">
+    <div class="media-header">
+<!--      <figure class="image is-32x32">-->
         <!--        <img :src="media.userImage" />-->
-      </figure>
-      <span class="username">{{media.username}}</span>
+<!--      </figure>-->
+      <div class="media-username">{{media.username}}</div>
     </div>
-    <div
-      v-if="media.type === 'image'"
-      class="image-container"
-      :style="{ backgroundImage: 'url(' + media.filename + ')' }"
-    ></div>
-    <div v-else class="video-container">
-      <video controls>
-        <source :src="media.filename" type="video/mp4" />Your browser does not support HTML5 video.
-      </video>
+    <div class="media-body">
+        <img v-if="media.type === 'image'" class="media-image" :src="media.src" :alt="media.body">
+        <video v-else controls class="media-video">
+            <source :src="media.src" type="video/mp4" />Your browser does not support HTML5 video.
+        </video>
     </div>
-    <div class="content">
-      <div class="heart">
-        <i class="far fa-heart fa-lg" :class="{'fas': this.media.hasBeenLiked}" @click="like"></i>
-      </div>
-      <div>
-        <p class="likes">{{media.likes}} likes</p>
-        <p class="comments">{{media.comments}} comments</p>
-        <p>{{getDate(media.created_at)}}</p>
-      </div>
-      <p class="caption">
-        <span>{{media.username}}</span>
-        {{media.body}}
-      </p>
+    <div class="media-content">
+        <div class="media-info">
+            <div class="media-likes" @click="like">
+            <!--        <font-awesome-icon :icon="['fas', 'heart']" v-if="this.media.hasBeenLiked" @click="like"/>-->
+                <font-awesome-icon :icon="['fas', 'heart']" />
+                {{media.likes}} likes
+            </div>
+            <div class="media-date">{{getDate(media.created_at)}}</div>
+        </div>
+        <div class="media-caption">
+            {{media.body}}
+        </div>
+        <div class="media-comments" v-if="media.comments && media.comments.length" >
+<!--            <div v-for="comment in media.comments" :key="`comment#${ comment.id }`"/>-->
+<!--                {{comment.text}}-->
+<!--            </div>-->
+        </div>
     </div>
   </div>
 </template>
@@ -49,9 +49,9 @@ export default {
     //    this.media.hasBeenCommented ? this.media.comments-- : this.media.comments++;
     //     this.media.hasBeenCommented = !this.media.hasBeenCommented;
     //   }
-    getDate(timestamp) {
-      let date = new Date(timestamp);
-      return `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`;
+    getDate(string) {
+      let date = new Date(string);
+      return new Intl.DateTimeFormat('ru-RU').format(date);
     }
   }
 };
@@ -59,70 +59,68 @@ export default {
 
 <style lang="scss" scoped>
 .media {
-  padding-top: 50px;
-}
+    padding: 10px;
+    margin-bottom: 25px;
+    max-width: 480px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 
-.media ~ .media {
-  padding-top: 0;
-}
+    &-header {
+        margin: 7px 0;
+        font-size: 1.2rem;
+        border-bottom: 1px solid #ccc;
+    }
 
-.media {
-  padding: 5px 0;
-  .header {
-    height: 30px;
-    border-bottom: 1px solid #fff;
-    margin: 7.5px 10px;
-    .image {
-      display: inline-block;
+    &-username {
+        padding-left: 1rem;
+        font-size: 0.9rem;
+        font-weight: bold;
     }
-    img {
-      border-radius: 99px;
-    }
-    .username {
-      padding-left: 5px;
-      font-size: 0.9rem;
-      font-weight: bold;
-    }
-  }
-  .level {
-    margin-bottom: 0.5rem !important;
-  }
-  .image-container {
-    height: 330px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-  }
-  .video-container {
-    height: 330px;
-    background-size: cover;
-  }
-  .content {
-    margin: 7.5px 10px;
-  }
-  .far.fa-heart,
-  .fas.fa-heart {
-    cursor: pointer;
-  }
-  .fas.fa-heart {
-    color: #f06595;
-  }
-  .likes,
-  .comments {
-    margin: 5px 0;
-    margin-bottom: 5px !important;
-    font-size: 0.85rem;
-    font-weight: bold;
-  }
-  .caption {
-    font-size: 0.85rem;
-    span {
-      font-weight: bold;
-    }
-  }
-}
 
-.media:last-child {
-  margin-bottom: 80px;
+    &-body {
+        margin-top: 12px;
+        margin-bottom: 7px;
+        max-width: 480px;
+    }
+
+    &-image {
+        width: 100%;
+    }
+
+    &-video {
+        width: 100%;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    &-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-likes {
+        color: #13899c;
+    }
+
+    &-date {
+        font-size: .9rem;
+        color: #c93151;
+    }
+
+    &-comments {
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+
+    &-caption {
+        padding: 10px;
+        font-size: 0.9rem;
+        color: #818181;
+    }
 }
 </style>
