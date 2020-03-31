@@ -22,9 +22,9 @@ use Yii;
  */
 class Profile extends \yii\db\ActiveRecord
 {
+    public const GENDER_UNKNOWN = 0;
     public const GENDER_MALE = 1;
     public const GENDER_FEMALE = 2;
-    public const GENDER_UNKNOWN = 0;
 
     /**
      * {@inheritdoc}
@@ -45,7 +45,7 @@ class Profile extends \yii\db\ActiveRecord
             [['about', 'site'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 30],
             [['profile_photo'], 'string', 'max' => 100],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -83,7 +83,6 @@ class Profile extends \yii\db\ActiveRecord
      */
     public function getGenders(): array
     {
-        // TODO: Подумать о мультиязычной поддержке
         return [
             self::GENDER_UNKNOWN => 'Не указан',
             self::GENDER_MALE => 'Мужской',
