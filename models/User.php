@@ -24,6 +24,7 @@ use yii\web\IdentityInterface;
  *
  * @property mixed $password
  * @property string $authKey
+ * @property Profile $profile
  * @property Media[] $media
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -83,6 +84,7 @@ class User extends ActiveRecord implements IdentityInterface
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'verification_token' => 'Verification Token',
+            'profile' => 'Профиль пользователя'
         ];
     }
 
@@ -251,5 +253,16 @@ class User extends ActiveRecord implements IdentityInterface
      public function getMedia()
      {
          return $this->hasMany(Media::class, ['user_id' => 'id']);
+     }
+
+    /**
+     * {@inheritdoc}
+     * Gets query for [[Profile]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+     public function getProfile()
+     {
+         return $this->hasOne(Profile::class, ['user_id' => 'id']);
      }
 }
