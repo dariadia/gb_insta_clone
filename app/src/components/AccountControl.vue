@@ -23,3 +23,15 @@
     methods: { login, logout }
   }
 </script>
+<style>
+    .guest__buttons, .user__buttons {
+        display: flex;
+        align-items: center;
+        height: 40px;
+    }
+
+    .btn-small, .btn-flat {
+        height: 32px !important;
+        line-height: 32px !important;
+    }
+</style>

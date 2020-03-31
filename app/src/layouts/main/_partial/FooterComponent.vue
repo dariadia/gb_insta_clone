@@ -6,7 +6,7 @@
           <a :href="link.href" class="link">{{ link.label }}</a>
         </li>
       </ul>
-      <span>&copy; InstaClone 2020</span>
+      <span>&copy; GeekGram {{ getCurrentYear }}</span>
     </div>
   </footer>
 </template>
@@ -24,6 +24,11 @@
     },
     name: "FooterComponent",
     components: {
+    },
+    computed: {
+      getCurrentYear() {
+        return new Date().getFullYear();
+      },
     }
   };
 </script>
