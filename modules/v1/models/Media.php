@@ -24,6 +24,9 @@ class Media extends \app\models\Media
             'name' => function () {
                 return $this->user->profile->name;
             },
+            'username' => function () {
+                return $this->user->username;
+            },
             'type' => function () {
                 return $this->mediaType->name;
             },

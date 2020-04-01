@@ -36,7 +36,6 @@ export class Api {
   buildYiiQuery( params, extraFields = null ) {
     const { filter, query } = params;
     const rawQueryParams = {
-      // [ `filter[${ filter.key }]` ]: filter.value,
       ...filter,
       expand: extraFields,
       ...query,

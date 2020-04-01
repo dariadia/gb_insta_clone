@@ -4,16 +4,25 @@ import { Api } from "./Api";
 class MediaApi extends Api {
 
   extraFields() {
-    return [ 'name', 'src', 'type', 'comments', 'likes' ];
+    return [ 'name', 'username', 'src', 'type', 'comments', 'likes' ];
   }
   /**
    * Получение списка медия, по запроосу
-   * @param { object<{ username: string, offset: number, limit: number|null }> } queryParams
+   * @param { object<{ username: string, id: int, offset: number, limit: number|null }> } queryParams
    **/
-  getUserMedia( queryParams ) {
-    return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
+  getMediaList( queryParams ) {
+    return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( 
+        queryParams, 
+        [ 'name', 'username', 'src', 'type', 'likes' ] )}`
+    )
       .then( ( res ) => res )
       .catch( error => console.warn( error ) );
+  }
+
+  getMediaItem( queryParams ) {
+    return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
+        .then( ( res ) => res )
+        .catch( error => console.warn( error ) );
   }
 }
 const mediaApi = new MediaApi();
