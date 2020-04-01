@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- большая вложенность, нужно разбить по компонентам -->
-    <div v-if="userLogin">
+    <div v-if="username">
       <preloader v-if="loading" size="big"/>
       <div v-if="mediaList && mediaList.length" class="media-container">
           <media v-for="media in mediaList" :key="`media#${ media.id }`" :media="media"/>
@@ -27,7 +27,7 @@
     data() {
       return {
         loading: false,
-        userLogin: this.$route.params.userLogin
+        username: this.$route.params.username
       }
     },
     computed: {
@@ -38,8 +38,8 @@
 
     mounted () {
       this.loading = true;
-      if ( this.userLogin ) {
-        getMedia( this.userLogin ).then( () => {
+      if ( this.username ) {
+        getMedia( this.username ).then( () => {
           this.loading = false
         });
       }

@@ -4,7 +4,7 @@
 <!--      <figure class="image is-32x32">-->
         <!--        <img :src="media.userImage" />-->
 <!--      </figure>-->
-      <div class="media-username">{{media.username}}</div>
+      <div class="media-username">{{media.name}}</div>
     </div>
     <div class="media-body">
         <img v-if="media.type === 'image'" class="media-image" :src="media.src" :alt="media.body">

@@ -4,11 +4,11 @@ import { Api } from "./Api";
 class MediaApi extends Api {
 
   extraFields() {
-    return [ 'username', 'src', 'type', 'comments', 'likes' ];
+    return [ 'name', 'src', 'type', 'comments', 'likes' ];
   }
   /**
    * Получение списка медия, по запроосу
-   * @param { object<{ user_login: string, offset: number, limit: number|null }> } queryParams
+   * @param { object<{ username: string, offset: number, limit: number|null }> } queryParams
    **/
   getUserMedia( queryParams ) {
     return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
