@@ -1,5 +1,5 @@
 <template>
-  <a class="logo" :href="getHomeUrl">GeekGram</a>
+  <router-link :to="{ name: 'home' }" class="logo">GeekGram</router-link>
 </template>
 <script>
   export default {

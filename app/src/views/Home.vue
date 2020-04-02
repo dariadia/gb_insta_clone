@@ -1,12 +1,11 @@
 <template>
   <div class="container">
-    <!-- большая вложенность, нужно разбить по компонентам -->
     <div v-if="userLogin">
-      <preloader v-if="loading" size="big"/>
-      <div v-if="mediaList && mediaList.length" class="media-container">
+        <div v-if="mediaList && mediaList.length" class="media-container">
           <media v-for="media in mediaList" :key="`media#${ media.id }`" :media="media"/>
-      </div>
-      <h3 v-else>У вас нет записей.</h3>
+        </div>
+        <h3 v-if="!loading && !( mediaList && mediaList.length )">У вас нет записей.</h3>
+        <preloader v-if="loading" size="big"/>
     </div>
     <div v-else class="greetings">
       <img class="greetings-image" src="/static/iphone.jpg" alt="Mobile">
@@ -27,22 +26,80 @@
     data() {
       return {
         loading: false,
-        userLogin: this.$route.params.userLogin
+        userLogin: null
       }
     },
     computed: {
+      getFullPath () {
+        return this.$route.path
+      },
       mediaList () {
         return this.$store.getters[ 'mediaList' ];
       }
     },
 
-    mounted () {
-      this.loading = true;
-      if ( this.userLogin ) {
-        getMedia( this.userLogin ).then( () => {
-          this.loading = false
-        });
+    watch: {
+      getFullPath() {
+        this.getData();
       }
+    },
+
+    /**
+     * Добавляем обработчик при монтировании компонента
+     * @return { void }
+     **/
+    created () {
+      window.addEventListener('scroll', this.infinityScroll);
+    },
+
+    /**
+     * Удаляем обработчик при размонтировании компонента
+     * @return { void }
+     **/
+    destroyed () {
+      window.removeEventListener('scroll', this.infinityScroll);
+    },
+
+    methods: {
+      /**
+       * Получение данных для первой загрузки страници
+       * @return { void }
+       **/
+      getData() {
+        this.userLogin = this.$route.params.userLogin;
+        this.handlerToggleLoading();
+        if ( this.userLogin ) {
+          getMedia( this.userLogin ).then( this.handlerToggleLoading );
+        }
+      },
+
+      /**
+       * Переключение режима загружзки, просто вспомогательная функция
+       * @return { void }
+       **/
+      infinityScroll() {
+        const isBottom = window.scrollY >= pageYOffset;
+        const { nextPage, pagesCount } = this.$store.getters[ 'mediaHeaders' ];
+
+        if ( isBottom && !this.loading && nextPage < pagesCount ) {
+          this.handlerToggleLoading();
+          getMedia( this.userLogin, nextPage ).then( () => {
+            setTimeout( this.handlerToggleLoading,2000);
+          });
+        }
+      },
+
+      /**
+       * Переключение режима загружзки, просто вспомогательная функция
+       * @return { void }
+       **/
+      handlerToggleLoading() {
+        this.loading = !this.loading;
+      },
+    },
+    // При монтировании компонента, пробуем получить данные
+    mounted() {
+      this.getData();
     },
     components: { Preloader, Media }
   }

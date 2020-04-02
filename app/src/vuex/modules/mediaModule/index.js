@@ -1,5 +1,6 @@
 import { SET_MEDIA_REQUEST_DATE } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
+import { Api } from "../../../common/request/Api";
 const { freeze } = Object;
 
 /**
@@ -7,21 +8,23 @@ const { freeze } = Object;
  * */
 export const mediaInitialState = freeze({
   mediaList: [],
-  mediaHeaders: []
+  mediaHeaders: {}
 });
 
 export default {
   state: { ...mediaInitialState },
   getters: {
-    mediaList: ({ mediaList }) => Array.isArray( mediaList ) ? mediaList : [ mediaList ]
+    mediaList: ({ mediaList }) => Array.isArray( mediaList ) ? mediaList : [ mediaList ],
+    mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
   },
   setters: {},
   mutations: {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
-      const { headers, data } = response;
-      state.mediaList = data || mediaInitialState.mediaList;
-      /** @todo расспарсить */
-      state. mediaHeaders = headers;
+      const { headers, data } = response || {};
+      const mediaList = data || mediaInitialState.mediaList;
+
+      state.mediaList.push( ...mediaList );
+      state.mediaHeaders = Api.parseHeaders( headers );
     },
   },
   actions: {
