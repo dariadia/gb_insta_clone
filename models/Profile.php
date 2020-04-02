@@ -27,6 +27,47 @@ class Profile extends \yii\db\ActiveRecord
     public const GENDER_FEMALE = 2;
 
     /**
+     * @return array
+     */
+    public function fields(): array
+    {
+        return [
+            'id',
+            'profile_photo_url' => function () {
+                // Здесь надо будет написать функцию, которая вернёт на выходе URL к фотке пользователя
+                return $this->profile_photo;
+            },
+            'username' => function () {
+                $this->user->username;
+            },
+            'name' => function () {
+                $this->name;
+            },
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function extraFields(): array
+    {
+        return [
+            'about',
+            'site',
+            // допилить эти поля
+            'posts' => function () {
+                return 999;
+            },
+            'followers' => function () {
+                return 999;
+            },
+            'following' => function () {
+                return 999;
+            },
+        ];
+    }
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
