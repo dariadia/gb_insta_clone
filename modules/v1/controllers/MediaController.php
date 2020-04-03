@@ -12,7 +12,7 @@ use yii\rest\ActiveController;
  */
 class MediaController extends ActiveController
 {
-    const MEDIA_PAGING_LIMIT = 20;
+    const MEDIA_PAGING_LIMIT = 5;
 
     public $modelClass = Media::class;
 
