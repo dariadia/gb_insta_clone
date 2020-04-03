@@ -131,36 +131,4 @@ class Media extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Likes::class, ['media_id' => 'id']);
     }
-
-    public function fields()
-    {
-        return [
-            'id',
-            'body',
-            'metadata',
-            'created_at',
-            'updated_at'
-        ];
-    }
-
-    public function extraFields()
-    {
-        return [
-            'username' => function () {
-                return $this->user->username;
-            },
-            'type' => function () {
-                return $this->mediaType->name;
-            },
-            'src' => function () {
-                return Url::to('/static/media/' . $this->filename);
-            },
-            'comments' => function () {
-                return $this->comments;
-            },
-            'likes' => function () {
-                return count($this->likes);
-            }
-        ];
-    }
 }

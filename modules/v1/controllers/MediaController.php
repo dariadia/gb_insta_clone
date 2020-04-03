@@ -2,13 +2,10 @@
 
 namespace app\modules\v1\controllers;
 
-use app\models\Media;
+use app\modules\v1\models\Media;
 use Yii;
-use yii\base\DynamicModel;
-use yii\data\ActiveDataFilter;
 use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
-use yii\web\BadRequestHttpException;
 
 /**
  * Контроллер работы с media
@@ -17,7 +14,7 @@ class MediaController extends ActiveController
 {
     const MEDIA_PAGING_LIMIT = 20;
 
-    public $modelClass = \app\models\Media::class;
+    public $modelClass = Media::class;
 
     public function actions()
     {
@@ -26,15 +23,6 @@ class MediaController extends ActiveController
             'class' => 'yii\rest\IndexAction',
             'modelClass' => $this->modelClass,
             'checkAccess' => [$this, 'checkAccess'],
-//            'dataFilter' => [
-//                'class' => ActiveDataFilter::class,
-//                'searchModel' => function () {
-//                    return (new DynamicModel(['id' => null, 'userLogin' => null, 'user_id' => null]))
-//                        ->addRule('id', 'integer')
-//                        ->addRule('userLogin', 'string')
-//                        ->addRule('user_id', 'integer');
-//                },
-//            ],
             'prepareDataProvider' => function() {
                 $params = Yii::$app->request->queryParams;
 
@@ -42,11 +30,15 @@ class MediaController extends ActiveController
 
                 $dataProvider = new ActiveDataProvider([
                     'query' => $query,
+                    'pagination' => [
+                        'pageSize' => self::MEDIA_PAGING_LIMIT,
+                        'page' => $params['page'] ?? 0
+                    ],
                 ]);
 
-                if (!empty($params['user_login'])) {
-                    $query->joinWith('user as user');
-                    $query->andWhere(['like', 'user.login', $params['user_login']]);
+                if (!empty($params['username'])) {
+                    $query->joinWith('user as u');
+                    $query->andWhere(['u.username' => $params['username']]);
                 } else {
                     $query->andFilterWhere([
                         'id' => $params['id'] ?? null,
@@ -82,69 +74,6 @@ class MediaController extends ActiveController
                     // Allow the X-Pagination-Current-Page header to be exposed to the browser.
 //                    'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
                 ],
-            ]
-        ]);
-    }
-
-    /**
-     * Имитация возможности поставить лайк, через асинхронный запрос
-     * @method POST
-     * @example
-     *   const data = await fetch('http://localhost/v1/media/like', {
-     *   method: 'POST',
-     *   headers: {
-     *        "Content-Type": "application/json",
-     *    },
-     *    body: JSON.stringify({
-     *        mediaId: 1
-     *    })
-     * })
-     * let json = await data.json(); /// собриаем тело запроса
-     *
-     * @throws BadRequestHttpException
-     */
-    public function actionLike()
-    {
-        $data = \Yii::$app->request->post();
-        if ( !Yii::$app->request->isPost || isset( $data['mediaId']) ) {
-            throw new BadRequestHttpException();
-        }
-        /// ставим лайк записе которая соответвует id === $data['mediaId']
-        return /* $model->update(); */ true;
-        return false;
-    }
-
-    /**
-     * Получить весь список Media ( данный метод будет расширен, для получение списка для конкретного пользователя
-     *  и пагинаций
-     * )
-     * @method GET
-     * @param int $userId пользователь медиа ленту которого запрашиваем
-     * @param int $page указатель на страницу медиа ( для пагинации если будем реализовывать )
-     * @param int $limit необязательный параметр, указывает на колличество записей в ленте
-     * @example
-     *     const response = await fetch('http://localhost/v1/media/list?userId=1&offset=0', {
-     *           method: 'GET',
-     *           headers: {
-     *               "Content-Type": "application/json",
-     *            },
-     *       });
-     *     const data = await data.json()
-     * @deprecated
-     * @return string
-     */
-    public function actionList( $userId, $page = 0, $limit = self::MEDIA_PAGING_LIMIT )
-    {
-        return new ActiveDataProvider([
-            'query' => Media::find()->where(['user_id' => $userId]),
-            'pagination' => [
-                'pageSize' => $limit,
-                'page' => $page
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'body' => SORT_DESC,
-                ]
             ]
         ]);
     }

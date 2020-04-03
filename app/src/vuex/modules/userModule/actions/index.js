@@ -2,13 +2,13 @@ import { dispatch } from "../../../store";
 import { LOGIN_ACTION, LOGOUT_ACTION } from "../constants";
 
 /**
- * @param { string } userName
+ * @param { string } username
  * @param { string } password
  * @return { function }
  **/
-export const login = ( userName, password ) => dispatch({
+export const login = ( username, password ) => dispatch({
   type: LOGIN_ACTION,
-  payload: { userName, password}
+  payload: { username, password}
 });
 
 /**
