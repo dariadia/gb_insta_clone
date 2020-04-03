@@ -42,4 +42,18 @@ export class Api {
     };
     return this.buildQueryParams( rawQueryParams );
   }
+  
+   /**
+    * Функция помощник, парсинга заголовков пагинации, и установка удобных ключей
+    * @return { object }
+    **/
+  static parseHeaders( headers ) {
+    return !headers ? {} : {
+      currentPage: headers['x-pagination-current-page'],
+      limit: headers['x-pagination-per-page'],
+      pagesCount: headers['x-pagination-page-count'],
+      totalItems: headers['x-pagination-total-count'],
+      nextPage: Number( headers['x-pagination-current-page'] ) + 1,
+    };
+  }
 }
