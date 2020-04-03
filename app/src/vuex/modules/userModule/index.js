@@ -6,7 +6,7 @@ const { freeze } = Object;
  * @type { object }
  * */
 export const usersInitialState = freeze({
-  login: null,
+  username: null,
   token: null,
   isGuest: true,
   isFetching: false,

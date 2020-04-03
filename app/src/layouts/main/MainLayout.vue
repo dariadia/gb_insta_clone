@@ -29,4 +29,7 @@
       flex-grow: 1;
     }
   }
+  .container {
+    height: 100%;
+  }
 </style>

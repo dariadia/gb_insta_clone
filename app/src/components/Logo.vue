@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'home' }" class="logo">GeekGram</router-link>
+  <router-link :to="{name: 'Home'}" class="logo">GeekGram</router-link>
 </template>
 <script>
   export default {
