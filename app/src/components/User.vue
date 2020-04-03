@@ -1,11 +1,11 @@
 <template>
     <div class="container">
         <div v-if="username">
-            <preloader v-if="loading" size="big"/>
             <div v-if="mediaList && mediaList.length" class="media-container">
                 <media v-for="media in mediaList" :key="`media#${ media.id }`" :media="media"/>
             </div>
-            <h3 v-else>У вас нет записей.</h3>
+            <h3 v-if="!loading && !( mediaList && mediaList.length )">У вас нет записей.</h3>
+            <preloader v-if="loading" size="big"/>
         </div>
     </div>
 </template>
@@ -72,17 +72,19 @@
        * @return { void }
        **/
       infinityScroll() {
+        const { currentPage, pagesCount } = this.$store.getters['mediaHeaders'];
+
         const pageYOffset = document.querySelector('body').scrollHeight;
         const windowHeight = window.screen.height;
         const isBottom = window.scrollY >= (pageYOffset - windowHeight - 300);
-        const {nextPage, pagesCount} = this.$store.getters['mediaHeaders'];
 
-        if (isBottom && !this.loading && (nextPage < pagesCount)) {
+        const isNotLastPage = ( currentPage < pagesCount );
+
+        if ( isBottom && !this.loading && isNotLastPage ) {
           this.handlerToggleLoading();
-          console.log(nextPage);
-          getMedia(this.username, nextPage).then(() => {
-            setTimeout(this.handlerToggleLoading, 2000);
-          });
+          setTimeout( () => {
+              getMedia( this.username, currentPage ).then( this.handlerToggleLoading )
+          }, 1000);
         }
       },
 

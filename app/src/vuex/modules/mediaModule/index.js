@@ -24,9 +24,16 @@ export default {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
       const { headers, data } = response || {};
       const mediaList = data || mediaInitialState.mediaList;
-
-      state.mediaList.push( ...mediaList );
       state.mediaHeaders = Api.parseHeaders( headers );
+
+      const currentPage = state.mediaHeaders.currentPage;
+
+      /** если страница 1 обнуляем лист, чтоб небыло дублей */
+      if ( currentPage === 1 ) {
+        state.mediaList = mediaList;
+      } else {
+        state.mediaList.push( ...mediaList );
+      }
     },
     [ SET_MEDIA_REQUEST_VIEW ] : ( state, response ) => {
       const { headers, data } = response || {};
