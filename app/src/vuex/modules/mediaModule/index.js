@@ -8,15 +8,17 @@ const { freeze } = Object;
  * */
 export const mediaInitialState = freeze({
   mediaList: [],
-  mediaItem: [],
+  mediaItem: {},
   mediaHeaders: []
 });
 
 export default {
   state: { ...mediaInitialState },
   getters: {
-    mediaList: ({ mediaList }) => Array.isArray( mediaList ) ? mediaList : [ mediaList ],
-    mediaHeaders: ({ mediaHeaders }) => mediaHeaders,  },
+    mediaList: ({ mediaList }) => mediaList,
+    mediaItem: ({ mediaItem }) => mediaItem,
+    mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
+    },
   setters: {},
   mutations: {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
@@ -27,10 +29,10 @@ export default {
       state.mediaHeaders = Api.parseHeaders( headers );
     },
     [ SET_MEDIA_REQUEST_VIEW ] : ( state, response ) => {
-      const { headers, data } = response;
-      state.mediaItem = data || mediaInitialState.mediaItem;
-      /** @todo расспарсить */
-      state. mediaHeaders = headers;
+      const { headers, data } = response || {};
+
+      state.mediaItem = data.length ? data[data.length - 1] : mediaInitialState.mediaItem;
+      state.mediaHeaders = Api.parseHeaders( headers );
     },
   },
   actions: {

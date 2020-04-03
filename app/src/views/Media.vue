@@ -2,40 +2,71 @@
     <div class="container">
         <preloader v-if="loading" size="big"/>
         <div v-if="mediaItem" class="media-container">
-            <media :media="mediaItem" />
+            <media :media="mediaItem"/>
         </div>
         <h3 v-else>Такой записи не существует</h3>
     </div>
 </template>
 
 <script>
-    import Preloader from "../components/ui/Preloader";
-    import Media from "../components/Media";
-    import { getMediaItem } from '../vuex/modules/mediaModule/actions/view';
+  import Preloader from "../components/ui/Preloader";
+  import Media from "../components/Media";
+  import {getMedia} from '../vuex/modules/mediaModule/actions/view';
 
-    export default {
-        data() {
-            return {
-                loading: false,
-                id: this.$route.params.id
-            }
-        },
-        computed: {
-            mediaItem() {
-                return this.$store.getters['mediaItem'][0];
-            }
-        },
+  export default {
+    data() {
+      return {
+        loading: false,
+        id: null
+      }
+    },
 
-        mounted() {
-            this.loading = true;
-            if (this.id) {
-                getMediaItem(this.id).then(() => {
-                    this.loading = false
-                });
-            }
-        },
-        components: { Preloader, Media }
-    }
+    computed: {
+      getFullPath() {
+        return this.$route.path
+      },
+      mediaItem() {
+        const mediaItem = this.$store.getters[ 'mediaItem' ];
+
+        return Object.keys(mediaItem).length ? mediaItem : null;
+      }
+    },
+
+    watch: {
+      getFullPath() {
+        this.getData();
+      }
+    },
+
+    methods: {
+      /**
+       * Получение данных для первой загрузки страници
+       * @return { void }
+       **/
+      getData() {
+        this.id = this.$route.params.id;
+        this.handlerToggleLoading();
+
+        if (this.id) {
+          getMedia(this.id).then(this.handlerToggleLoading);
+        }
+      },
+
+      /**
+       * Переключение режима загружзки, просто вспомогательная функция
+       * @return { void }
+       **/
+      handlerToggleLoading() {
+        this.loading = !this.loading;
+      },
+    },
+
+    mounted() {
+      this.getData();
+    },
+
+    components: {Preloader, Media}
+  }
 </script>
 
 <style lang="scss" scoped>
