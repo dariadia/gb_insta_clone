@@ -11,7 +11,7 @@
 <script>
     import Preloader from "../components/ui/Preloader";
     import ProfileItem from "../components/ProfileItem";
-    import {getProfile} from "../vuex/modules/profileModule/actions/index";
+    import {getProfiles} from "../vuex/modules/profileModule/actions/index";
 
     export default {
         name: "Profiles",
@@ -43,7 +43,7 @@
              **/
             getData() {
                 this.handlerToggleLoading();
-                getProfile().then(this.handlerToggleLoading);
+                getProfiles().then(this.handlerToggleLoading);
             },
 
             /**
