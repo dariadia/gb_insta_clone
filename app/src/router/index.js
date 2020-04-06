@@ -3,13 +3,16 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import User from "../views/User.vue";
 import Media from "../views/Media.vue";
+import Profiles from "../views/Profiles";
 
 Vue.use(VueRouter);
 
 const routes = [
   { path: '/', name: "Home", component: Home },
+  { path: "/profiles", name: "Profiles", component: Profiles },
   { path: "/:username([a-zA-Z]+)", name: "User", component: User },
-  { path: "/m/:id(\\d+)", name: "Media", component: Media }
+  { path: "/m/:id(\\d+)", name: "Media", component: Media },
+
 ];
 
 const router = new VueRouter({ mode: "history", routes });
