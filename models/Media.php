@@ -42,7 +42,6 @@ class Media extends \yii\db\ActiveRecord
         return [
             [['media_type_id', 'user_id', 'size', 'created_at', 'updated_at'], 'integer'],
             [['body', 'metadata'], 'string'],
-            [['created_at', 'updated_at'], 'required'],
             [['filename'], 'string', 'max' => 255],
             [['media_type_id'], 'exist',
                 'skipOnError' => true,
