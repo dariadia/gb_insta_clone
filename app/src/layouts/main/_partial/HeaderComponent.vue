@@ -3,20 +3,49 @@
      <div class="container">
        <logo />
        <search-button/>
-       <account-control/>
+       <account-control :onClick="handleToggleModal"/>
      </div>
+
+    <modal :show="showModal">
+      <component v-bind:is="modalBodyComponent" />
+      <button v-on:click="handleToggleModal">Close</button>
+    </modal>
+
   </header> 
 </template>
 
 <script>
-  import Logo from '../../../components/Logo';
-  import SearchButton from '../../../components/SearchButton';
+  import Logo from '../../../components/ui/Logo';
+  import SearchButton from '../../../components/ui/SearchButton';
   import AccountControl from '../../../components/AccountControl';
+  import Modal from '../../../components/ui/Modal';
 
   export default {
     name: "HeaderComponent",
+    computed: {
+      /**
+       * динамический компонент
+       * @todo добавить формы авторизации, или регистрации, и заменить эти загрушки
+       **/
+      modalBodyComponent() {
+        return !this.$store.getters['isGuest'] ? AccountControl : SearchButton;
+      }
+    },
+    data() {
+      return {
+        showModal: false,
+      }
+    },
     components: {
-      Logo, SearchButton, AccountControl
+      Logo, SearchButton, AccountControl, Modal
+    },
+    methods: {
+      /**
+       * @todo с вводом формы, расширить функционал, форма должна очищать состояние с закрытием окна!
+       **/
+      handleToggleModal() {
+        this.showModal = !this.showModal;
+      }
     }
   };
 </script>

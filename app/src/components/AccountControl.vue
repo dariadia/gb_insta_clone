@@ -1,7 +1,7 @@
 <template>
   <div class="accout__control">
     <div v-if="isGuest" class="guest__buttons">
-      <button class="waves-effect waves-light btn-small" v-on:click="login">Login</button>
+      <button class="waves-effect waves-light btn-small" v-on:click="handleClick">Login</button>
       <button class="btn-flat">Register</button>
     </div>
     <div v-if="!isGuest" class="user__buttons">
@@ -13,16 +13,23 @@
 </template>
 
 <script>
-  import { login } from '../vuex/modules/userModule/actions/login';
   import { logout } from '../vuex/modules/userModule/actions/logout';
   
   export default {
+    props: {
+      onClick: Function,
+    },
     computed: {
       isGuest () {
         return this.$store.getters['isGuest']
       }
     },
-    methods: { login, logout }
+    methods: {
+      handleClick() {
+        this.onClick();
+      },
+      logout
+    }
   }
 </script>
 <style>
