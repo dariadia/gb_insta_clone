@@ -11,15 +11,14 @@
     </div>
 
     <modal :show="Boolean( modalBody )" :closeHandler="handleCloseModal">
-      <component v-bind:is="getModalBodyComponent" />
-      <button v-on:click="handleCloseModal">Close</button>
+      <component v-bind:is="getModalBodyComponent" :onClose="handleCloseModal"/>
     </modal>
   </div>
 
 </template>
 
 <script>
-  import Logo from "./ui/Logo";
+  import LoginForm from "../components/LoginForm";
   import Modal from './ui/Modal';
   import AccountControl from '../components/AccountControl';
   import { logout } from '../vuex/modules/userModule/actions/logout';
@@ -27,7 +26,7 @@
   export default {
     data() {
       return {
-        loginForm: Logo,
+        loginForm: LoginForm,
         registerForm: AccountControl,
         modalBody: null
       }
@@ -41,7 +40,6 @@
        * @todo добавить формы авторизации, или регистрации, и заменить эти заглушки
        **/
       getModalBodyComponent() {
-        console.log( this.modalBody );
         return this.modalBody
       },
     },

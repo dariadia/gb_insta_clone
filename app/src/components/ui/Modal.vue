@@ -40,7 +40,7 @@
     cursor: pointer;
 
     &:hover {
-      color: #8b1f09;
+      color: #8b1014;
     }
   }
 
@@ -61,7 +61,7 @@
   right: 0;
   background-color: #fafafa;
   max-height: 70%;
-  width: 55%;
+  max-width: 500px;
   margin: auto;
   overflow-y: auto;
   border-radius: 2px;
