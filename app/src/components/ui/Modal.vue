@@ -2,6 +2,10 @@
     <div v-if="show">
       <div class="modal_overflow"/>
       <div class="modal__window show">
+        <!-- если передали обработчик закрытия в компонент модалки, тогда отображаем кнопку закрытия в шапке -->
+        <div v-if="closeHandler" class="button_close" v-on:click="closeHandler">
+          <i class="icon material-icons">close</i>
+        </div>
         <div class="modal__body">
           <slot/>
         </div>
@@ -14,6 +18,7 @@
     name: "modal_window",
     props: {
       show: Boolean,
+      closeHandler: Function,
     },
     data() {
       return {
@@ -24,6 +29,20 @@
 </script>
 
 <style scoped lang="scss">
+
+  .button_close {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: #8b1f09;
+    }
+  }
 
 .modal_overflow {
   position: absolute;

@@ -3,14 +3,8 @@
      <div class="container">
        <logo />
        <search-button/>
-       <account-control :onClick="handleToggleModal"/>
+       <account-control/>
      </div>
-
-    <modal :show="showModal">
-      <component v-bind:is="modalBodyComponent" />
-      <button v-on:click="handleToggleModal">Close</button>
-    </modal>
-
   </header> 
 </template>
 
@@ -18,35 +12,12 @@
   import Logo from '../../../components/ui/Logo';
   import SearchButton from '../../../components/ui/SearchButton';
   import AccountControl from '../../../components/AccountControl';
-  import Modal from '../../../components/ui/Modal';
 
   export default {
     name: "HeaderComponent",
-    computed: {
-      /**
-       * динамический компонент
-       * @todo добавить формы авторизации, или регистрации, и заменить эти загрушки
-       **/
-      modalBodyComponent() {
-        return !this.$store.getters['isGuest'] ? AccountControl : SearchButton;
-      }
-    },
-    data() {
-      return {
-        showModal: false,
-      }
-    },
     components: {
-      Logo, SearchButton, AccountControl, Modal
+      Logo, SearchButton, AccountControl
     },
-    methods: {
-      /**
-       * @todo с вводом формы, расширить функционал, форма должна очищать состояние с закрытием окна!
-       **/
-      handleToggleModal() {
-        this.showModal = !this.showModal;
-      }
-    }
   };
 </script>
 
