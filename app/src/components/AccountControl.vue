@@ -18,16 +18,16 @@
 </template>
 
 <script>
-  import LoginForm from "../components/LoginForm";
   import Modal from './ui/Modal';
-  import AccountControl from '../components/AccountControl';
+  import LoginForm from "../components/LoginForm";
+  import RegisterForm from "../components/RegisterForm";
   import { logout } from '../vuex/modules/userModule/actions/logout';
 
   export default {
     data() {
       return {
         loginForm: LoginForm,
-        registerForm: AccountControl,
+        registerForm: RegisterForm,
         modalBody: null
       }
     },

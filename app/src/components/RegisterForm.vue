@@ -1,6 +1,6 @@
 <template>
   <div class="login__form">
-    <h5 class="form_header">Авторизация</h5>
+    <h5 class="form_header">Регистрация</h5>
     <div class="row">
       <form class="col s12">
         <div class="row">
@@ -25,13 +25,23 @@
             <label for="password">Пароль</label>
           </div>
         </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email"
+               v-model="email"
+               type="email"
+               :class="`validate ${ validate( email ) }`"
+               autocomplete
+            />
+            <label for="email">Email</label>
+          </div>
+        </div>
+
       </form>
     </div>
     <div class="buttons">
-      <button :disabled="!password || !username"
-        class="waves-effect waves-light btn"
-        v-on:click="doLogin"
-      >Войти</button>
+      <button class="waves-effect waves-light btn" v-on:click="doRegister">Зарегистрироватся</button>
       <button class="waves-effect waves-light btn red" v-on:click="onClose">Отмена</button>
     </div>
   </div>
@@ -39,10 +49,10 @@
 </template>
 
 <script>
-  /** @todo допилить валидацию */
-  import { login } from '../vuex/modules/userModule/actions/login'
+  /** @todo а данный момент форма идентична логину, практически. нужна дальнейшая доработка */
+  import { register } from '../vuex/modules/userModule/actions/register';
   export default {
-    name: "LoginForm",
+    name: "RegisterForm",
     props: {
       onClose: Function
     },
@@ -52,13 +62,14 @@
         isValid: true,
         username: null,
         password: null,
+        email: null,
       }
     },
     methods: {
-      doLogin() {
+      doRegister() {
         /** validation */
-        if ( this.username && this.password ) {
-          login( this.username, this.password );
+        if ( this.username && this.password && this.email ) {
+          register( this.$data );
           this.onClose();
         } else {
           this.isValid = false;
