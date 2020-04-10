@@ -31,7 +31,7 @@ class MediaController extends ActiveController
                 $dataProvider = new ActiveDataProvider([
                     'query' => $query,
                     'pagination' => [
-                        'pageSize' => self::MEDIA_PAGING_LIMIT,
+                        'pageSize' => $params['per-page'] ?? self::MEDIA_PAGING_LIMIT,
                         'page' => $params['page'] ?? 0
                     ],
                 ]);

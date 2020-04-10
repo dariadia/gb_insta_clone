@@ -49,11 +49,10 @@ export class Api {
     **/
   static parseHeaders( headers ) {
     return !headers ? {} : {
-      currentPage: headers['x-pagination-current-page'],
-      limit: headers['x-pagination-per-page'],
-      pagesCount: headers['x-pagination-page-count'],
-      totalItems: headers['x-pagination-total-count'],
-      nextPage: Number( headers['x-pagination-current-page'] ) + 1,
+      currentPage: Number( headers['x-pagination-current-page'] ),
+      limit: Number( headers['x-pagination-per-page'] ),
+      pagesCount: Number( headers['x-pagination-page-count'] ),
+      totalItems: Number( headers['x-pagination-total-count'] ),
     };
   }
 }

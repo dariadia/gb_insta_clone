@@ -2,7 +2,7 @@
     <div class="container">
         <preloader v-if="loading" size="big"/>
         <div v-if="mediaItem" class="media-container">
-            <media :media="mediaItem"/>
+            <post :media="mediaItem"/>
         </div>
         <h3 v-else>Такой записи не существует</h3>
     </div>
@@ -10,7 +10,7 @@
 
 <script>
   import Preloader from "../components/ui/Preloader";
-  import Media from "../components/Media";
+  import Post from "../components/PostFull";
   import {getMedia} from '../vuex/modules/mediaModule/actions/view';
 
   export default {
@@ -65,7 +65,7 @@
       this.getData();
     },
 
-    components: {Preloader, Media}
+    components: {Preloader, Post}
   }
 </script>
 

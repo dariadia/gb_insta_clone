@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name: 'Media', params: { id: media.id } }" class="media">
+    <div class="media">
         <div class="media-header">
             <!--      <figure class="image is-32x32">-->
             <!--        <img :src="media.userImage" />-->
@@ -34,46 +34,40 @@
                 <!--            </div>-->
             </div>
         </div>
-    </router-link>
+    </div>
 </template>
 
 <script>
-    export default {
-        name: "Media",
-        props: {
-            media: Object
-        },
-        methods: {
-            like() {
-                this.media.hasBeenLiked ? this.media.likes-- : this.media.likes++;
-                this.media.hasBeenLiked = !this.media.hasBeenLiked;
-            },
-            //  comment() {
-            //    (might cause an issue, so TODO)
-            //    this.media.hasBeenCommented ? this.media.comments-- : this.media.comments++;
-            //     this.media.hasBeenCommented = !this.media.hasBeenCommented;
-            //   }
-            getDate(string) {
-                let date = new Date(string);
-                return new Intl.DateTimeFormat('ru-RU').format(date);
-            }
-        }
-    };
+  export default {
+    name: "Post",
+    props: {
+      media: Object
+    },
+    methods: {
+      like() {
+        this.media.hasBeenLiked ? this.media.likes-- : this.media.likes++;
+        this.media.hasBeenLiked = !this.media.hasBeenLiked;
+      },
+      //  comment() {
+      //    (might cause an issue, so TODO)
+      //    this.media.hasBeenCommented ? this.media.comments-- : this.media.comments++;
+      //     this.media.hasBeenCommented = !this.media.hasBeenCommented;
+      //   }
+      getDate(string) {
+        let date = new Date(string);
+        return new Intl.DateTimeFormat('ru-RU').format(date);
+      }
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
     .media {
         padding: 10px;
         margin-bottom: 25px;
-        max-width: 480px;
+        max-width: 640px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        transition: all .35s;
-
-        &:hover {
-            border: 1px solid #8b97a8;
-            box-shadow: 0 0 4px #bebebe;
-        }
 
         &-header {
             margin: 7px 0;
@@ -83,14 +77,14 @@
 
         &-username {
             padding-left: 1rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #353a40;
             text-decoration: none;
             transition: color .3s;
 
             &:hover {
-                color: #104db5;
+                color: #f9520e;
             }
         }
 

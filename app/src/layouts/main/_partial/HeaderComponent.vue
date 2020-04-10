@@ -9,15 +9,15 @@
 </template>
 
 <script>
-  import Logo from '../../../components/Logo';
-  import SearchButton from '../../../components/SearchButton';
+  import Logo from '../../../components/ui/Logo';
+  import SearchButton from '../../../components/ui/SearchButton';
   import AccountControl from '../../../components/AccountControl';
 
   export default {
     name: "HeaderComponent",
     components: {
       Logo, SearchButton, AccountControl
-    }
+    },
   };
 </script>
 

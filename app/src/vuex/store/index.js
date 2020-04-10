@@ -31,7 +31,7 @@ const store = new Vuex.Store({
  **/
 export const dispatch = ( action ) => {
   const { type, payload } = action;
-  return  store.dispatch( type, payload );
+  return store.dispatch( type, payload );
 };
 
 export default store;

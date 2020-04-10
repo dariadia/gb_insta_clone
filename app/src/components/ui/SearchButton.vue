@@ -4,8 +4,8 @@
     
       <div v-if="isActive" class="search__group flex items_center">
           <i class="material-icons">search</i>
-          <input type="text" class="search_input" placeholder="Find"/>
-          <i class="material-icons" v-on:click="toggle">cancel</i>
+          <input v-model="searchString" v-on:change="handleChange" type="text" class="search_input" placeholder="Find"/>
+          <i class="material-icons" v-on:click="handleClearSearch">cancel</i>
       </div>
   
       <div v-else class="search__group flex items_center content_center" v-on:click="toggle">
@@ -18,15 +18,37 @@
 </template>
 
 <script>
+  import { searchClear } from "../../vuex/modules/userModule/actions/searchClear";
+  import { searchChange } from "../../vuex/modules/userModule/actions/searchChange";
+
   export default {
-    data: function() {
+
+    data() {
       return {
         isActive: false,
+        searchString: this.$store.getters['searchString']
       }
     },
     methods: {
-      toggle: function() { 
+      toggle() {
         this.isActive = !this.isActive;
+      },
+      /**
+       * Обработчик поля поиска
+       * @param { event } event
+       * @return { void }
+       **/
+      handleChange( event ) {
+        const { target: { value }} = event;
+        searchChange( value );
+      },
+      /**
+       * Очистка поля в вода, возможно вызов новых действий
+       * @return { void }
+       **/
+      handleClearSearch() {
+        searchClear();
+        this.toggle();
       }
     }
   }
