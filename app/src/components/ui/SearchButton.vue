@@ -18,8 +18,8 @@
 </template>
 
 <script>
-  import { searchClear } from "../vuex/modules/userModule/actions/searchClear";
-  import { searchChange } from "../vuex/modules/userModule/actions/searchChange";
+  import { searchClear } from "../../vuex/modules/userModule/actions/searchClear";
+  import { searchChange } from "../../vuex/modules/userModule/actions/searchChange";
 
   export default {
 
