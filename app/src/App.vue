@@ -9,8 +9,12 @@
 <script>
   import MainLayout from './layouts/main/MainLayout'
   import 'materialize-css/dist/js/materialize.min';
+  import { init } from "./vuex/modules/userModule/actions/init";
 
   export default {
+    mounted() {
+      init();
+    },
     computed: {
       layout() {
         return 'main-layout';
