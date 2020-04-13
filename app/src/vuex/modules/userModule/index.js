@@ -73,16 +73,10 @@ export default {
     [ INIT ]: ({ commit }) => {
       let token = null;
       const cookies = document.cookie.split(';');
+      const tokenString = cookies.find( item => item.match( RegExp( TOKEN_KEY )) );
 
-      const tokenString = cookies.find( item => item.match( RegExp( TOKEN_KEY ) ) );
       if ( tokenString ) {
         const parts = tokenString.split('=');
-
-        console.log({
-          tokenString,
-          reg: RegExp( TOKEN_KEY ),
-          parts
-        });
         token = parts[ 1 ];
       }
       commit( INIT,  token );
