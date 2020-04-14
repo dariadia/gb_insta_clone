@@ -100,8 +100,10 @@ export default {
         token = parts[1];
       }
       commit( INIT, token );
-
-      return getProfile(token);
+      /** сохраняем в Апи токен */
+      userApi.setToken( token );
+      /** Запрашиваем данные о профиле */
+      return getProfile();
     },
     [ LOGIN_ACTION ] : async ({ commit }, payload ) => {
       const { username, password } = payload;

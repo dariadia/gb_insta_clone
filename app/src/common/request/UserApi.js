@@ -33,13 +33,11 @@ class UserApi extends Api {
 
   /**
    * Действие получение профиля
-   * @param { sting } token
    * @return { Promise }
    * 
    * @todo разобратся как axios по человечески отдавать заголовки, ибо это ппц 
    **/
-  getProfile( token ) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`;
+  getProfile() {
     return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)
         .then( ( res ) => res )
         .catch( error => console.warn( error ) );
