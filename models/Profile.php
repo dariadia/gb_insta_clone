@@ -38,10 +38,10 @@ class Profile extends \yii\db\ActiveRecord
                 return $this->profile_photo;
             },
             'username' => function () {
-                $this->user->username;
+                return $this->user->username;
             },
             'name' => function () {
-                $this->name;
+               return $this->name;
             },
         ];
     }

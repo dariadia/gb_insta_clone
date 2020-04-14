@@ -21,23 +21,6 @@ class AuthController extends ActiveController
         ];
     }
 
-    public function actionLogin()
-    {
-        $loginData = \Yii::$app->request->post( 'auth');
-        if ( !$loginData ) {
-            throw new BadRequestHttpException();
-        }
-        $base64String = base64_decode( $loginData );
-        $loginData = explode( ':', $base64String );
-
-        $model = ( new User() )->findOne(['username' => $loginData[ 0 ]]);
-
-        if ( $model && \Yii::$app->security->validatePassword( $loginData[ 1 ], $model->password_hash ) ) {
-            return $model->authKey;
-        }
-        return $model;
-    }
-
     public function behaviors()
     {
         $parent = parent::behaviors();
@@ -53,5 +36,22 @@ class AuthController extends ActiveController
                 ],
             ]
         ]);
+    }
+
+    public function actionLogin()
+    {
+        $loginData = \Yii::$app->request->post( 'auth');
+        if ( !$loginData ) {
+            throw new BadRequestHttpException();
+        }
+        $base64String = base64_decode( $loginData );
+        $loginData = explode( ':', $base64String );
+
+        $model = ( new User() )->findOne(['username' => $loginData[ 0 ]]);
+
+        if ( $model && \Yii::$app->security->validatePassword( $loginData[ 1 ], $model->password_hash ) ) {
+            return $model->authKey;
+        }
+        return $model;
     }
 }
