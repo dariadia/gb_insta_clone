@@ -130,4 +130,10 @@ class Media extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Likes::class, ['media_id' => 'id']);
     }
+
+    public function getUsersLikeIt()
+    {
+        return $this->hasMany(User::class, ['id' => 'user_id'])
+            ->viaTable('likes', ['media_id' => 'id']);
+    }
 }

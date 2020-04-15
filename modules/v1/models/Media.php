@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\models;
 
+use app\models\Likes;
 use yii\helpers\Url;
 
 
@@ -38,7 +39,15 @@ class Media extends \app\models\Media
             },
             'likes' => function () {
                 return count($this->likes);
-            }
+            },
+            'like' => function () {
+                $params = \Yii::$app->request->queryParams;
+                $like = new Likes();
+                return $like->getLike($params['id'], $this->user->id) ? true : false;
+            },
+            'usersLikeIt' => function () {
+                return $this->usersLikeIt;
+            },
         ];
     }
 }

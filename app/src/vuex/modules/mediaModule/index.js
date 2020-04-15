@@ -1,4 +1,4 @@
-import { SET_MEDIA_REQUEST_DATE, SET_MEDIA_REQUEST_VIEW } from "./constants";
+import { SET_MEDIA_REQUEST_DATE, SET_MEDIA_REQUEST_VIEW, SET_MEDIA_REQUEST_LIKE } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
 import { Api } from "../../../common/request/Api";
 const { freeze } = Object;
@@ -9,7 +9,8 @@ const { freeze } = Object;
 export const mediaInitialState = freeze({
   mediaList: [],
   mediaItem: {},
-  mediaHeaders: []
+  mediaHeaders: [],
+    mediaLikes: []
 });
 
 export default {
@@ -18,6 +19,7 @@ export default {
     mediaList: ({ mediaList }) => mediaList,
     mediaItem: ({ mediaItem }) => mediaItem,
     mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
+    mediaLikes: ({ mediaLikes }) => mediaLikes,
     },
   setters: {},
   mutations: {
@@ -42,6 +44,12 @@ export default {
       state.mediaItem = data.length ? data[data.length - 1] : mediaInitialState.mediaItem;
       state.mediaHeaders = Api.parseHeaders( headers );
     },
+      [ SET_MEDIA_REQUEST_LIKE ] : ( state, response ) => {
+          const { headers, data } = response || {};
+
+          state.mediaLikes = data.length ? data[data.length - 1] : mediaInitialState.mediaLikes;
+          state.mediaHeaders = Api.parseHeaders( headers );
+      },
   },
   actions: {
     [ SET_MEDIA_REQUEST_DATE ] : async ({ commit }, payload ) => {
@@ -52,5 +60,9 @@ export default {
       const response = await mediaApi.getMediaItem( payload );
       commit( SET_MEDIA_REQUEST_VIEW, response );
     },
+      [ SET_MEDIA_REQUEST_LIKE ] : async ({ commit }, payload ) => {
+          const response = await mediaApi.getMediaLikes( payload );
+          commit( SET_MEDIA_REQUEST_LIKE, response );
+      },
   }
 };

@@ -4,7 +4,7 @@ import { Api } from "./Api";
 class MediaApi extends Api {
 
   extraFields() {
-    return [ 'name', 'username', 'src', 'type', 'comments', 'likes' ];
+    return [ 'name', 'username', 'src', 'type', 'comments', 'likes', 'like'];
   }
   /**
    * Получение списка медия, по запроосу
@@ -23,6 +23,15 @@ class MediaApi extends Api {
     return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
         .then( ( res ) => res )
         .catch( error => console.warn( error ) );
+  }
+
+  getMediaLikes( queryParams ) {
+      return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( 
+          queryParams, 
+              [ 'usersLikeIt' ] )}`
+          )
+              .then( ( res ) => res )
+          .catch( error => console.warn( error ) );
   }
 }
 const mediaApi = new MediaApi();
