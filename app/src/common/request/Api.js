@@ -1,6 +1,29 @@
+import axios from "axios";
+
 const EMPTY_QUERY = '';
 
 export class Api {
+
+  _token = null;
+
+  /**
+   * Сеттер для токена, и установка его в заголовки axios
+   * @return { this }
+   **/
+  setToken( token ) {
+    this._token = token;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${ token }`;
+    return this;
+  }
+
+  /**
+   * Геттер для токена
+   * @return { string }
+   **/
+  getToken() {
+    return this._token;
+  }
+
   /**
    * Получение базового URL с переменных окружений
    * @return { string }
