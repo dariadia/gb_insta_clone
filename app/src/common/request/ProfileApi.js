@@ -4,7 +4,7 @@ import { Api } from "./Api";
 class ProfileApi extends Api {
 
     extraFields() {
-        return [ 'username' ];
+        // return [ 'username' ];
     }
     /**
      * Получение списка профилей, по запроосу
@@ -21,7 +21,7 @@ class ProfileApi extends Api {
 
     /**
      * Получение профиля, по запроосу
-     * @param { object<{user_id:number, offset: number, limit: number|null }> } queryParams
+     * @param { object<{username:string, offset: number, limit: number|null }> } queryParams
      **/
     getProfileItem( queryParams ) {
         return axios.get(`${ Api.getBaseUrl() }v1/profile${ this.buildYiiQuery( queryParams, this.extraFields() )}`)

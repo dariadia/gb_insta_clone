@@ -18,17 +18,16 @@
         </div>
         <div class="media-content">
             <div class="media-info">
-                <div class="media-likes" @click="like">
-                    <!--        <font-awesome-icon :icon="['fas', 'heart']" v-if="this.media.hasBeenLiked" @click="like"/>-->
-                    <font-awesome-icon v-if="media.like === true" :icon="['fas', 'heart']"/>
-                    <font-awesome-icon v-else :icon="['fas', 'heart-broken']"/>
-                </div>
-                <div class="media-date">{{getDate(media.created_at)}}</div>
-                <div v-if="media.likes > 0" class="media-like">
-                    <router-link :to="{ name: 'Likes', params: { id: media.id } }" class="post post__preview">
-                        Нравиться: {{ media.likes }}
+                <div class="media-likes">
+                    <div class="media-likes__icons" @click="like">
+                        <font-awesome-icon v-if="media.hasBeenLiked" :icon="['fas', 'heart']"/>
+                        <font-awesome-icon v-else :icon="['far', 'heart']"/>
+                    </div>
+                    <router-link v-if="media.likes > 0" class="media-likes__link" :to="{ name: 'Likes', params: { id: media.id } }">
+                        Нравится: {{ media.likes }}
                     </router-link>
                 </div>
+                <div class="media-date">{{getDate(media.created_at)}}</div>
             </div>
             <div class="media-caption">
                 {{media.body}}
@@ -121,12 +120,26 @@
         }
 
         &-likes {
+            display: flex;
             color: #13899c;
-            cursor: pointer;
-        }
 
-        &-like {
-            width: 100%;
+            &__icons {
+                margin-right: 7px;
+                cursor: pointer;
+
+                & > svg {
+                    transition: transform .1s ease-in-out;
+                }
+
+                &:hover > svg {
+                    transform: scale(1.15);
+                }
+            }
+
+            &__link {
+                color: #13899c;
+                text-decoration: none;
+            }
         }
 
         &-date {

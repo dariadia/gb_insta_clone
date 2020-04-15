@@ -28,7 +28,7 @@ class AuthController extends ActiveController
             'corsFilter' => [
                 'class' => \yii\filters\Cors::class,
                 'cors' => [
-                    'Origin' => ['http://localhost:8080', 'http://localhost'],
+                    'Origin' => ['*'],
                     'Access-Control-Expose-Headers' => [ '*' ],
                     'Access-Control-Request-Headers' => [ '*' ],
                     'Access-Control-Allow-Origin' => ['*'],
