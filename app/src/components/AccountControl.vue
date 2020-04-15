@@ -20,7 +20,7 @@
 <script>
   import Modal from './ui/Modal';
   import LoginForm from "../components/LoginForm";
-  import RegisterForm from "../components/RegisterForm";
+  import RegisterForm from "./SignUpForm";
   import { logout } from '../vuex/modules/userModule/actions/logout';
 
   export default {

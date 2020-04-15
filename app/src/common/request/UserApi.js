@@ -25,8 +25,8 @@ class UserApi extends Api {
    * @param { object } data
    * @return { Promise }
    **/
-  register( data ) {
-    return axios.post(`${ Api.getBaseUrl() }v1/auth`, data )
+  signUp( data ) {
+    return axios.post(`${ Api.getBaseUrl() }v1/auth/signup`, data )
         .then( ( res ) => res )
         .catch( error => console.warn( error ) );
   }
@@ -34,8 +34,6 @@ class UserApi extends Api {
   /**
    * Действие получение профиля
    * @return { Promise }
-   * 
-   * @todo разобратся как axios по человечески отдавать заголовки, ибо это ппц 
    **/
   getProfile() {
     return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)

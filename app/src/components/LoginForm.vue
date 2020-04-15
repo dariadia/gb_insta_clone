@@ -26,6 +26,7 @@
           </div>
         </div>
       </form>
+      <div v-if="errorMessage" class="red-text center">{{ errorMessage }}</div>
     </div>
     <div class="buttons">
       <button :disabled="!password || !username"
@@ -52,17 +53,25 @@
         isValid: true,
         username: null,
         password: null,
+        errorMessage: null
       }
     },
     methods: {
       doLogin() {
-        /** validation */
+        this.errorMessage = false;
+
         if ( this.username && this.password ) {
-          login( this.username, this.password );
-          this.onClose();
-        } else {
-          this.isValid = false;
+         return login( this.username, this.password ).then( () => {
+            const { login: loginError } = this.$store.getters['errors'];
+            const token = this.$store.getters['token'];
+            if ( !token ) {
+              return this.errorMessage = loginError;
+            } else {
+              return this.onClose();
+            }
+          });
         }
+        return this.isValid = false;
       },
       /**
        * Пока что простенькая валидация, не стал заморачиватся

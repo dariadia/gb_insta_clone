@@ -28,7 +28,7 @@ export const usersInitialState = Object.freeze({
   isGuest: true,
   isFetching: false,
   searchString: null,
-  errors: [],
+  errors: {},
   personalData: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
   }),
@@ -41,6 +41,7 @@ export default {
     personalData: ({ personalData }) => personalData,
     searchString: ({ searchString }) => searchString,
     token: ({ token }) => token,
+    errors: ({ errors }) => errors,
   },
   setters: {},
   mutations: {
@@ -51,6 +52,7 @@ export default {
       }
     },
     [ LOGOUT_ACTION ] : ( state ) => {
+      state.token = null;
       state.isGuest = usersInitialState.isGuest;
       document.cookie = 'token=';
     },
@@ -65,8 +67,8 @@ export default {
       const { token } = response;
       state.token = token;
     },
-    [ REGISTER_ERROR ]:  ( state, errorMessage ) => {
-      state.errors.push( errorMessage);
+    [ REGISTER_ERROR ]:  ( state, errors ) => {
+      state.errors.register = errors;
     },
     [ LOGIN_ACTION_SUCCESS ]: ( state, authToken ) => {
       state.token = authToken;
@@ -77,7 +79,7 @@ export default {
     },
     /** Обрабатываем както ошибку при авторизации @todo реалиовать */
     [ LOGIN_ACTION_ERROR ]: ( state ) => {
-      state.errors.push( 'invalid login or password' );
+      state.errors.login = 'Неверное имя пользователя или пароль';
     },
     /** Прфиль успешно получен, сохраняем данные **/
     [ GET_PROFILE_SUCCESS ]: ( state, data ) => {
@@ -85,7 +87,7 @@ export default {
     },
     /** Сохраняем данные, либо чтото делаем если профиль не был найден **/
     [ GET_PROFILE_ERROR ]: ( state ) => {
-      state.errors.push( 'cant get profile' );
+      state.errors.profile= 'cant get profile';
     }
   },
   actions: {
@@ -95,40 +97,53 @@ export default {
       const cookies = document.cookie.split(';');
       const tokenString = cookies.find(item => item.match(RegExp(TOKEN_KEY)));
 
-      if (tokenString) {
+      if ( tokenString ) {
         const parts = tokenString.split('=');
-        token = parts[1];
+        const tokenPart = parts[ 1 ];
+        token = tokenPart && tokenPart.trim() ? tokenPart : null;
+
+        if ( token ) {
+          userApi.setToken( token );
+          getProfile();
+        }
       }
       commit( INIT, token );
-      /** сохраняем в Апи токен */
-      userApi.setToken( token );
-      /** Запрашиваем данные о профиле */
-      return getProfile();
     },
     [ LOGIN_ACTION ] : async ({ commit }, payload ) => {
       const { username, password } = payload;
-      const response = await userApi.login( username, password );
-      if ( response && response.status === 200 ) {
-         return commit( LOGIN_ACTION_SUCCESS, response.data )
+      const { status, data } = await userApi.login( username, password );
+
+      if ( status === 200 && data ) {
+         return commit( LOGIN_ACTION_SUCCESS, data )
       }
       return commit( LOGIN_ACTION_ERROR );
     },
     [ LOGOUT_ACTION ] : ({ commit }) => commit( LOGOUT_ACTION ),
     [ SEARCH_QUERY_CHANGE ] : ({ commit }, payload ) => commit( SEARCH_QUERY_CHANGE, payload.searchString ),
     [ CLEAR_SEARCH_STRING ] : ({ commit } ) => commit( CLEAR_SEARCH_STRING ),
+
+    /** Регистрация пользователя */
     [ REGISTER_ACTION ]: async ({ commit }, payload ) => {
-      const { data } = payload;
-      const response = await userApi.register( data );
+      const { formValues } = payload;
+
+      const clearFormFields = Object.entries( formValues ).map(([ key, { value } ]) => ({
+        [ key ]: value
+      }));
+      const userObject = Object.assign({}, ...clearFormFields );
+
+      const { status, data } = await userApi.signUp( userObject );
+
       /** както будем проверять на ошибки*/
-      if ( response && response.status === 200 ) {
-        return commit( REGISTER_SUCCESS, response );
+      if ( status === 200 ) {
+        return commit( REGISTER_SUCCESS, data.token );
       }
-      return  commit( REGISTER_ERROR );
+      return commit( REGISTER_ERROR, data.errors );
     },
-    [ GET_PROFILE ]: async ({ commit }, payload ) => {
-      const { status, data } = await userApi.getProfile( payload.token );
+
+    [ GET_PROFILE ]: async ({ commit }) => {
+      const { status, data } = await userApi.getProfile();
       /** както будем проверять на ошибки*/
-      if ( status && status === 200 ) {
+      if ( status === 200 ) {
         return commit( GET_PROFILE_SUCCESS, data );
       }
       return commit( GET_PROFILE_ERROR );
