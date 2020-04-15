@@ -5,11 +5,13 @@ import store from "./vuex/store";
 import 'materialize-css/dist/js/materialize.min';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeartBroken } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 Vue.config.productionTip = false;
 
 library.add(faHeart);
+library.add(faHeartBroken);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 const vueInitialState = {

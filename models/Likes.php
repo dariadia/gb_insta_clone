@@ -81,4 +81,9 @@ class Likes extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
+
+    public function getLike($media_id, $user_id)
+    {
+        return Likes::find()->where(['media_id' => $media_id])->andWhere(['user_id' => $user_id])->one() ? true : false;
+    }
 }
