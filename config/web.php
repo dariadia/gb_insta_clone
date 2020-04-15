@@ -58,6 +58,9 @@ $config = [
                 [ 'controller' => [ 'v1/media'], 'class' => UrlRule::class, ],
                 [ 'controller' => [ 'v1/auth'] , 'class' => UrlRule::class, ],
                 [ 'controller' => [ 'v1/profile'] , 'class' => UrlRule::class, ],
+
+                /// все перенаправляем на корень
+                '<controller>' => 'site'
             ],
         ],
     ],
