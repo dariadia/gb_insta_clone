@@ -5,6 +5,7 @@ namespace app\modules\v1\controllers;
 
 
 use app\models\Profile;
+use app\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\Cors;
@@ -32,10 +33,9 @@ class ProfileController extends ActiveController
                     'Access-Control-Expose-Headers' => [ '*' ],
                     'Access-Control-Request-Headers' => [ '*' ],
                     'Origin' => ['http://localhost:8080', 'http://localhost'],
+                    'Allow' => ['*'],
+                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET', 'OPTIONS'],
                 ],
-            ],
-            'bearerAuth' => [
-                'class' => \yii\filters\auth\HttpBearerAuth::class,
             ],
         ]);
     }
@@ -71,8 +71,17 @@ class ProfileController extends ActiveController
      * @return Profile
      **/
     public function actionGet() {
-        return Profile::find()
-            ->where(['user_id' => Yii::$app->user->id ])
-            ->one();
+        /** временная мера, пока отключаем тут поведение, потом чтото другое придумаем */
+        $token = Yii::$app->request->headers->get('authorization');
+        $token = str_replace('Bearer', '', $token );
+        $user = ( new User())->findIdentityByAccessToken( trim($token) );
+
+        if ( $user ) {
+            return Profile::find()
+                ->where(['user_id' => $user->id ])
+                ->one();
+        }
+        \Yii::$app->response->statusCode = 404;
+        return null;
     }
 }

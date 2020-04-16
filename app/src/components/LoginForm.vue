@@ -42,6 +42,7 @@
 <script>
   /** @todo допилить валидацию */
   import { login } from '../vuex/modules/userModule/actions/login'
+  import {getProfile} from "../vuex/modules/userModule/actions/getProfile";
   export default {
     name: "LoginForm",
     props: {
@@ -61,14 +62,15 @@
         this.errorMessage = false;
 
         if ( this.username && this.password ) {
-         return login( this.username, this.password ).then( () => {
+          return login( this.username, this.password ).then( async () => {
             const { login: loginError } = this.$store.getters['errors'];
-            const token = this.$store.getters['token'];
-            if ( !token ) {
+            const isGuest = this.$store.getters['isGuest'];
+
+            if ( isGuest ) {
               return this.errorMessage = loginError;
-            } else {
-              return this.onClose();
             }
+            await getProfile();
+            return this.onClose();
           });
         }
         return this.isValid = false;

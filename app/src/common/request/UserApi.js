@@ -18,7 +18,7 @@ class UserApi extends Api {
 
     return axios.post(`${ Api.getBaseUrl() }v1/auth/login`, requestBody )
       .then( ( res ) => res )
-      .catch( error => console.warn( error ) );
+      .catch( error =>error.response  );
   }
   /**
    * Действие регистрации ( набросок, будет настраиватся в задаче после )
@@ -28,7 +28,7 @@ class UserApi extends Api {
   signUp( data ) {
     return axios.post(`${ Api.getBaseUrl() }v1/auth/signup`, data )
         .then( ( res ) => res )
-        .catch( error => console.warn( error ) );
+        .catch( error => error.response )
   }
 
   /**
@@ -38,7 +38,7 @@ class UserApi extends Api {
   getProfile() {
     return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)
         .then( ( res ) => res )
-        .catch( error => console.warn( error ) );
+        .catch( error => error.response );
   }
 }
 const userApi = new UserApi();

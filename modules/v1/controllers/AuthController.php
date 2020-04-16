@@ -20,7 +20,8 @@ class AuthController extends ActiveController
     protected function verbs()
     {
         return [
-            'index' => ['GET', 'POST', 'OPTIONS'],
+            'signup' => [ 'POST', 'OPTIONS' ],
+            'login' => [ 'POST', 'OPTIONS' ],
         ];
     }
 
@@ -66,7 +67,7 @@ class AuthController extends ActiveController
         $model->email = $formValues->email ?? null;
         $model->username = $formValues->username ?? null;
         $model->password = $formValues->password ?? null;
-        $model->password_repeat = $formValues->retypePassword ?? null;
+        $model->password_repeat = $formValues->passwordRepeat ?? null;
 
         return $model->signup();
     }

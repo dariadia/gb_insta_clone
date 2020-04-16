@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { userApi } from "../../../common/request/UserApi";
 import {
   INIT,
@@ -14,7 +15,6 @@ import {
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
 } from "./constants";
-import { getProfile } from "./actions/getProfile";
 
 const TOKEN_KEY = 'token';
 
@@ -23,13 +23,12 @@ const TOKEN_KEY = 'token';
  * @type { object }
  **/
 export const usersInitialState = Object.freeze({
-  login: null,
   token: null,
   isGuest: true,
   isFetching: false,
   searchString: null,
   errors: {},
-  personalData: Object.freeze({
+  profile: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
   }),
 });
@@ -54,6 +53,7 @@ export default {
     [ LOGOUT_ACTION ] : ( state ) => {
       state.token = null;
       state.isGuest = usersInitialState.isGuest;
+      state.profile = usersInitialState.profile;
       document.cookie = 'token=';
     },
     [ SEARCH_QUERY_CHANGE ] : ( state, searchString ) => state.searchString = searchString,
@@ -66,14 +66,16 @@ export default {
       /** с ответа скорее всего будем получать некий токен, либо id сессии*/
       const { token } = response;
       state.token = token;
+      state.errors.register = null;
     },
     [ REGISTER_ERROR ]:  ( state, errors ) => {
-      state.errors.register = errors;
+      state.errors.register = _.mapKeys( errors, (value, key) => _.camelCase(key) );
     },
     [ LOGIN_ACTION_SUCCESS ]: ( state, authToken ) => {
       state.token = authToken;
       state.isGuest = false;
 
+      userApi.setToken( authToken );
       /** @todo придумать защиту */
       document.cookie = `token=${ authToken }`;
     },
@@ -95,17 +97,14 @@ export default {
     [ INIT ]: ({ commit }) => {
       let token = null;
       const cookies = document.cookie.split(';');
-      const tokenString = cookies.find(item => item.match(RegExp(TOKEN_KEY)));
+      const tokenString = cookies.find(item => item.match( RegExp( TOKEN_KEY )) );
 
       if ( tokenString ) {
         const parts = tokenString.split('=');
         const tokenPart = parts[ 1 ];
         token = tokenPart && tokenPart.trim() ? tokenPart : null;
 
-        if ( token ) {
-          userApi.setToken( token );
-          getProfile();
-        }
+        token && userApi.setToken( token );
       }
       commit( INIT, token );
     },
@@ -132,7 +131,6 @@ export default {
       const userObject = Object.assign({}, ...clearFormFields );
 
       const { status, data } = await userApi.signUp( userObject );
-
       /** както будем проверять на ошибки*/
       if ( status === 200 ) {
         return commit( REGISTER_SUCCESS, data.token );

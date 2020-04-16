@@ -16,13 +16,13 @@ class MediaApi extends Api {
         [ 'name', 'username', 'src', 'type', 'likes' ] )}`
     )
       .then( ( res ) => res )
-      .catch( error => console.warn( error ) );
+      .catch( error => error.response );
   }
 
   getMediaItem( queryParams ) {
     return axios.get(`${ Api.getBaseUrl() }v1/media${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
         .then( ( res ) => res )
-        .catch( error => console.warn( error ) );
+        .catch( error => error.response );
   }
 }
 const mediaApi = new MediaApi();
