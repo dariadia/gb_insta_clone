@@ -1,10 +1,10 @@
 <template>
     <div class="media">
         <div class="media-header">
-            <router-link :to="{ name: 'Post', params: { id: media.id } }" class="post post__preview">
-                <i class="material-icons">arrow_back</i>
+            <router-link :to="{ name: 'Post', params: { id: media.id } }" class="media-likes__link">
+                <font-awesome-icon :icon="['fas', 'arrow-left']"/>
             </router-link>
-            <div class="media-name">Отметки: "Нравиться"</div>
+            <div class="media-title">Отметки: "Нравится"</div>
         </div>
         <div class="media-body">
             <ul class="users">
@@ -40,6 +40,10 @@
         border: 1px solid #ccc;
         border-radius: 5px;
 
+        &-title {
+            margin-left: 5px;
+        }
+
         &-header {
             display: flex;
             justify-content: space-between;
@@ -53,6 +57,11 @@
             margin-top: 12px;
             margin-bottom: 7px;
             max-width: 480px;
+        }
+
+        &-likes__link {
+            color: #13899c;
+            text-decoration: none;
         }
     }
 

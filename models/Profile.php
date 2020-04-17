@@ -43,6 +43,8 @@ class Profile extends \yii\db\ActiveRecord
             'name' => function () {
                return $this->name;
             },
+            'about',
+            'site',
         ];
     }
 
@@ -52,8 +54,6 @@ class Profile extends \yii\db\ActiveRecord
     public function extraFields(): array
     {
         return [
-            'about',
-            'site',
             // допилить эти поля
             'posts' => function () {
                 return 999;

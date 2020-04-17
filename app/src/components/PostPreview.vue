@@ -10,7 +10,7 @@
         <div class="post__preview-content">
             <div class="post__preview-likes">
                 <font-awesome-icon :icon="['fas', 'heart']"/>
-                {{ media.likes }} Нравиться
+                {{ media.likes }}
             </div>
         </div>
     </router-link>

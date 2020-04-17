@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { subscribe } from '../vuex/modules/userModule/actions';
+  import { subscribe } from '../vuex/modules/userModule/actions/subscribe';
   export default {
     name: "UserInfo",
     props: {

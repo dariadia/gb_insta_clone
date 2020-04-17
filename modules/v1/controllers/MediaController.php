@@ -62,7 +62,7 @@ class MediaController extends ActiveController
                     'Access-Control-Expose-Headers' => [ '*' ],
                     'Access-Control-Request-Headers' => [ '*' ],
                     // restrict access to
-                    'Origin' => ['http://localhost:8080', 'http://localhost'],
+                    'Origin' => ['*'],
                     // Allow only POST and PUT methods
 //                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET'],
                     // Allow only headers 'X-Wsse'

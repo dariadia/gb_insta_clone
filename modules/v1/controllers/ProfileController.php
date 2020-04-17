@@ -32,7 +32,7 @@ class ProfileController extends ActiveController
                 'cors' => [
                     'Access-Control-Expose-Headers' => [ '*' ],
                     'Access-Control-Request-Headers' => [ '*' ],
-                    'Origin' => ['http://localhost:8080', 'http://localhost'],
+                    'Origin' => ['*'],
                     'Allow' => ['*'],
                     'Access-Control-Request-Method' => ['POST', 'PUT', 'GET', 'OPTIONS'],
                 ],
@@ -50,14 +50,20 @@ class ProfileController extends ActiveController
             'checkAccess' => [$this, 'checkAccess'],
 
             'prepareDataProvider' => function() {
+                $params = Yii::$app->request->queryParams;
+
                 $query = Profile::find()->joinWith('user as user');
 
                 $dataProvider = new ActiveDataProvider([
                     'query' => $query,
                     'pagination' => [
-                        'pageSize' => Yii::$app->request->get('per-page', static::PROFILES_PER_PAGE),
+                        'pageSize' => $params['per-page'] ?? self::PROFILES_PER_PAGE,
                     ],
                 ]);
+
+                if (!empty($params['username'])) {
+                    $query->andWhere(['user.username' => $params['username']]);
+                }
                 return $dataProvider;
             },
         ];
