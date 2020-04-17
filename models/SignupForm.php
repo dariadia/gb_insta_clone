@@ -1,8 +1,10 @@
 <?php
 namespace app\models;
 
+use Cassandra\Exception\ValidationException;
 use Yii;
 use yii\base\Model;
+use yii\db\Exception;
 
 /**
  * Signup form
@@ -43,31 +45,58 @@ class SignupForm extends Model
     }
 
     /**
-     * Signs user up.
-     *
-     * @return bool whether the creating new account was successful and email was sent
-     * @throws \yii\base\Exception
-     */
-    public function signup(): bool
+     * Регистрация пользователя
+     * @return array
+     **/
+    public function signup()
     {
-        if (!$this->validate()) {
-            return false;
+        try {
+            if ( !$this->validate() ) {
+                throw new \Exception();
+            }
+            $user = $this->saveUser();
+            $this->saveProfile( $user->id );
+//          $this->sendEmail( $user ); временно отключил
+            Yii::$app->response->statusCode = 200;
+            return [ 'token' => $user->authKey ];
+        } catch (\Exception $ex ) {
+            Yii::$app->response->statusCode = 400;
+            return [ 'errors' => $this->getErrors() ];
         }
-        
+    }
+
+    /**
+     * Сохранение данных о пользователе
+     * @return User
+     * @throws \Exception
+     **/
+    private function saveUser() {
         $user = new User();
         $user->email = $this->email;
         $user->username = $this->username;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
-        $isSaved = $user->save();
+        $user->status = 10; /// временно отключил проверку по почте, и активация происходит автоматом
 
-        if ($isSaved) {
-            $profile = new Profile(['user_id' => $user->id]);
-            $profile->save(false);
-            $this->sendEmail($user);
+        if ( !$user->save() ) {
+            throw new \Exception();
         }
-        return $isSaved;
+        return $user;
+    }
+
+    /**
+     * Сохранение данных о профиле
+     * @param int $userId
+     * @return void
+     * @throws \Exception
+     **/
+    private function saveProfile( $userId ) {
+        $profile = new Profile(['user_id' => $userId ]);
+        $profile->save(false);
+        if ( !$profile ) {
+            throw new \Exception();
+        }
     }
 
     /**

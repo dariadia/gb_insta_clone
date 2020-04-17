@@ -18,29 +18,27 @@ class UserApi extends Api {
 
     return axios.post(`${ Api.getBaseUrl() }v1/auth/login`, requestBody )
       .then( ( res ) => res )
-      .catch( error => console.warn( error ) );
+      .catch( error =>error.response  );
   }
   /**
    * Действие регистрации ( набросок, будет настраиватся в задаче после )
    * @param { object } data
    * @return { Promise }
    **/
-  register( data ) {
-    return axios.post(`${ Api.getBaseUrl() }v1/auth`, data )
+  signUp( data ) {
+    return axios.post(`${ Api.getBaseUrl() }v1/auth/signup`, data )
         .then( ( res ) => res )
-        .catch( error => console.warn( error ) );
+        .catch( error => error.response )
   }
 
   /**
    * Действие получение профиля
    * @return { Promise }
-   * 
-   * @todo разобратся как axios по человечески отдавать заголовки, ибо это ппц 
    **/
   getProfile() {
     return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)
         .then( ( res ) => res )
-        .catch( error => console.warn( error ) );
+        .catch( error => error.response );
   }
 }
 const userApi = new UserApi();

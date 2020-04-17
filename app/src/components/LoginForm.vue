@@ -26,6 +26,7 @@
           </div>
         </div>
       </form>
+      <div v-if="errorMessage" class="red-text center">{{ errorMessage }}</div>
     </div>
     <div class="buttons">
       <button :disabled="!password || !username"
@@ -41,6 +42,7 @@
 <script>
   /** @todo допилить валидацию */
   import { login } from '../vuex/modules/userModule/actions/login'
+  import {getProfile} from "../vuex/modules/userModule/actions/getProfile";
   export default {
     name: "LoginForm",
     props: {
@@ -52,17 +54,26 @@
         isValid: true,
         username: null,
         password: null,
+        errorMessage: null
       }
     },
     methods: {
       doLogin() {
-        /** validation */
+        this.errorMessage = false;
+
         if ( this.username && this.password ) {
-          login( this.username, this.password );
-          this.onClose();
-        } else {
-          this.isValid = false;
+          return login( this.username, this.password ).then( async () => {
+            const { login: loginError } = this.$store.getters['errors'];
+            const isGuest = this.$store.getters['isGuest'];
+
+            if ( isGuest ) {
+              return this.errorMessage = loginError;
+            }
+            await getProfile();
+            return this.onClose();
+          });
         }
+        return this.isValid = false;
       },
       /**
        * Пока что простенькая валидация, не стал заморачиватся
