@@ -16,7 +16,7 @@ class ProfileApi extends Api {
             this.extraFields() )}`
         )
             .then( ( res ) => res )
-            .catch( error => console.warn( error ) );
+            .catch( error => error.response );
     }
 
     /**
@@ -26,7 +26,18 @@ class ProfileApi extends Api {
     getProfileItem( queryParams ) {
         return axios.get(`${ Api.getBaseUrl() }v1/profile${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
             .then( ( res ) => res )
-            .catch( error => console.warn( error ) );
+
+            .catch( error => error.response );
+    }
+
+    /**
+     * Действие получение профиля по заголовку auth_token
+     * @return { Promise }
+     **/
+    getProfileByAuthToken() {
+        return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)
+            .then( ( res ) => res )
+            .catch( error => error.response );
     }
 }
 const profileApi = new ProfileApi();

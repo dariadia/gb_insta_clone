@@ -3,6 +3,8 @@ import { profileApi } from "../../../common/request/ProfileApi";
 import { Api } from "../../../common/request/Api";
 const { freeze } = Object;
 
+export const DEFAULT_PROFILE_PHOTO = 'profile.jpg';
+
 /**
  * @type { object }
  * */

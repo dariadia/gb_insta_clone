@@ -4,6 +4,7 @@ import createLogger from 'vuex/dist/logger';
 import UserModule from '../modules/userModule';
 import MediaModule from '../modules/mediaModule';
 import ProfileModule from '../modules/profileModule';
+import SearchModule from '../modules/searchModule';
 
 Vue.use( Vuex );
 
@@ -20,7 +21,7 @@ if ( process.env.NODE_ENV !== 'production' ) {
  * @type { object } Vuex.Store
  **/
 const store = new Vuex.Store({
-  modules: { UserModule, MediaModule, ProfileModule },
+  modules: { UserModule, MediaModule, ProfileModule, SearchModule },
   plugins
 });
 

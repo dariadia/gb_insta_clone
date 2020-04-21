@@ -38,6 +38,11 @@ class User extends ActiveRecord implements IdentityInterface
         return 'user';
     }
 
+    public function fields(): array
+    {
+        return [ 'id', 'username', 'profile' ];
+    }
+
     public function behaviors()
     {
         return [
