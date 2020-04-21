@@ -74,9 +74,14 @@
        **/
       gotToUserPage( username ) {
         searchClear().then(() => {
+          const newPath = `/${ username }`;
+          const { path } = this.$route;
+
+          if ( newPath !== path ) {
+            this.$router.push( newPath );
+          }
           this.toggle();
-          this.$router.push( `/${ username }`);
-        })
+        });
       },
       /**
        * Очистка поля в вода, возможно вызов новых действий
