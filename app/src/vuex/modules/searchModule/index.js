@@ -5,7 +5,7 @@ import {
     SEARCH_RESPONSE_SUCCESS,
     SEARCH_RESPONSE_ERROR
 } from "./constants";
-import { userApi } from "../../../common/request/UserApi";
+import { memoSearch } from "../../../common/memo";
 
 /**
  * чтоб не было соблазна редактировать обьект стандартного состояния
@@ -46,8 +46,7 @@ export default {
             if ( !searchQuery ) {
                 return commit( SEARCH_RESPONSE_SUCCESS, searchInitialState.searchResults );
             }
-            const { status, data } = await userApi.search({ username: searchQuery });
-
+            const { status, data } = await memoSearch( { username: searchQuery } );
             if ( status === 200 ) {
                 return commit( SEARCH_RESPONSE_SUCCESS, data );
             }
