@@ -1,5 +1,5 @@
 <template>
-  <div class="preloader__container">
+  <div :class="`preloader__container ${ size }`">
     <div :class="`preloader-wrapper ${ size } active`">
       <div class="spinner-layer spinner-green-only">
         <div class="circle-clipper left">
@@ -30,9 +30,11 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .preloader__container {
-    padding: 20px;
     text-align: center;
+    &.mini {
+      transform: scale(0.3);
+    }
   }
 </style>

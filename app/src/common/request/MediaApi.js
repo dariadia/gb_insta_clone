@@ -31,7 +31,7 @@ class MediaApi extends Api {
               [ 'usersLikeIt' ] )}`
           )
               .then( ( res ) => res )
-          .catch( error => console.warn( error ) );
+          .catch( error => error.response );
   }
 }
 const mediaApi = new MediaApi();

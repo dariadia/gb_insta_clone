@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import { userApi } from "../../../common/request/UserApi";
+import { profileApi } from "../../../common/request/ProfileApi";
 import {
   INIT,
-  SEARCH_QUERY_CHANGE,
   LOGIN_ACTION,
   LOGOUT_ACTION,
-  CLEAR_SEARCH_STRING,
   REGISTER_ACTION,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
@@ -26,7 +25,6 @@ export const usersInitialState = Object.freeze({
   token: null,
   isGuest: true,
   isFetching: false,
-  searchString: null,
   errors: {},
   profile: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
@@ -38,7 +36,6 @@ export default {
   getters: {
     isGuest: ({ isGuest }) => isGuest,
     personalData: ({ personalData }) => personalData,
-    searchString: ({ searchString }) => searchString,
     token: ({ token }) => token,
     errors: ({ errors }) => errors,
   },
@@ -56,8 +53,7 @@ export default {
       state.profile = usersInitialState.profile;
       document.cookie = 'token=';
     },
-    [ SEARCH_QUERY_CHANGE ] : ( state, searchString ) => state.searchString = searchString,
-    [ CLEAR_SEARCH_STRING ] : ( state ) => state.searchString = usersInitialState.searchString,
+
     /**
      * Действия при регистрации, Коммитить не обядательно действия 1 в 1 как было то что вызванно,
      * коммитить можно любые другие действия, потому что мы можем пойти по разным веткам
@@ -79,7 +75,7 @@ export default {
       /** @todo придумать защиту */
       document.cookie = `token=${ authToken }`;
     },
-    /** Обрабатываем както ошибку при авторизации @todo реалиовать */
+    /** Обрабатываем както ошибку при авторизации @todo реализовать */
     [ LOGIN_ACTION_ERROR ]: ( state ) => {
       state.errors.login = 'Неверное имя пользователя или пароль';
     },
@@ -118,9 +114,6 @@ export default {
       return commit( LOGIN_ACTION_ERROR );
     },
     [ LOGOUT_ACTION ] : ({ commit }) => commit( LOGOUT_ACTION ),
-    [ SEARCH_QUERY_CHANGE ] : ({ commit }, payload ) => commit( SEARCH_QUERY_CHANGE, payload.searchString ),
-    [ CLEAR_SEARCH_STRING ] : ({ commit } ) => commit( CLEAR_SEARCH_STRING ),
-
     /** Регистрация пользователя */
     [ REGISTER_ACTION ]: async ({ commit }, payload ) => {
       const { formValues } = payload;
@@ -139,7 +132,7 @@ export default {
     },
 
     [ GET_PROFILE ]: async ({ commit }) => {
-      const { status, data } = await userApi.getProfile();
+      const { status, data } = await profileApi.getProfileByAuthToken();
       /** както будем проверять на ошибки*/
       if ( status === 200 ) {
         return commit( GET_PROFILE_SUCCESS, data );

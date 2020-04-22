@@ -54,6 +54,7 @@
     watch: {
       getFullPath() {
         this.getData();
+        this.getUserProfile();
       }
     },
 
@@ -143,6 +144,7 @@
     .post__container {
         max-width: 920px;
         display: grid;
+        margin: 0 auto;
         grid-template-columns: repeat(2, 1fr);
         grid-column-gap: 5px;
         grid-row-gap: 5px;

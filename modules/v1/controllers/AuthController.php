@@ -4,6 +4,7 @@ namespace app\modules\v1\controllers;
 
 use app\models\Profile;
 use app\models\SignupForm;
+use app\modules\v1\controllers\_base\BaseRestController;
 use yii\filters\Cors;
 
 use app\models\User;
@@ -11,7 +12,7 @@ use yii\rest\ActiveController;
 use yii\web\BadRequestHttpException;
 use yii\web\UnauthorizedHttpException;
 
-class AuthController extends ActiveController
+class AuthController extends BaseRestController
 {
     public $modelClass = User::class;
     /**
@@ -23,23 +24,6 @@ class AuthController extends ActiveController
             'signup' => [ 'POST', 'OPTIONS' ],
             'login' => [ 'POST', 'OPTIONS' ],
         ];
-    }
-
-    public function behaviors()
-    {
-        $parent = parent::behaviors();
-        return array_merge($parent, [
-            'corsFilter' => [
-                'class' => \yii\filters\Cors::class,
-                'cors' => [
-                    'Origin' => ['*'],
-                    'Access-Control-Expose-Headers' => [ '*' ],
-                    'Access-Control-Request-Headers' => [ '*' ],
-                    'Access-Control-Allow-Origin' => ['*'],
-                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET', 'OPTIONS'],
-                ],
-            ]
-        ]);
     }
 
     public function actionLogin()
