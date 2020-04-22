@@ -61,10 +61,9 @@
         this.showResults = false;
       },
       async doSearch( event ) {
-        const { target:{ value }} = event;
+        const { target: { value } } = event;
           searchChange( value ).then( async () =>
-            getSearchedData( value ).then( () => this.showResults = true
-          )
+            getSearchedData( value ).then( () => this.showResults = true )
         );
       },
       /**

@@ -43,11 +43,13 @@ export default {
         [ CLEAR_SEARCH_STRING ] : ({ commit }) => commit( CLEAR_SEARCH_STRING ),
         [ GET_SEARCHED_DATA ] : async ({ commit }, payload ) => {
             const { searchQuery } = payload;
-            const { status, data } = await userApi.search({
-                username: searchQuery
-            });
+            if ( !searchQuery ) {
+                return commit( SEARCH_RESPONSE_SUCCESS, searchInitialState.searchResults );
+            }
+            const { status, data } = await userApi.search({ username: searchQuery });
+
             if ( status === 200 ) {
-               return commit( SEARCH_RESPONSE_SUCCESS, data );
+                return commit( SEARCH_RESPONSE_SUCCESS, data );
             }
             return commit( SEARCH_RESPONSE_ERROR, data );
         },
