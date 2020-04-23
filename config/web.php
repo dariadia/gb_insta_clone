@@ -21,7 +21,8 @@ $config = [
 //            'cookieValidationKey' => '',
             'parsers' => [
                 'application/json' => \yii\web\JsonParser::class,
-            ]
+                'multipart/form-data' => yii\web\MultipartFormDataParser::class
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

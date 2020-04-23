@@ -2,15 +2,15 @@
 
 namespace app\modules\v1\controllers;
 
+use app\modules\v1\controllers\_base\BaseRestController;
 use app\modules\v1\models\Media;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\rest\ActiveController;
 
 /**
  * Контроллер работы с media
  */
-class MediaController extends ActiveController
+class MediaController extends BaseRestController
 {
     const MEDIA_PAGING_LIMIT = 5;
 
@@ -19,6 +19,7 @@ class MediaController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
+        unset($actions['create']);
         $actions['index'] = [
             'class' => 'yii\rest\IndexAction',
             'modelClass' => $this->modelClass,
@@ -45,36 +46,32 @@ class MediaController extends ActiveController
                         'user_id' => $params['user_id'] ?? null,
                     ]);
                 }
-
                 return $dataProvider;
             },
         ];
         return $actions;
     }
 
-    public function behaviors()
-    {
-        $parent = parent::behaviors();
-        return array_merge($parent, [
-            'corsFilter' => [
-                'class' => \yii\filters\Cors::class,
-                'cors' => [
-                    'Access-Control-Expose-Headers' => [ '*' ],
-                    'Access-Control-Request-Headers' => [ '*' ],
-                    // restrict access to
-                    'Origin' => ['*'],
-                    // Allow only POST and PUT methods
-//                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET'],
-                    // Allow only headers 'X-Wsse'
-//                    'Access-Control-Request-Headers' => ['X-Wsse'],
-                    // Allow credentials (cookies, authorization headers, etc.) to be exposed to the browser
-//                    'Access-Control-Allow-Credentials' => true,
-                    // Allow OPTIONS caching
-//                    'Access-Control-Max-Age' => 3600,
-                    // Allow the X-Pagination-Current-Page header to be exposed to the browser.
-//                    'Access-Control-Expose-Headers' => ['X-Pagination-Current-Page'],
-                ],
-            ]
-        ]);
+    public function actionCreate() {
+        $file = \yii\web\UploadedFile::getInstanceByName('file');
+        $user = $this->getUserByAuthorizationHeader();
+        if ( !$user ) {
+            \Yii::$app->response->statusCode = 401;
+            return null;
+        }
+        $model = new Media();
+        $model->user_id = $user->id;
+        $model->body = preg_replace( '/\.\w+/', '', $file->name );
+        $model->media_type_id = 1;
+        $model->filename = $file->name;
+        $model->size = $file->size;
+        if ( $model->save( false ) ) {
+            $filePath = '../app/public/static/media/'.$file->name;
+            $file->saveAs( $filePath );
+
+             return $model->id;
+        }
+        \Yii::$app->response->statusCode = 400;
+        return false;
     }
 }

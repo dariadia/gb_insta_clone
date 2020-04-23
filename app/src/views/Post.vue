@@ -4,7 +4,7 @@
         <div v-if="mediaItem" class="media-container">
             <post :media="mediaItem"/>
         </div>
-        <h3 v-else>Такой записи не существует</h3>
+        <h3 v-else-if="!loading && !mediaItem">Такой записи не существует</h3>
     </div>
 </template>
 

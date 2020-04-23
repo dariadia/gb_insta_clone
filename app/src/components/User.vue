@@ -1,24 +1,12 @@
 <template>
     <div class="container">
         <div v-if="profile.username" class="content">
-            <div class="user__data">
-                <div class="user__avatar">
-                    <img :src="profile.profile_photo_url || '/static/media/profile.jpg'" alt="avatar">
-                </div>
-                <div class="user__info">
-                    <div class="user__title">{{ profile.username }}</div>
-                    <div class="user__name">
-                        {{ profile.name }}
-                    </div>
-                    <div class="user__about">
-                        {{ profile.about }}
-                    </div>
-                </div>
-            </div>
+            <user-info :profile="profile"/>
+            <post-categories/>
             <div v-if="mediaList && mediaList.length" class="post__container">
                 <post-preview v-for="media in mediaList" :key="`media#${ media.id }`" :media="media"/>
             </div>
-            <h3 v-if="!loading && !( mediaList && mediaList.length )">
+            <h3 v-if="!loading && !( mediaList && mediaList.length )" class="center">
                 У пользователя пока нет записей.
             </h3>
             <preloader v-if="loading" size="big"/>
@@ -31,6 +19,8 @@
   import PostPreview from "../components/PostPreview";
   import {getMedia} from '../vuex/modules/mediaModule/actions/index';
   import {getProfile} from '../vuex/modules/profileModule/actions/view';
+  import UserInfo from "./UserInfo";
+  import PostCategories from "./PostCategories";
 
   export default {
     data() {
@@ -132,7 +122,7 @@
       this.getData();
       this.getUserProfile();
     },
-    components: {Preloader, PostPreview}
+    components: { Preloader, PostPreview, UserInfo, PostCategories }
   }
 </script>
 
@@ -150,32 +140,4 @@
         grid-row-gap: 5px;
     }
 
-    .user {
-        &__data {
-            display: flex;
-            margin-left: 60px;
-            margin-bottom: 20px;
-        }
-
-        &__avatar {
-            display: flex;
-            width: 150px;
-            height: 150px;
-
-            & > img {
-                width: 100%;
-                border-radius: 50%;
-            }
-        }
-
-        &__title {
-            font-size: 28px;
-            color: #32383e;
-        }
-
-        &__info {
-            margin-left: 30px;
-            margin-bottom: 10px;
-        }
-    }
 </style>

@@ -8,6 +8,8 @@
                          class="media-username">
                 {{media.name}}
             </router-link>
+
+          <font-awesome-icon v-if="isPageOwner" class="options" icon="ellipsis-h" @click="toggleModal"/>
         </div>
         <div class="media-body">
             <img v-if="media.type === 'image'" class="media-image" :src="media.src" :alt="media.body">
@@ -38,19 +40,48 @@
                 <!--            </div>-->
             </div>
         </div>
+
+        <modal v-if="isPageOwner" size="small" :show="modalOpen" :closeHandler="toggleModal">
+          <ul class="control__menu">
+            <li class="btn_delete" @click="deletePost">Удалить</li>
+          </ul>
+        </modal>
     </div>
 </template>
 
 <script>
+  import Modal from './ui/Modal'
+  import {deletePost} from "../vuex/modules/mediaModule/actions/deletePost";
   export default {
     name: "Post",
     props: {
       media: Object
     },
+    computed: {
+       isPageOwner() {
+           return this.$store.getters['username'] === this.media.username;
+       }
+    },
+    data() {
+      return {
+          modalOpen: false
+      }
+    },
+
     methods: {
       like() {
         this.media.hasBeenLiked ? this.media.likes-- : this.media.likes++;
         this.media.hasBeenLiked = !this.media.hasBeenLiked;
+      },
+      toggleModal() {
+          this.modalOpen = !this.modalOpen;
+      },
+      deletePost() {
+        const { id } = this.media;
+        deletePost( id ).then( () => {
+            this.toggleModal();
+            this.$router.back();
+        });
       },
       //  comment() {
       //    (might cause an issue, so TODO)
@@ -61,7 +92,8 @@
         let date = new Date(string);
         return new Intl.DateTimeFormat('ru-RU').format(date);
       }
-    }
+    },
+    components: { Modal }
   };
 </script>
 
@@ -77,6 +109,19 @@
             margin: 7px 0;
             font-size: 1.2rem;
             border-bottom: 1px solid #ccc;
+            position: relative;
+
+            .options {
+                position: absolute;
+                top: 0;
+                right: 0;
+                cursor: pointer;
+                transition: 0.2s;
+
+                &:hover {
+                    color: #E57373;
+                }
+            }
         }
 
         &-username {
@@ -157,5 +202,18 @@
             font-size: 0.9rem;
             color: #818181;
         }
+    }
+
+    .control__menu {
+       text-align: center;
+       font-weight: bold;
+      .btn_delete {
+        cursor: pointer;
+        transition: color 0.5s;
+        color: #e01717;
+        &:hover {
+          color: #E57373;
+        }
+      }
     }
 </style>

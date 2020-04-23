@@ -26,7 +26,6 @@ class ProfileApi extends Api {
     getProfileItem( queryParams ) {
         return axios.get(`${ Api.getBaseUrl() }v1/profile${ this.buildYiiQuery( queryParams, this.extraFields() )}`)
             .then( ( res ) => res )
-
             .catch( error => error.response );
     }
 
@@ -35,7 +34,7 @@ class ProfileApi extends Api {
      * @return { Promise }
      **/
     getProfileByAuthToken() {
-        return axios.post(`${ Api.getBaseUrl() }v1/profile/get`)
+        return axios.get(`${ Api.getBaseUrl() }v1/profile/get`)
             .then( ( res ) => res )
             .catch( error => error.response );
     }

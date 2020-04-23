@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers\_base;
 
+use app\models\User;
 use yii\filters\Cors;
 use yii\rest\ActiveController;
 
@@ -18,9 +19,20 @@ class BaseRestController extends ActiveController
                     'Access-Control-Request-Headers' => [ '*' ],
                     'Origin' => ['*'],
                     'Allow' => ['*'],
-                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET', 'OPTIONS'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Получить пользователя по заголовкам авторизации
+     * @return User|null
+     **/
+    protected function getUserByAuthorizationHeader() {
+        $token = \Yii::$app->request->headers->get('authorization');
+        $token = str_replace('Bearer', '', $token );
+
+        return ( new User())->findIdentityByAccessToken( trim($token) );
     }
 }

@@ -68,11 +68,7 @@ class ProfileController extends BaseRestController
      * @return ActiveRecord | null
      **/
     public function actionGet() {
-        /** временная мера, пока отключаем тут поведение, потом чтото другое придумаем */
-        $token = Yii::$app->request->headers->get('authorization');
-        $token = str_replace('Bearer', '', $token );
-        $user = ( new User())->findIdentityByAccessToken( trim($token) );
-
+        $user = $this->getUserByAuthorizationHeader();
         if ( $user ) {
             return Profile::find()
                 ->where(['user_id' => $user->id ])
