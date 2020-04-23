@@ -136,9 +136,10 @@ export default {
       const { status, data } = await profileApi.getProfileByAuthToken();
       /** както будем проверять на ошибки*/
       if ( status === 200 ) {
-        return commit( GET_PROFILE_SUCCESS, data );
+        commit( GET_PROFILE_SUCCESS, data );
+      } else {
+        commit(GET_PROFILE_ERROR);
       }
-      return commit( GET_PROFILE_ERROR );
     },
   }
 };

@@ -21,11 +21,12 @@
         <div class="media-content">
             <div class="media-info">
                 <div class="media-likes">
-                    <div class="media-likes__icons" @click="like">
-                        <font-awesome-icon v-if="media.hasBeenLiked" :icon="['fas', 'heart']"/>
+                    <div class="media-likes__icons" @click="doLike">
+                        <font-awesome-icon v-if="hasBeenLiked" :icon="['fas', 'heart']"/>
                         <font-awesome-icon v-else :icon="['far', 'heart']"/>
                     </div>
-                    <router-link v-if="media.likes > 0" class="media-likes__link" :to="{ name: 'Likes', params: { id: media.id } }">
+                    <router-link v-if="media.likes > 0" class="media-likes__link"
+                                 :to="{ name: 'Likes', params: { id: media.id } }">
                         Нравится: {{ media.likes }}
                     </router-link>
                 </div>
@@ -52,6 +53,8 @@
 <script>
   import Modal from './ui/Modal'
   import {deletePost} from "../vuex/modules/mediaModule/actions/deletePost";
+  import {deleteLike} from "../vuex/modules/mediaModule/actions/deleteLike";
+  import {doLike} from "../vuex/modules/mediaModule/actions/doLike";
   export default {
     name: "Post",
     props: {
@@ -60,7 +63,10 @@
     computed: {
        isPageOwner() {
            return this.$store.getters['username'] === this.media.username;
-       }
+       },
+        hasBeenLiked() {
+            return this.$store.getters['mediaItem'].likes;
+        }
     },
     data() {
       return {
@@ -69,9 +75,12 @@
     },
 
     methods: {
-      like() {
-        this.media.hasBeenLiked ? this.media.likes-- : this.media.likes++;
-        this.media.hasBeenLiked = !this.media.hasBeenLiked;
+      doLike() {
+          const { id } = this.media;
+
+        this.hasBeenLiked ? deleteLike(id) : doLike(id);
+        // ? this.media.likes-- : this.media.likes++;
+        // this.media.hasBeenLiked = !this.media.hasBeenLiked;
       },
       toggleModal() {
           this.modalOpen = !this.modalOpen;
@@ -93,7 +102,7 @@
         return new Intl.DateTimeFormat('ru-RU').format(date);
       }
     },
-    components: { Modal }
+      components: { Modal }
   };
 </script>
 

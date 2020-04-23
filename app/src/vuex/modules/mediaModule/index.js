@@ -8,9 +8,12 @@ import {
   GET_NEW_MEDIA,
   DELETE_POST,
   DELETE_POST_ERROR,
-  DELETE_POST_SUCCESS
+  DELETE_POST_SUCCESS,
+  SET_MEDIA_LIKE_INCREMENT,
+  SET_MEDIA_LIKE_DECREMENT
 } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
+import { likeApi } from "../../../common/request/LikeApi";
 import { Api } from "../../../common/request/Api";
 import { getMedia } from "./actions/view";
 const { freeze } = Object;
@@ -70,7 +73,17 @@ export default {
     [ DELETE_POST_SUCCESS ] : ( state, postId ) => {
       state.mediaList = state.mediaList.filter( ({ id }) => id !== postId );
     },
-    [ DELETE_POST_ERROR ] : ( state, data ) => state.errors.push( data )
+    [ DELETE_POST_ERROR ] : ( state, data ) => state.errors.push( data ),
+    [ SET_MEDIA_LIKE_INCREMENT ] : ( state, response ) => {
+      const { headers, data } = response || {};
+      if (data) state.mediaItem.likes++;
+      state.mediaHeaders = Api.parseHeaders( headers );
+    },
+    [ SET_MEDIA_LIKE_DECREMENT ] : ( state, response ) => {
+      const { headers, data } = response || {};
+      if (data) state.mediaItem.likes--;
+      state.mediaHeaders = Api.parseHeaders( headers );
+    },
   },
 
   actions: {
@@ -106,6 +119,14 @@ export default {
         return commit( DELETE_POST_SUCCESS, payload );
       }
       return commit( DELETE_POST_ERROR, data );
-    }
+    },
+    [ SET_MEDIA_LIKE_INCREMENT ] : async ({ commit }, payload ) => {
+      const response = await likeApi.doLike( payload );
+      commit( SET_MEDIA_LIKE_INCREMENT, response );
+    },
+    [ SET_MEDIA_LIKE_DECREMENT ] : async ({ commit }, payload ) => {
+      const response = await likeApi.deleteLike( payload );
+      commit( SET_MEDIA_LIKE_DECREMENT, response );
+    },
   }
 };

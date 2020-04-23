@@ -1,10 +1,13 @@
 <template>
-  <div class="accout__control">
+  <div class="account__control">
     <div v-if="isGuest" class="guest__buttons">
       <button class="waves-effect waves-light btn-small" v-on:click="modalBody = loginForm">Login</button>
       <button class="btn-flat" v-on:click="modalBody = registerForm">Register</button>
     </div>
     <div v-if="!isGuest" class="user__buttons">
+        <router-link class="user__profile" v-if="getUsername" :to="{ name: 'User', params: { username: getUsername }}">
+            <font-awesome-icon :icon="['fas', 'user-circle']"/>
+        </router-link>
         <button class="waves-effect waves-red btn-small red lighten-2" v-on:click="logout">
            <i class="material-icons">exit_to_app</i>
         </button>
@@ -42,6 +45,9 @@
       getModalBodyComponent() {
         return this.modalBody
       },
+        getUsername() {
+          return this.$store.getters['username'];
+        },
     },
 
     methods: {
@@ -58,11 +64,22 @@
     },
   }
 </script>
-<style>
+<style lang="scss">
     .guest__buttons, .user__buttons {
         display: flex;
         align-items: center;
         height: 40px;
+    }
+
+    .account__control .user__profile svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .user__profile {
+        margin-right: 24px;
+        display: flex;
+        color: #a7a7a7;
     }
 
     .btn-small, .btn-flat {

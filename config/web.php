@@ -60,6 +60,11 @@ $config = [
                 [ 'controller' => [ 'v1/auth'] , 'class' => UrlRule::class, ],
                 [ 'controller' => [ 'v1/profile'], 'class' => UrlRule::class, ],
                 [ 'controller' => [ 'v1/users'] , 'class' => UrlRule::class, ],
+                [ 'controller' =>
+                    [ 'v1/like' ],
+                    'class' => UrlRule::class,
+                    'pluralize' => false,
+                ],
             ],
         ],
     ],
