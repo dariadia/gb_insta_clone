@@ -68,7 +68,7 @@ export default {
     },
     [ UPLOAD_ERROR ]: ( state, error ) => state.errors.push( error ),
     [ DELETE_POST_SUCCESS ] : ( state, postId ) => {
-      state.media = state.media.filter( ({ id }) => id !== postId );
+      state.mediaList = state.mediaList.filter( ({ id }) => id !== postId );
     },
     [ DELETE_POST_ERROR ] : ( state, data ) => state.errors.push( data )
   },
@@ -101,7 +101,7 @@ export default {
       return commit( UPLOAD_ERROR, data );
     },
     [ DELETE_POST ] : async ({ commit }, payload ) => {
-      const { status, data } = mediaApi.deletePost( payload );
+      const { status, data } = await mediaApi.deletePost( payload );
       if ( status === Api.STATUS_DELETED ) {
         return commit( DELETE_POST_SUCCESS, payload );
       }
