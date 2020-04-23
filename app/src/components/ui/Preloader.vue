@@ -33,6 +33,9 @@
 <style scoped lang="scss">
   .preloader__container {
     text-align: center;
+    &.big {
+      padding: 20px;
+    }
     &.mini {
       transform: scale(0.3);
     }

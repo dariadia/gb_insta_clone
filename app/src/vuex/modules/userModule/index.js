@@ -26,7 +26,7 @@ export const usersInitialState = Object.freeze({
   isGuest: true,
   isFetching: false,
   errors: {},
-  profile: Object.freeze({
+  personalData: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
   }),
 });
@@ -36,6 +36,7 @@ export default {
   getters: {
     isGuest: ({ isGuest }) => isGuest,
     personalData: ({ personalData }) => personalData,
+    username: ({ personalData }) => personalData.username || null,
     token: ({ token }) => token,
     errors: ({ errors }) => errors,
   },
@@ -50,7 +51,7 @@ export default {
     [ LOGOUT_ACTION ] : ( state ) => {
       state.token = null;
       state.isGuest = usersInitialState.isGuest;
-      state.profile = usersInitialState.profile;
+      state.personalData = usersInitialState.personalData;
       document.cookie = 'token=';
     },
 
@@ -85,7 +86,7 @@ export default {
     },
     /** Сохраняем данные, либо чтото делаем если профиль не был найден **/
     [ GET_PROFILE_ERROR ]: ( state ) => {
-      state.errors.profile= 'cant get profile';
+      state.errors.personalData = 'cant get profile';
     }
   },
   actions: {
