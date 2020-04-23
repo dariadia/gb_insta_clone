@@ -46,7 +46,7 @@ class MediaController extends BaseRestController
                         'user_id' => $params['user_id'] ?? null,
                     ]);
                 }
-                $query->orderBy([ 'id' => SORT_DESC ]);
+//                $query->orderBy([ 'id' => SORT_DESC ]);
                 return $dataProvider;
             },
         ];
