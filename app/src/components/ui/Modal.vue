@@ -1,7 +1,7 @@
 <template>
     <div v-if="show">
       <div class="modal_overflow"/>
-      <div class="modal__window show">
+      <div :class="`modal__window show ${ size || '' }`">
         <!-- если передали обработчик закрытия в компонент модалки, тогда отображаем кнопку закрытия в шапке -->
         <div v-if="closeHandler" class="button_close" v-on:click="closeHandler">
           <i class="icon material-icons">close</i>
@@ -17,6 +17,7 @@
   export default {
     name: "modal_window",
     props: {
+      size: String,
       show: Boolean,
       closeHandler: Function,
     },
@@ -70,7 +71,10 @@
   z-index: 1003;
   display: block;
   top: 10%;
-  -ms-transform: scaleX(1) scaleY(1);
+
+  &.small {
+    max-width: 10%;
+  }
 
   .modal__body {
     padding: 24px;

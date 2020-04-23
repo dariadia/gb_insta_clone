@@ -56,9 +56,8 @@
               this.showMenu = !this.showMenu;
           },
           handleUploadFile( event ) {
-              const { target: { files } } = event
-              this.toggleMenu();
-              upload( files )
+              const { target: { files } } = event;
+              upload( files ).then( this.toggleMenu );
           }
       }
   }

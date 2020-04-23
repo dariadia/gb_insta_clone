@@ -19,7 +19,7 @@ class BaseRestController extends ActiveController
                     'Access-Control-Request-Headers' => [ '*' ],
                     'Origin' => ['*'],
                     'Allow' => ['*'],
-                    'Access-Control-Request-Method' => ['POST', 'PUT', 'GET', 'OPTIONS'],
+                    'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS'],
                 ],
             ],
         ]);

@@ -3,7 +3,8 @@ import axios from "axios";
 const EMPTY_QUERY = '';
 
 export class Api {
-
+  static STATUS_OK = 200;
+  static STATUS_DELETED = 204;
   _token = null;
 
   /**

@@ -2,7 +2,13 @@ import {
   SET_MEDIA_REQUEST_DATE,
   SET_MEDIA_REQUEST_VIEW,
   SET_MEDIA_REQUEST_LIKE,
-  UPLOAD_FILE_TO_SERVER, UPLOAD_SUCCESS, UPLOAD_ERROR, GET_NEW_MEDIA
+  UPLOAD_FILE_TO_SERVER,
+  UPLOAD_SUCCESS,
+  UPLOAD_ERROR,
+  GET_NEW_MEDIA,
+  DELETE_POST,
+  DELETE_POST_ERROR,
+  DELETE_POST_SUCCESS
 } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
 import { Api } from "../../../common/request/Api";
@@ -60,10 +66,13 @@ export default {
     [ UPLOAD_SUCCESS ]: ( state, data ) => {
       state.mediaList.unshift( ...data )
     },
-    [ UPLOAD_ERROR ]: ( state, error ) => {
-      state.errors.push( error );
-    }
+    [ UPLOAD_ERROR ]: ( state, error ) => state.errors.push( error ),
+    [ DELETE_POST_SUCCESS ] : ( state, postId ) => {
+      state.media = state.media.filter( ({ id }) => id !== postId );
+    },
+    [ DELETE_POST_ERROR ] : ( state, data ) => state.errors.push( data )
   },
+
   actions: {
     [ SET_MEDIA_REQUEST_DATE ] : async ({ commit }, payload ) => {
       const response = await mediaApi.getMediaList( payload );
@@ -79,17 +88,24 @@ export default {
     },
     [ UPLOAD_FILE_TO_SERVER ] : async ({ commit }, payload ) => {
       const { status, data } = await mediaApi.uploadPost( payload );
-      if ( status === 200 ) {
+      if ( status === Api.STATUS_OK ) {
         return await getMedia( data, GET_NEW_MEDIA );
       }
       return commit( UPLOAD_ERROR, data );
     },
     [ GET_NEW_MEDIA ] : async ({ commit }, payload ) => {
       const { status, data } = await mediaApi.getMediaItem( payload );
-      if ( status === 200 ) {
+      if ( status === Api.STATUS_OK ) {
         return commit( UPLOAD_SUCCESS, data )
       }
       return commit( UPLOAD_ERROR, data );
+    },
+    [ DELETE_POST ] : async ({ commit }, payload ) => {
+      const { status, data } = mediaApi.deletePost( payload );
+      if ( status === Api.STATUS_DELETED ) {
+        return commit( DELETE_POST_SUCCESS, payload );
+      }
+      return commit( DELETE_POST_ERROR, data );
     }
   }
 };
