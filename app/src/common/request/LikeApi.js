@@ -9,9 +9,7 @@ class LikeApi extends Api {
 
 
     doLike( mediaID ) {
-        return axios.post(`${ Api.getBaseUrl() }v1/like`, {
-            mediaID
-        })
+        return axios.post(`${ Api.getBaseUrl() }v1/like`, mediaID)
             .then( ( res ) => res )
             .catch( error => error.response );
     }
