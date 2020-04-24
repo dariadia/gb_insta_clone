@@ -24,7 +24,7 @@
     <div class="data__arrow"/>
     <div class="search__data">
       <div v-for="item in searchData" :key="item.id" class="item" @click="gotToUserPage( item.username )">
-          <img class="profile__photo" :src="`static/profiles/${ setPhoto( item ) }`">
+          <img class="profile__photo" :src="`/static/profiles/${ setPhoto( item ) }`">
           <div class="profile__name">{{ item.username }}</div>
       </div>
       <div v-if="!searchData || !searchData.length" class="item not_found">Ничего не найдено.</div>

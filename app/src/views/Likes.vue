@@ -11,7 +11,7 @@
 <script>
   import Preloader from "../components/ui/Preloader";
   import Post from "../components/PostLikes";
-  import {getMedia} from '../vuex/modules/mediaModule/actions/likes';
+  import {getMedia} from '../vuex/modules/mediaModule/actions/getLikes';
 
   export default {
     data() {
