@@ -1,8 +1,8 @@
 <template>
   <div class="account__control">
     <div v-if="isGuest" class="guest__buttons">
-      <button class="waves-effect waves-light btn-small" v-on:click="modalBody = loginForm">Login</button>
-      <button class="btn-flat" v-on:click="modalBody = registerForm">Register</button>
+      <button class="waves-effect waves-light btn-small" v-on:click="modalBody = loginForm">Войти</button>
+      <button class="btn-flat" v-on:click="modalBody = registerForm">Регистрация</button>
     </div>
     <div v-if="!isGuest" class="user__buttons">
         <router-link class="user__profile" v-if="getUsername" :to="{ name: 'User', params: { username: getUsername }}">
@@ -59,9 +59,7 @@
         this.modalBody =  null;
       },
     },
-    components: {
-      Modal
-    },
+    components: { Modal },
   }
 </script>
 <style lang="scss">

@@ -96,7 +96,10 @@ class MediaController extends BaseRestController
 
         $media = Media::find()->where(['id' => $mediaId])->one();
 
-        if ($media->delete()) return true;
+        if ($media->delete()) {
+            \Yii::$app->response->statusCode = 204;
+            return true;
+        }
 
         \Yii::$app->response->statusCode = 400;
         return false;
