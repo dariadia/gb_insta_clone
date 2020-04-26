@@ -5,6 +5,7 @@ import UserModule from '../modules/userModule';
 import MediaModule from '../modules/mediaModule';
 import ProfileModule from '../modules/profileModule';
 import SearchModule from '../modules/searchModule';
+import SubscriptionsModule from '../modules/subscriptionsModule';
 
 Vue.use( Vuex );
 
@@ -21,7 +22,10 @@ if ( process.env.NODE_ENV !== 'production' ) {
  * @type { object } Vuex.Store
  **/
 const store = new Vuex.Store({
-  modules: { UserModule, MediaModule, ProfileModule, SearchModule },
+  modules: {
+      UserModule, MediaModule, ProfileModule, SearchModule,
+      SubscriptionsModule
+  },
   plugins
 });
 

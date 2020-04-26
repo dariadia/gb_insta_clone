@@ -24,7 +24,7 @@ const { freeze } = Object;
 export const mediaInitialState = freeze({
   mediaList: [],
   mediaItem: {},
-  mediaHeaders: [],
+  mediaHeaders: {},
   mediaLikes: [],
   errors: []
 });
@@ -36,7 +36,8 @@ export default {
     mediaItem: ({ mediaItem }) => mediaItem,
     mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
     mediaLikes: ({ mediaLikes }) => mediaLikes,
-    },
+    mediaCount: ({ mediaHeaders }) => mediaHeaders.totalItems || 0
+  },
   setters: {},
   mutations: {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
@@ -68,6 +69,7 @@ export default {
     },
     [ UPLOAD_SUCCESS ]: ( state, data ) => {
       state.mediaList.unshift( ...data )
+      state.mediaHeaders.totalItems++;
     },
     [ UPLOAD_ERROR ]: ( state, error ) => state.errors.push( error ),
     [ DELETE_POST_SUCCESS ] : ( state, postId ) => {
