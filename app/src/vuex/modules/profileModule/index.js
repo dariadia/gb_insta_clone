@@ -11,7 +11,8 @@ export const DEFAULT_PROFILE_PHOTO = 'profile.jpg';
 export const profileInitialState = freeze({
     profileList: [],
     profileItem: {},
-    profileHeaders: []
+    profileHeaders: [],
+    profilePath: process.env.VUE_APP_STATIC_HOST + 'profiles/'
 });
 
 export default {
@@ -20,6 +21,7 @@ export default {
         profileList: ({ profileList }) => profileList,
         profileItem: ({ profileItem }) => profileItem,
         profileHeaders: ({ profileHeaders }) => profileHeaders,
+        profilePath: ({ profilePath }) => profilePath,
     },
     setters: {},
     mutations: {

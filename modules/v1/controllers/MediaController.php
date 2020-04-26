@@ -68,7 +68,7 @@ class MediaController extends BaseRestController
         $model->filename = $file->name;
         $model->size = $file->size;
         if ( $model->save( false ) ) {
-            $filePath = '../app/public/static/media/'.$file->name;
+            $filePath = Yii::$app->params['staticPath'] . Media::tableName() . DIRECTORY_SEPARATOR . $file->name;
             $file->saveAs( $filePath );
 
              return $model->id;

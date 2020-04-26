@@ -3,7 +3,7 @@
         <div class="profile-item__info">
             <a href="#">
                 <div class="profile-item__img-border">
-                    <img class="profile-item__img" :src="profile.profile_photo" alt="" >
+                    <img class="profile-item__img" :src="mediaHost + profile.profile_photo" alt="" >
                 </div>
             </a>
             <div class="profile-item__details">
@@ -23,6 +23,11 @@
         name: "ProfileItem",
         props: {
             profile: Object
+        },
+        data() {
+            return {
+                mediaHost: this.$store.getters[ 'mediaHost' ]
+            }
         },
     }
 </script>

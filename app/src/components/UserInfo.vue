@@ -2,7 +2,7 @@
   <div class="container">
     <div class="user__data">
       <div class="user__avatar">
-        <img :src="profile.profile_photo_url || '/static/profiles/profile.jpg'" alt="avatar">
+        <img :src="setPhoto( profile.profile_photo_url )" alt="avatar">
       </div>
       <div class="user__info">
         <div class="user__title">{{ profile.username }}</div>
@@ -23,6 +23,16 @@
     props: {
       profile: Object,
     },
+    data() {
+        return {
+            profilePath: this.$store.getters[ 'profilePath' ]
+        }
+    },
+    methods: {
+      setPhoto( url ) {
+          return this.profilePath + ( url || 'profile.jpg' );
+      }
+    }
   }
 
 </script>

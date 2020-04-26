@@ -10,8 +10,6 @@ use Yii;
 use yii\rest\IndexAction;
 
 /**
- * Управляет пользовательским профилем, в том числе предоставляет интерфейс для изменения отдельных полей модели User
- * Class ProfileController
  * @package app\modules\v1\controllers
  */
 class UsersController extends BaseRestController

@@ -16,11 +16,19 @@ if ( process.env.NODE_ENV !== 'production' ) {
     plugins.push( createLogger() );
 }
 
+const mainInitialState = Object.freeze({
+    staticPath: process.env.VUE_APP_STATIC_HOST
+});
+
 /**
  * Состояние всего приложения, так как скорее всего разработка будет модульной, станарные ключи были убранны
  * @type { object } Vuex.Store
  **/
 const store = new Vuex.Store({
+  state: { ...mainInitialState },
+  getters: {
+      staticPath: ({ staticPath } ) => staticPath
+  },
   modules: { UserModule, MediaModule, ProfileModule, SearchModule },
   plugins
 });

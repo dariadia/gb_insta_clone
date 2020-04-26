@@ -12,9 +12,9 @@
           <font-awesome-icon v-if="isPageOwner" class="options" icon="ellipsis-h" @click="toggleModal"/>
         </div>
         <div class="media-body">
-            <img v-if="media.type === 'image'" class="media-image" :src="media.src" :alt="media.body">
+            <img v-if="media.type === 'image'" class="media-image" :src="mediaPath + media.src" :alt="media.body">
             <video v-else controls class="media-video">
-                <source :src="media.src" type="video/mp4"/>
+                <source :src="mediaPath + media.src" type="video/mp4"/>
                 Your browser does not support HTML5 video.
             </video>
         </div>
@@ -70,7 +70,8 @@
     },
     data() {
       return {
-          modalOpen: false
+          modalOpen: false,
+          mediaPath: this.$store.getters[ 'mediaPath' ]
       }
     },
 
