@@ -38,7 +38,6 @@ export default {
     mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
     mediaLikes: ({ mediaLikes }) => mediaLikes,
     mediaPath: ({ mediaPath }) => mediaPath,
-    mediaCount: ({ mediaHeaders }) => mediaHeaders.totalItems || 0
   },
   setters: {},
   mutations: {

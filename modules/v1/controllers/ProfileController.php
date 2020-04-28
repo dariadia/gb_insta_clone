@@ -77,15 +77,4 @@ class ProfileController extends BaseRestController
         \Yii::$app->response->statusCode = 404;
         return null;
     }
-
-    /** @todo сделать в следующей ветке, которая подтянет баг фиксы по файлам */
-    public function actionUploadNewPhoto() {
-        $file = \yii\web\UploadedFile::getInstanceByName('file');
-        $user = $this->getUserByAuthorizationHeader();
-        if ( !$user ) {
-            \Yii::$app->response->statusCode = 401;
-            return null;
-        }
-        return false;
-    }
 }

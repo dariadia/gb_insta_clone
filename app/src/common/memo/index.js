@@ -31,6 +31,9 @@ export function memo( fn ) {
         if ( !value ) {
             value = fn.apply( null, arguments );
             memoCache[ key ] = value;
+            console.log( '%c API CALL', 'color: RED' );
+        } else {
+            console.log( '%c FROM CACHE!!!', 'color: green' );
         }
         return value;
     }
