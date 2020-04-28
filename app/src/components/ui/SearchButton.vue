@@ -6,7 +6,7 @@
           <input type="text"
              @input="doSearch"
              class="search_input"
-             placeholder="Find"
+             placeholder="Найти"
           />
 
         <div class="clear__container">
@@ -16,7 +16,7 @@
 
       </div>
       <div v-else class="search__group flex items_center content_center" v-on:click="toggle">
-          Search
+          Поиск
       </div>
     </div>
 
@@ -24,7 +24,7 @@
     <div class="data__arrow"/>
     <div class="search__data">
       <div v-for="item in searchData" :key="item.id" class="item" @click="gotToUserPage( item.username )">
-          <img class="profile__photo" :src="`/static/profiles/${ setPhoto( item ) }`">
+          <img class="profile__photo" :src="setPhoto( item )">
           <div class="profile__name">{{ item.username }}</div>
       </div>
       <div v-if="!searchData || !searchData.length" class="item not_found">Ничего не найдено.</div>
@@ -53,7 +53,10 @@
     },
 
     data() {
-      return { isActive: false, showResults: false }
+      return {
+          isActive: false, showResults: false,
+          profilePath: this.$store.getters[ 'profilePath' ]
+      }
     },
     methods: {
       toggle() {
@@ -96,7 +99,9 @@
        **/
       setPhoto( item ) {
          const { profile } = item;
-         return profile && profile.profile_photo_url ? profile.profile_photo_url : DEFAULT_PROFILE_PHOTO
+         const photo = profile && profile.profile_photo_url ? profile.profile_photo_url : DEFAULT_PROFILE_PHOTO
+
+         return this.profilePath + photo;
       }
     },
     components: { Preloader }

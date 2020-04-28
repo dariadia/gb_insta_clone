@@ -32,7 +32,7 @@ class Media extends \app\models\Media
                 return $this->mediaType->name;
             },
             'src' => function () {
-                return Url::to('/static/media/' . $this->filename);
+                return Url::to( $this->filename );
             },
             'comments' => function () {
                 return $this->comments;

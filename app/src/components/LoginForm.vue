@@ -35,6 +35,8 @@
       >Войти</button>
       <button class="waves-effect waves-light btn red" v-on:click="onClose">Отмена</button>
     </div>
+
+    <preloader v-if="loading" :wrapper="true" size="big"/>
   </div>
 
 </template>
@@ -43,6 +45,7 @@
   /** @todo допилить валидацию */
   import { login } from '../vuex/modules/userModule/actions/login'
   import {getProfile} from "../vuex/modules/userModule/actions/getProfile";
+  import Preloader from "./ui/Preloader";
   export default {
     name: "LoginForm",
     props: {
@@ -51,6 +54,7 @@
 
     data() {
       return {
+        loading: false,
         isValid: true,
         username: null,
         password: null,
@@ -59,6 +63,7 @@
     },
     methods: {
       doLogin() {
+        this.loading = true;
         this.errorMessage = false;
 
         if ( this.username && this.password ) {
@@ -67,10 +72,13 @@
             const isGuest = this.$store.getters['isGuest'];
 
             if ( isGuest ) {
+              this.loading = false;
               return this.errorMessage = loginError;
             }
-            await getProfile();
-            return this.onClose();
+            await getProfile().then( () => {
+                this.onClose();
+                this.loading = false;
+            });
           });
         }
         return this.isValid = false;
@@ -86,7 +94,8 @@
         }
         return 'default';
       }
-    }
+    },
+    components: { Preloader }
   }
 </script>
 

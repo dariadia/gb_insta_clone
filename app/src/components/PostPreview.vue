@@ -1,9 +1,9 @@
 <template>
     <router-link :to="{ name: 'Post', params: { id: media.id } }" class="post post__preview">
         <div class="post__preview-media">
-            <img v-if="media.type === 'image'" class="post__preview-image" :src="media.src" :alt="media.body">
+            <img v-if="media.type === 'image'" class="post__preview-image" :src="mediaPath + media.src" :alt="media.body">
             <video v-else controls class="post__preview-video">
-                <source :src="media.src" type="video/mp4"/>
+                <source :src="mediaPath + media.src" type="video/mp4"/>
                 Your browser does not support HTML5 video.
             </video>
         </div>
@@ -21,6 +21,12 @@
     name: "Media",
     props: {
       media: Object
+    },
+    data() {
+        // console
+      return {
+          mediaPath: this.$store.getters[ 'mediaPath' ]
+      }
     },
     methods: {
       getDate(string) {

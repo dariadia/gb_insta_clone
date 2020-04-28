@@ -68,7 +68,7 @@ class MediaController extends BaseRestController
         $model->filename = $file->name;
         $model->size = $file->size;
         if ( $model->save( false ) ) {
-            $filePath = '../app/public/static/media/'.$file->name;
+            $filePath = Yii::$app->params['staticPath'] . Media::tableName() . DIRECTORY_SEPARATOR . $file->name;
             $file->saveAs( $filePath );
 
              return $model->id;
@@ -96,7 +96,10 @@ class MediaController extends BaseRestController
 
         $media = Media::find()->where(['id' => $mediaId])->one();
 
-        if ($media->delete()) return true;
+        if ($media->delete()) {
+            \Yii::$app->response->statusCode = 204;
+            return true;
+        }
 
         \Yii::$app->response->statusCode = 400;
         return false;

@@ -28,6 +28,7 @@ export const usersInitialState = Object.freeze({
   errors: {},
   personalData: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
+    username: null,
   }),
 });
 
@@ -55,14 +56,7 @@ export default {
       document.cookie = 'token=';
     },
 
-    /**
-     * Действия при регистрации, Коммитить не обядательно действия 1 в 1 как было то что вызванно,
-     * коммитить можно любые другие действия, потому что мы можем пойти по разным веткам
-     **/
-    [ REGISTER_SUCCESS ]:  ( state, response ) => {
-      /** с ответа скорее всего будем получать некий токен, либо id сессии*/
-      const { token } = response;
-      state.token = token;
+    [ REGISTER_SUCCESS ]:  ( state ) => {
       state.errors.register = null;
     },
     [ REGISTER_ERROR ]:  ( state, errors ) => {
@@ -127,7 +121,7 @@ export default {
       const { status, data } = await userApi.signUp( userObject );
       /** както будем проверять на ошибки*/
       if ( status === 200 ) {
-        return commit( REGISTER_SUCCESS, data.token );
+        return commit( REGISTER_SUCCESS );
       }
       return commit( REGISTER_ERROR, data.errors );
     },

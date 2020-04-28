@@ -26,7 +26,8 @@ export const mediaInitialState = freeze({
   mediaItem: {},
   mediaHeaders: [],
   mediaLikes: [],
-  errors: []
+  errors: [],
+  mediaPath: process.env.VUE_APP_STATIC_HOST + 'media/'
 });
 
 export default {
@@ -36,7 +37,8 @@ export default {
     mediaItem: ({ mediaItem }) => mediaItem,
     mediaHeaders: ({ mediaHeaders }) => mediaHeaders,
     mediaLikes: ({ mediaLikes }) => mediaLikes,
-    },
+    mediaPath: ({ mediaPath }) => mediaPath,
+  },
   setters: {},
   mutations: {
     [ SET_MEDIA_REQUEST_DATE ] : ( state, response ) => {
