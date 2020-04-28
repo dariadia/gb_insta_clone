@@ -5,6 +5,7 @@ import UserModule from '../modules/userModule';
 import MediaModule from '../modules/mediaModule';
 import ProfileModule from '../modules/profileModule';
 import SearchModule from '../modules/searchModule';
+import SubscriptionsModule from '../modules/subscriptionsModule';
 
 Vue.use( Vuex );
 
@@ -17,9 +18,8 @@ if ( process.env.NODE_ENV !== 'production' ) {
 }
 
 const mainInitialState = Object.freeze({
-    staticPath: process.env.VUE_APP_STATIC_HOST
+  staticPath: process.env.VUE_APP_STATIC_HOST
 });
-
 /**
  * Состояние всего приложения, так как скорее всего разработка будет модульной, станарные ключи были убранны
  * @type { object } Vuex.Store
@@ -27,9 +27,12 @@ const mainInitialState = Object.freeze({
 const store = new Vuex.Store({
   state: { ...mainInitialState },
   getters: {
-      staticPath: ({ staticPath } ) => staticPath
+    staticPath: ({ staticPath } ) => staticPath
   },
-  modules: { UserModule, MediaModule, ProfileModule, SearchModule },
+  modules: {
+      UserModule, MediaModule, ProfileModule, SearchModule,
+      SubscriptionsModule
+  },
   plugins
 });
 
