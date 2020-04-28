@@ -5,14 +5,14 @@ namespace app\modules\v1\controllers;
 
 
 use app\models\Profile;
-use app\models\search\ProfileSearch;
+
 use app\models\User;
 use app\modules\v1\controllers\_base\BaseRestController;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
-use yii\filters\Cors;
-use yii\rest\ActiveController;
+use yii\helpers\BaseJson;
+use yii\helpers\Json;
 use yii\rest\IndexAction;
 
 /**
@@ -30,6 +30,7 @@ class ProfileController extends BaseRestController
     {
         return [
             'index' => [ 'GET', 'OPTIONS' ],
+            'updateProfile' => [ 'PUT', 'OPTIONS' ],
         ];
     }
 
@@ -76,5 +77,50 @@ class ProfileController extends BaseRestController
         }
         \Yii::$app->response->statusCode = 404;
         return null;
+    }
+
+    public function actionUploadPhoto() {
+        $file = \yii\web\UploadedFile::getInstanceByName('file');
+        $user = $this->getUserByAuthorizationHeader();
+        if ( !$user ) {
+            \Yii::$app->response->statusCode = 401;
+            return null;
+        }
+
+        $filePath = Yii::$app->params['staticPath'] . Profile::tableName() . DIRECTORY_SEPARATOR . $file->name;
+        $profile = Profile::findOne([ 'user_id' => $user->id ]);
+        $profile->profile_photo = $file->name;
+
+        if ( $file->saveAs( $filePath ) && $profile->save() ) {
+            return $profile;
+        }
+
+        return false;
+    }
+
+    public function actionUpdateProfile() {
+        $request = Json::decode( Yii::$app->request->getRawBody() );
+
+        $profile = Profile::findOne([ 'id' => $request[ 'id' ] ]);
+
+        if ( !$profile ) {
+            \Yii::$app->response->statusCode = 404;
+            return null;
+        }
+
+        $user = $profile->user;
+
+        $profile->name = $request['name'];
+        $profile->site = $request['site'];
+        $profile->about = $request['about'];
+
+        $user->username = $request['username'];
+
+        if ( $profile->save( ) && $user->save() ) {
+            return true;
+        }
+
+        \Yii::$app->response->statusCode = 400;
+        return false;
     }
 }

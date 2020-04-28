@@ -14,7 +14,6 @@ import {
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
 } from "./constants";
-import {UPLOAD_NEW_PHOTO} from "../profileModule/constants";
 
 const TOKEN_KEY = 'token';
 
@@ -144,15 +143,7 @@ export default {
       if ( status === 200 ) {
         commit( GET_PROFILE_SUCCESS, data );
       } else {
-        commit(GET_PROFILE_ERROR);
-      }
-    },
-    [ UPLOAD_NEW_PHOTO ] : async ({ commit }, payload ) => {
-      const { status, data } = await profileApi.uploadNewPhoto( payload );
-      if ( status === 200 ) {
-        commit( GET_PROFILE_SUCCESS, data );
-      } else {
-        commit(GET_PROFILE_ERROR);
+        commit( GET_PROFILE_ERROR );
       }
     },
   }

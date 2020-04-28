@@ -5,7 +5,7 @@
       <div class="input__group flex">
         <label class="label">
           <font-awesome-icon v-if="!getPhotoPath()" class="photo_icon" :icon="['fas', 'user-circle']"/>
-          <img v-else :src="getPhotoPath()"/>
+          <img class="photo" v-else :src="getPhotoPath()"/>
         </label>
         <div class="content">
           <div class="username">{{ username.value || 'Не заданно' }}</div>
@@ -61,10 +61,18 @@
           />
         </div>
       </div>
+
+      <modal :show="showConfirm" :closeHandler="toggleConfirm">
+        <div class="center">Профиль успешно обновлен</div>
+        <hr/>
+        <div class="flex center">
+          <button class="waves-effect waves-light btn" v-on:click="toggleConfirm">OK</button>
+        </div>
+      </modal>
     </div>
 
     <div class="flex center">
-      <button :disabled="!isValid" class="waves-effect waves-light btn-small orange darken-4">Отправить</button>
+      <button :disabled="!isValid || !isChanged" class="waves-effect waves-light btn-small orange darken-4" @click="handleSave">Отправить</button>
     </div>
   </div>
 
@@ -74,7 +82,8 @@
 <script>
     import { uploadPhoto } from "../vuex/modules/profileModule/actions/uploadPhoto";
     import { doValidateByRules } from "../common/validators";
-
+    import { updateProfile } from "../vuex/modules/profileModule/actions/updateProfile";
+    import Modal from "./ui/Modal";
 
     export default {
         name: "UserProfileForm",
@@ -82,7 +91,7 @@
         data() {
             const { username, name, about, site } = this.$store.getters[ 'personalData' ];
             return {
-                file: null, isValid: true, isLoading: true, updatedProfile: {},
+                file: null, isValid: true, isLoading: true, isChanged: false, showConfirm: false,
                 username: {
                     key: 'username', valid: true, value: username, label: 'Имя пользователя',
                     error: null, rules: { required: true }
@@ -101,7 +110,9 @@
             },
             /** @todo доделать в следующей ветке */
             getPhotoPath() {
-                return false;
+                const { profile_photo_url } = this.$store.getters[ 'personalData' ];
+                const staticPath = this.$store.getters[ 'profilePath' ];
+                return profile_photo_url ? `${ staticPath }${ profile_photo_url }` : null;
             },
             validateField( key, event ) {
                 const { rules } = this[ key ];
@@ -110,8 +121,25 @@
                 this.isValid = doValidateByRules( value, rules );
                 this[ key ].value = value;
                 this[ key ].isValid = this.isValid;
+
+                this.isChanged = true;
             },
+            handleSave() {
+                const { id } = this.$store.getters[ 'personalData' ];
+                updateProfile( id, {
+                    username: this.username.value || null,
+                    name: this.name.value || null,
+                    about: this.about.value || null,
+                    site: this.site.value || null
+                });
+                this.isChanged = false;
+                this.toggleConfirm();
+            },
+            toggleConfirm() {
+                this.showConfirm = !this.showConfirm;
+            }
         },
+        components: { Modal }
     }
 </script>
 
@@ -129,6 +157,12 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+
+    .photo {
+      width: 100px;
+      border-radius: 50%;
+      height: 100px;
+    }
   }
 
   .profile__form {
