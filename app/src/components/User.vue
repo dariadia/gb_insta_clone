@@ -18,16 +18,16 @@
   import Preloader from "../components/ui/Preloader";
   import PostPreview from "../components/PostPreview";
   import {getMedia} from '../vuex/modules/mediaModule/actions/index';
-  import {getProfile} from '../vuex/modules/profileModule/actions/view';
   import UserInfo from "./UserInfo";
   import PostCategories from "./PostCategories";
 
   export default {
+    props: {
+      profile: Object
+    },
     data() {
       return {
         loading: false,
-        username: null,
-        profile: {},
         postsPerPage: 6,
         scrollOffset: 300,
       }
@@ -44,7 +44,6 @@
     watch: {
       getFullPath() {
         this.getData();
-        this.getUserProfile();
       }
     },
 
@@ -61,7 +60,7 @@
      * @return { void }
      **/
     destroyed () {
-      window.removeEventListener('scroll', this.infinityScroll);
+      window.removeEventListener('scroll', this.infinityScroll );
     },
 
     methods: {
@@ -70,20 +69,9 @@
        * @return { void }
        **/
       getData() {
-        this.username = this.$route.params.username;
         this.handlerToggleLoading();
-
-        if (this.username) {
-          getMedia(this.username, 0, this.postsPerPage).then(this.handlerToggleLoading);
-        }
-      },
-
-      getUserProfile () {
-        if (this.username) {
-            getProfile(this.username).then(() => {
-                    this.profile = this.$store.getters['profileItem'];
-                }
-            );
+        if (this.profile.username) {
+          getMedia(this.profile.username, 0, this.postsPerPage).then(this.handlerToggleLoading);
         }
       },
 
@@ -103,7 +91,7 @@
           this.handlerToggleLoading();
 
           setTimeout( () => {
-            getMedia( this.username, currentPage, this.postsPerPage )
+            getMedia( this.profile.username, currentPage, this.postsPerPage )
               .then( this.handlerToggleLoading )
           }, 1000);
         }
@@ -120,7 +108,6 @@
 
     mounted() {
       this.getData();
-      this.getUserProfile();
     },
     components: { Preloader, PostPreview, UserInfo, PostCategories }
   }

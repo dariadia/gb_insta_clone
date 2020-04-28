@@ -84,6 +84,8 @@
   import { signUp } from '../vuex/modules/userModule/actions/signUp';
   import Modal from "./ui/Modal";
   import Preloader from "./ui/Preloader";
+  import { getProfile } from "../vuex/modules/userModule/actions/getProfile";
+
 
   export default {
     name: "RegisterForm",
@@ -142,6 +144,7 @@
         let isValid = true;
         const formFields = this.$data;
 
+        /** @TODO сделать общий валидатор, сейчас копипаст изза отсутствия времени */
         Object.entries( formFields ).forEach( ([ key, data ]) => {
           const { value, rules } = data;
 

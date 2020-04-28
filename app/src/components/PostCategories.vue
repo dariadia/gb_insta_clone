@@ -24,7 +24,7 @@
       </li>
 
     </ul>
-    <input id="test" type="file" ref="file" :value="file" v-on:change="handleUploadFile" hidden>
+    <input type="file" ref="file" :value="file" v-on:change="handleUploadFile" hidden>
   </div>
 </template>
 

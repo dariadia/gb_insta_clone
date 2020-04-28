@@ -14,6 +14,7 @@ import {
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
 } from "./constants";
+import {UPLOAD_NEW_PHOTO} from "../profileModule/constants";
 
 const TOKEN_KEY = 'token';
 
@@ -24,7 +25,8 @@ const TOKEN_KEY = 'token';
 export const usersInitialState = Object.freeze({
   token: null,
   isGuest: true,
-  isFetching: false,
+  isFetching: true,
+  isProfileFetching: true,
   errors: {},
   personalData: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
@@ -40,6 +42,8 @@ export default {
     username: ({ personalData }) => personalData.username || null,
     token: ({ token }) => token,
     errors: ({ errors }) => errors,
+    isUserFetching: ({ isFetching }) => isFetching,
+    isUserProfileIsFetching: ({ isProfileFetching }) => isProfileFetching,
   },
   setters: {},
   mutations: {
@@ -48,6 +52,7 @@ export default {
           state.isGuest = false;
           state.token = token;
       }
+      state.isFetching = false;
     },
     [ LOGOUT_ACTION ] : ( state ) => {
       state.token = null;
@@ -76,12 +81,14 @@ export default {
     },
     /** Прфиль успешно получен, сохраняем данные **/
     [ GET_PROFILE_SUCCESS ]: ( state, data ) => {
+      state.isProfileFetching = false;
       state.personalData = { ...state.personalData, ...data };
     },
     /** Сохраняем данные, либо чтото делаем если профиль не был найден **/
     [ GET_PROFILE_ERROR ]: ( state ) => {
+      state.isProfileFetching = false;
       state.errors.personalData = 'cant get profile';
-    }
+    },
   },
   actions: {
     /** @todo найти модуль или написать класс для работы с куками */
@@ -89,7 +96,6 @@ export default {
       let token = null;
       const cookies = document.cookie.split(';');
       const tokenString = cookies.find(item => item.match( RegExp( TOKEN_KEY )) );
-
       if ( tokenString ) {
         const parts = tokenString.split('=');
         const tokenPart = parts[ 1 ];
@@ -129,6 +135,14 @@ export default {
     [ GET_PROFILE ]: async ({ commit }) => {
       const { status, data } = await profileApi.getProfileByAuthToken();
       /** както будем проверять на ошибки*/
+      if ( status === 200 ) {
+        commit( GET_PROFILE_SUCCESS, data );
+      } else {
+        commit(GET_PROFILE_ERROR);
+      }
+    },
+    [ UPLOAD_NEW_PHOTO ] : async ({ commit }, payload ) => {
+      const { status, data } = await profileApi.uploadNewPhoto( payload );
       if ( status === 200 ) {
         commit( GET_PROFILE_SUCCESS, data );
       } else {

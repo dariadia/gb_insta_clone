@@ -10,7 +10,7 @@ export const DEFAULT_PROFILE_PHOTO = 'profile.jpg';
  * */
 export const profileInitialState = freeze({
     profileList: [],
-    profileItem: {},
+    profileItem: null,
     profileHeaders: [],
     profilePath: process.env.VUE_APP_STATIC_HOST + 'profiles/'
 });
@@ -32,11 +32,8 @@ export default {
             state.profileList.push( ...profileList );
             state.profileHeaders = Api.parseHeaders( headers );
         },
-        [ SET_PROFILE_REQUEST_VIEW ] : ( state, response ) => {
-            const { headers, data } = response || {};
-
-            state.profileItem = data.length ? data[data.length - 1] : profileInitialState.profileItem;
-            state.profileHeaders = Api.parseHeaders( headers );
+        [ SET_PROFILE_REQUEST_VIEW ] : ( state, data ) => {
+            state.profileItem = data.length ? data[ 0 ] : profileInitialState.profileItem;
         },
     },
     actions: {
@@ -45,8 +42,9 @@ export default {
             commit( SET_PROFILE_REQUEST_DATE, response );
         },
         [ SET_PROFILE_REQUEST_VIEW ] : async ({ commit }, payload ) => {
-            const response = await profileApi.getProfileItem( payload );
-            commit( SET_PROFILE_REQUEST_VIEW, response );
+            const { data } = await profileApi.getProfileItem( payload );
+
+            commit( SET_PROFILE_REQUEST_VIEW, data );
         },
     }
 };

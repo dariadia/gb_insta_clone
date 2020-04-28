@@ -5,6 +5,7 @@ import UserModule from '../modules/userModule';
 import MediaModule from '../modules/mediaModule';
 import ProfileModule from '../modules/profileModule';
 import SearchModule from '../modules/searchModule';
+import SubscriptionsModule from '../modules/subscriptionsModule';
 
 Vue.use( Vuex );
 
@@ -29,7 +30,10 @@ const store = new Vuex.Store({
   getters: {
       staticPath: ({ staticPath } ) => staticPath
   },
-  modules: { UserModule, MediaModule, ProfileModule, SearchModule },
+  modules: {
+      UserModule, MediaModule, ProfileModule, SearchModule,
+      SubscriptionsModule
+  },
   plugins
 });
 
