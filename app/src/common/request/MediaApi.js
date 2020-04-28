@@ -56,6 +56,7 @@ class MediaApi extends Api {
      * @return { Promise }
      **/
     deletePost( id ) {
+        console.log( id )
         return axios.delete(`${ Api.getBaseUrl() }v1/media/${ id }`)
             .then( ( res ) => res )
             .catch( error => error.response );

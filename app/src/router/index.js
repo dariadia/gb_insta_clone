@@ -6,7 +6,6 @@ import Profiles from "../views/Profiles";
 import Post from "../views/Post.vue";
 import Likes from "../views/Likes.vue";
 import NotFound from "../views/404.vue";
-import AccountControl from "../views/AccountControl.vue";
 
 Vue.use(VueRouter);
 
@@ -16,8 +15,7 @@ const routes = [
   { path: "/:username([a-zA-Z]+)", name: "User", component: User },
   { path: "/p/:id(\\d+)", name: "Post", component: Post },
   { path: "/likes/:id(\\d+)", name: "Likes", component: Likes },
-  { path: '*', component: NotFound },
-  { path: '/accounts/edit', name: 'account', component: AccountControl },
+  { path: '*', component: NotFound }
 ];
 
 const router = new VueRouter({ mode: "history", routes });

@@ -3,7 +3,7 @@
      <div class="container">
        <logo />
        <search-button/>
-       <controls-panel/>
+       <account-control/>
      </div>
   </header> 
 </template>
@@ -11,12 +11,12 @@
 <script>
   import Logo from '../../../components/ui/Logo';
   import SearchButton from '../../../components/ui/SearchButton';
-  import ControlsPanel from '../../../components/ControlsPanel';
+  import AccountControl from '../../../components/AccountControl';
 
   export default {
     name: "HeaderComponent",
     components: {
-      Logo, SearchButton, ControlsPanel
+      Logo, SearchButton, AccountControl
     },
   };
 </script>

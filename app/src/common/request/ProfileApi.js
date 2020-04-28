@@ -38,17 +38,6 @@ class ProfileApi extends Api {
             .then( ( res ) => res )
             .catch( error => error.response );
     }
-
-    uploadNewPhoto( files ) {
-        const formData = new FormData();
-        formData.append('file', files[ 0 ] );
-
-        return axios.post(`${ Api.getBaseUrl() }v1/profiles/uploadNewPhoto`, formData, {
-            headers: { 'Content-Type': `multipart/form-data` },
-        })
-            .then( ( res ) => res )
-            .catch( error => error.response );
-    }
 }
 const profileApi = new ProfileApi();
 
