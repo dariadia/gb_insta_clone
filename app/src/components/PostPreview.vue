@@ -23,7 +23,6 @@
       media: Object
     },
     data() {
-        // console
       return {
           mediaPath: this.$store.getters[ 'mediaPath' ]
       }

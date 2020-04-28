@@ -14,6 +14,7 @@ import {
   GET_PROFILE_SUCCESS,
   GET_PROFILE_ERROR
 } from "./constants";
+import {UPLOAD_NEW_PHOTO} from "../profileModule/constants";
 
 const TOKEN_KEY = 'token';
 
@@ -24,11 +25,11 @@ const TOKEN_KEY = 'token';
 export const usersInitialState = Object.freeze({
   token: null,
   isGuest: true,
-  isFetching: false,
+  isFetching: true,
+  isProfileFetching: true,
   errors: {},
   personalData: Object.freeze({
     userStatistics: null, /// будет заполнена при логине
-    username: null,
   }),
 });
 
@@ -40,6 +41,8 @@ export default {
     username: ({ personalData }) => personalData.username || null,
     token: ({ token }) => token,
     errors: ({ errors }) => errors,
+    isUserFetching: ({ isFetching }) => isFetching,
+    isUserProfileIsFetching: ({ isProfileFetching }) => isProfileFetching,
   },
   setters: {},
   mutations: {
@@ -48,6 +51,7 @@ export default {
           state.isGuest = false;
           state.token = token;
       }
+      state.isFetching = false;
     },
     [ LOGOUT_ACTION ] : ( state ) => {
       state.token = null;
@@ -56,7 +60,14 @@ export default {
       document.cookie = 'token=';
     },
 
-    [ REGISTER_SUCCESS ]:  ( state ) => {
+    /**
+     * Действия при регистрации, Коммитить не обядательно действия 1 в 1 как было то что вызванно,
+     * коммитить можно любые другие действия, потому что мы можем пойти по разным веткам
+     **/
+    [ REGISTER_SUCCESS ]:  ( state, response ) => {
+      /** с ответа скорее всего будем получать некий токен, либо id сессии*/
+      const { token } = response;
+      state.token = token;
       state.errors.register = null;
     },
     [ REGISTER_ERROR ]:  ( state, errors ) => {
@@ -76,12 +87,14 @@ export default {
     },
     /** Прфиль успешно получен, сохраняем данные **/
     [ GET_PROFILE_SUCCESS ]: ( state, data ) => {
+      state.isProfileFetching = false;
       state.personalData = { ...state.personalData, ...data };
     },
     /** Сохраняем данные, либо чтото делаем если профиль не был найден **/
     [ GET_PROFILE_ERROR ]: ( state ) => {
+      state.isProfileFetching = false;
       state.errors.personalData = 'cant get profile';
-    }
+    },
   },
   actions: {
     /** @todo найти модуль или написать класс для работы с куками */
@@ -89,7 +102,6 @@ export default {
       let token = null;
       const cookies = document.cookie.split(';');
       const tokenString = cookies.find(item => item.match( RegExp( TOKEN_KEY )) );
-
       if ( tokenString ) {
         const parts = tokenString.split('=');
         const tokenPart = parts[ 1 ];
@@ -121,7 +133,7 @@ export default {
       const { status, data } = await userApi.signUp( userObject );
       /** както будем проверять на ошибки*/
       if ( status === 200 ) {
-        return commit( REGISTER_SUCCESS );
+        return commit( REGISTER_SUCCESS, data.token );
       }
       return commit( REGISTER_ERROR, data.errors );
     },
@@ -129,6 +141,14 @@ export default {
     [ GET_PROFILE ]: async ({ commit }) => {
       const { status, data } = await profileApi.getProfileByAuthToken();
       /** както будем проверять на ошибки*/
+      if ( status === 200 ) {
+        commit( GET_PROFILE_SUCCESS, data );
+      } else {
+        commit(GET_PROFILE_ERROR);
+      }
+    },
+    [ UPLOAD_NEW_PHOTO ] : async ({ commit }, payload ) => {
+      const { status, data } = await profileApi.uploadNewPhoto( payload );
       if ( status === 200 ) {
         commit( GET_PROFILE_SUCCESS, data );
       } else {

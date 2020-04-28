@@ -69,10 +69,10 @@
     </div>
 
     <modal :show="showConfirm" :closeHandler="handleClose">
+      <div class="center">Регистрация прошла успешно</div>
+      <div class="center">Теперь вы можете войти в свой аккаунт</div>
+      <hr/>
       <div class="flex center">
-        <div class="center">Регистрация прошла успешно</div>
-        <div class="center">Теперь вы можете войти в свой аккаунт</div>
-        <hr/>
         <button class="waves-effect waves-light btn" v-on:click="handleClose">OK</button>
       </div>
     </modal>
