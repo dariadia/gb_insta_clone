@@ -7,16 +7,40 @@
         </ul>
       </div>
       <div class="control_left">
-          .... edit form ....
+        <user-profile-form v-if="!isProfileFetching"/>
+        <preloader v-else size="big"/>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
+    import UserProfileForm from "../components/UserProfileForm";
+    import Preloader from "../components/ui/Preloader";
+
     export default {
-        name: "AccountControl"
+        name: "AccountControl",
+        computed: {
+            isProfileFetching() {
+                console.log({
+                    f: this.$store.getters[ 'isUserProfileIsFetching' ]
+                })
+                return this.$store.getters[ 'isUserProfileIsFetching' ];
+            },
+            isGuest() {
+                const isGuest = this.$store.getters[ 'isGuest' ];
+                const isFetching = this.$store.getters[ 'isUserFetching' ];
+                return !isFetching && isGuest;
+            },
+        },
+        watch: {
+            isGuest() {
+                if ( this.isGuest ) {
+                    this.$router.push({ name: 'Home' });
+                }
+            },
+        },
+        components: { UserProfileForm, Preloader }
     }
 </script>
 
@@ -60,7 +84,6 @@
           height: 100%;
           line-height: 20px;
           padding: 16px 16px 16px 30px;
-          /*width: calc(100% - 48px);*/
 
           &.selected {
             border-left-color: #262626;
@@ -75,9 +98,6 @@
     &_left {
       flex: 1 1 400px;
       padding: 30px;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
     }
   }
 

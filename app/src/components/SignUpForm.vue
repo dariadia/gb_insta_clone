@@ -69,9 +69,9 @@
 </template>
 
 <script>
-  /** @todo а данный момент форма идентична логину, практически. нужна дальнейшая доработка */
   import { signUp } from '../vuex/modules/userModule/actions/signUp';
-  import {getProfile} from "../vuex/modules/userModule/actions/getProfile";
+  import { getProfile } from "../vuex/modules/userModule/actions/getProfile";
+
   export default {
     name: "RegisterForm",
     props: {
@@ -128,6 +128,7 @@
         let isValid = true;
         const formFields = this.$data;
 
+        /** @TODO сделать общий валидатор, сейчас копипаст изза отсутствия времени */
         Object.entries( formFields ).forEach( ([ key, data ]) => {
           const { value, rules } = data;
 

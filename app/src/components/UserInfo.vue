@@ -32,7 +32,7 @@
               <strong>{{ subscriptions }}</strong>&nbsp;<span>подписок</span>
           </div>
         </div>
-        <div class="right_bottom">
+        <div class="user__about">
           {{ profile.about }}
         </div>
       </div>
@@ -70,6 +70,8 @@
   .user {
     &__data {
       display: flex;
+      align-items: center;
+      justify-content: center;
       margin: 0 -10%;
       padding: 30px 0 44px;
       border-bottom: 1px solid #dddd;
@@ -94,9 +96,6 @@
     &__info {
       margin-left: 30px;
       margin-bottom: 10px;
-
-      flex-basis: 30px;
-      flex-grow: 2;
       padding: 5px;
 
       .controls {
