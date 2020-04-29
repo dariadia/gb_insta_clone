@@ -65,7 +65,7 @@
       this.getData();
     },
 
-    components: {Preloader, Post}
+    components: { Preloader, Post }
   }
 </script>
 
