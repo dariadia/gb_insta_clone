@@ -16,7 +16,7 @@
             <font-awesome-icon class="quick__actions" icon="cog"/>
           </div>
           <div v-else class="controls guest">
-            <button class="waves-effect waves-red btn-small red lighten-2" v-on:click="() => console.log('subscribe')">Подписатся</button>
+            <button class="waves-effect waves-red btn-small red lighten-2" @click="subscribe(profile.id)">Подписатся</button>
           </div>
         </div>
 
@@ -53,6 +53,9 @@
     methods: {
       setPhoto( url ) {
           return this.profilePath + ( url || 'profile.jpg' );
+      },
+      subscribe( id ) {
+        console.log(`Subscribe to User#${id}`);
       }
     },
     computed: {

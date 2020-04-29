@@ -79,7 +79,7 @@
                 this.modalOpen = !this.modalOpen;
             },
             deletePost() {
-                const { id } = this.media;
+                const { id } = this.mediaItem;
                 deletePost( id ).then( () => {
                     this.toggleModal();
                     this.$router.back();
@@ -87,6 +87,7 @@
             },
             publishComment() {
                 addComment( this.mediaItem.id, this.comment );
+                this.comment = null;
             }
         },
     }
