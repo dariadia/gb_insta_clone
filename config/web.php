@@ -58,13 +58,14 @@ $config = [
             'rules' => [
                 [ 'controller' => [ 'v1/media'], 'class' => UrlRule::class, ],
                 [ 'controller' => [ 'v1/auth'] , 'class' => UrlRule::class, ],
-                [ 'controller' => [ 'v1/profile'], 'class' => UrlRule::class, ],
+                [ 'controller' => [ 'v1/profile'], 'class' => UrlRule::class,  ],
                 [ 'controller' => [ 'v1/users'] , 'class' => UrlRule::class, ],
                 [ 'controller' =>
                     [ 'v1/like' ],
                     'class' => UrlRule::class,
                     'pluralize' => false,
                 ],
+                [ 'controller' => [ 'v1/comment'] , 'class' => UrlRule::class, 'pluralize' => false, ],
             ],
         ],
     ],

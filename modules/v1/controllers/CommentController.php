@@ -5,13 +5,24 @@ namespace app\modules\v1\controllers;
 
 
 use app\models\Comment;
+use app\modules\v1\controllers\_base\BaseRestController;
 use yii\helpers\ArrayHelper;
 use yii\helpers\HtmlPurifier;
-use yii\web\Controller;
 use yii\web\Response;
 
-class CommentController extends Controller
+class CommentController extends BaseRestController
 {
+    public $modelClass = Comment::class;
+
+
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['create']);
+
+        return $actions;
+    }
+
     /**
      * Возвращает массив объектов вида:
      * [
@@ -49,36 +60,35 @@ class CommentController extends Controller
      * Объект комментария должен содержать поля media_id и 'text', т.е. {"media_id":"1","text":"Dummy comment text"}
      * @uses $_POST['comment']
      * Возвращает ответ в виде объекта {"status":"true|false"}
-     * @return array
+     *
+     * @return boolean|Comment
      */
     public function actionCreate()
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $user = $this->getUserByAuthorizationHeader();
+        $comment = \Yii::$app->getRequest()->post('comment');
 
-        $data = \Yii::$app->getRequest()->post('comment');
-        if ($data === null) {
-            return $this->sendStatus(false);
+        if (!$user) {
+            \Yii::$app->response->statusCode = 403;
+            return false;
         }
 
-        $comment = json_decode($data, true);
-        //$comment = json_decode('{"media_id":"10","text":"Dummy comment text"}', true);
-
-        $userId = \Yii::$app->getUser()->identity->getId();
-        //$userId = 1;
-
-        $mediaId = (int)$comment['media_id'];
-        $text = HtmlPurifier::process($comment['text']);
+        if ( $comment === null ) {
+            \Yii::$app->response->statusCode = 400;
+            return false;
+        }
 
         $model = new Comment([
-            'author_id' => $userId,
-            'media_id' => $mediaId,
-            'comment' => $text
+            'author_id' => $user->id,
+            'media_id' => (int)\Yii::$app->getRequest()->post('mediaId'),
+            'comment' => HtmlPurifier::process( $comment )
         ]);
 
-        if ($model->save()) {
-            return $this->sendStatus(true);
+        if ( $model->save() ) {
+            return $model;
         }
-        return $this->sendStatus(false);
+        \Yii::$app->response->statusCode = 500;
+        return false;
     }
 
     /**

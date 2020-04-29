@@ -20,6 +20,16 @@ use yii\db\ActiveRecord;
  */
 class Comment extends \yii\db\ActiveRecord
 {
+
+    public function fields()
+    {
+        return array_merge(parent::fields(),[
+           'author' => function( $model ) {
+                return $model->author;
+           }
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */
