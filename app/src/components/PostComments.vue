@@ -73,9 +73,7 @@
                 }
                 const { author: { username } } = this.selectedComment;
                 const currentUser = this.$store.getters['username'];
-                
-                console.log({ username, currentUser });
-                
+
                 return username === currentUser;
             },
             deleteComment( ) {
