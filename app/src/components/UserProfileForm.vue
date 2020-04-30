@@ -57,7 +57,7 @@
               :id="about.key"
               v-model="about.value"
               :placeholder="about.label"
-              @input="( event ) => validateField( site.key, event)"
+              @input="( event ) => validateField( about.key, event)"
           />
         </div>
       </div>
