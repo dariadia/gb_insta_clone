@@ -10,7 +10,7 @@ import {
   DELETE_POST_ERROR,
   DELETE_POST_SUCCESS,
   SET_MEDIA_LIKE_INCREMENT,
-  SET_MEDIA_LIKE_DECREMENT, ADD_COMMENT_TO_POST, ADD_COMMENT_TO_POST_SUCCESS
+  SET_MEDIA_LIKE_DECREMENT, ADD_COMMENT_TO_POST, ADD_COMMENT_TO_POST_SUCCESS, DELETE_COMMENT, DELETE_COMMENT_SUCCESS
 } from "./constants";
 import { mediaApi } from "../../../common/request/MediaApi";
 import { likeApi } from "../../../common/request/LikeApi";
@@ -92,7 +92,12 @@ export default {
     [ ADD_COMMENT_TO_POST ] : ( state ) => state,
     [ ADD_COMMENT_TO_POST_SUCCESS ] : ( state, data ) => {
       state.mediaItem.comments.push( data );
-    }
+    },
+    [ DELETE_COMMENT ] : ( state ) => state,
+    [ DELETE_COMMENT_SUCCESS ] : ( state, id ) => {
+      const { mediaItem: { comments } } = state;
+      state.mediaItem.comments = comments.filter( item => item.id !== id );
+    },
   },
 
   actions: {
@@ -143,6 +148,14 @@ export default {
         return commit( ADD_COMMENT_TO_POST_SUCCESS, data );
       }
       return commit( ADD_COMMENT_TO_POST );
+    },
+    [ DELETE_COMMENT ] : async ({ commit }, payload ) => {
+      const { status } = await commentApi.deleteComment( payload );
+      if ( status === Api.STATUS_DELETED ) {
+         commit( DELETE_COMMENT_SUCCESS, payload );
+      } else {
+        commit( DELETE_COMMENT );
+      }
     },
   }
 };

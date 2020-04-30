@@ -98,6 +98,7 @@
         max-width: 640px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        height: 100%;
 
         &-header {
             margin: 7px 0;
