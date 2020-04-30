@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="comments__container">
         <div ref='messageDisplay' class="post__comments" v-if="comments && comments.length">
             <div class="comment" v-for="comment in comments" :key="`comment#${ comment.id }`">
                 
@@ -54,7 +54,12 @@
                 return profile_photo_url ? `${ staticPath }${ profile_photo_url }` : null;
             },
             scrollToBottom() {
-                this.$refs.messageDisplay.scrollTop = this.$refs.messageDisplay.scrollHeight
+                const { messageDisplay } =  this.$refs;
+                if ( !messageDisplay ) {
+                    return;
+                }
+       
+               messageDisplay.scrollTop = messageDisplay.scrollHeight;
             },
             dateTime( dateTime ) {
                 return moment( dateTime ).format('DD-MM-YYYY H:mm')
@@ -90,6 +95,11 @@
 </script>
 
 <style scoped lang="scss">
+    
+    .comments__container {
+        height: 326px;
+    }
+    
     .comment {
         padding: 12px 16px;
         width: auto;
@@ -129,7 +139,7 @@
     .post__comments {
         flex-grow: 1;
         -ms-overflow-style: none;
-        height: 326px;
+        height: 100%;
         overflow: scroll;
         &::-webkit-scrollbar {
             display: none;
