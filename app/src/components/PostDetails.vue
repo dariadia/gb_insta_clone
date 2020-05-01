@@ -100,6 +100,8 @@
         width: 30%;
         padding: 20px 10px 0;
         border: 1px solid #dddddd;
+        height: 100%;
+        border-radius: 4px;
 
         .details_top {
             display: flex;
@@ -111,6 +113,8 @@
                 width: 30px;
                 height: 30px;
                 margin-right: 16px;
+                border-radius: 50%;
+                color: #a7a7a7;
             }
             .username {
                 flex-grow: 1;

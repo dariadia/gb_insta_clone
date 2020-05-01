@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 const routes = [
   { path: '/', name: "Home", component: Home },
   { path: "/profiles", name: "Profiles", component: Profiles },
-  { path: "/:username([a-zA-Z]+)", name: "User", component: User },
+  { path: "/:username([a-zA-Z0-9]+)", name: "User", component: User },
   { path: "/p/:id(\\d+)", name: "Post", component: Post },
   { path: "/likes/:id(\\d+)", name: "Likes", component: Likes },
   { path: '*', component: NotFound },

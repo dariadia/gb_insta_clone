@@ -6,7 +6,10 @@
     </div>
     <div v-if="!isGuest" class="user__buttons">
       <router-link class="user__profile" v-if="getUsername" :to="{ name: 'User', params: { username: getUsername }}">
-        <font-awesome-icon :icon="['fas', 'user-circle']"/>
+
+          <font-awesome-icon v-if="!getPhotoPath()" class="photo_icon" :icon="['fas', 'user-circle']"/>
+          <img class="photo_icon" v-else :src="getPhotoPath()"/>
+
       </router-link>
       <button class="waves-effect waves-red btn-small red lighten-2" v-on:click="logout">
         <i class="material-icons">exit_to_app</i>
@@ -58,6 +61,11 @@
             handleCloseModal() {
                 this.modalBody =  null;
             },
+            getPhotoPath() {
+                const path = this.$store.getters['profilePath'];
+                const { profile_photo_url } = this.$store.getters['personalData'];
+                return profile_photo_url ? `${ path }${ profile_photo_url }` : null;
+            }
         },
         components: { Modal },
     }
@@ -83,5 +91,11 @@
   .btn-small, .btn-flat {
     height: 32px !important;
     line-height: 32px !important;
+  }
+  
+  .photo_icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
   }
 </style>

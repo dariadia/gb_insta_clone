@@ -22,9 +22,6 @@
         name: "AccountControl",
         computed: {
             isProfileFetching() {
-                console.log({
-                    f: this.$store.getters[ 'isUserProfileIsFetching' ]
-                })
                 return this.$store.getters[ 'isUserProfileIsFetching' ];
             },
             isGuest() {

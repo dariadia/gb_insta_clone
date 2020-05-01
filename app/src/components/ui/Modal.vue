@@ -73,7 +73,7 @@
   top: 10%;
 
   &.small {
-    max-width: 10%;
+    max-width: 15%;
   }
 
   .modal__body {
