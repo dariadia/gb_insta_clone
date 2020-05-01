@@ -30,7 +30,7 @@
     </div>
     <div class="buttons">
       <button :disabled="!password || !username"
-        class="waves-effect waves-light btn"
+        class="waves-effect waves-light btn btn-submit"
         v-on:click="doLogin"
       >Войти</button>
       <button class="waves-effect waves-light btn red" v-on:click="onClose">Отмена</button>
@@ -60,6 +60,13 @@
         password: null,
         errorMessage: null
       }
+    },
+    mounted() {
+      document.querySelector('#username').focus();
+      document.onkeydown = (e) => {
+        const btnSubmit = document.querySelector('.btn-submit');
+        if (btnSubmit && !btnSubmit.disabled && 'Enter' === e.key) this.doLogin();
+      };
     },
     methods: {
       doLogin() {
