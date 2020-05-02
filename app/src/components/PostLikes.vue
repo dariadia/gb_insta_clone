@@ -9,8 +9,12 @@
         <div class="media-body">
             <ul class="users">
                 <li class="users-item" v-for="item in media.usersLikeIt" :key="item.user_id">
+                    <router-link class="users-likes-link" v-if="getUsername" :to="{ name: 'User', params: { username: getUsername }}">
+                        <font-awesome-icon v-if="!getPhotoPath()" class="users-likes-avatar" :icon="['fas', 'user-circle']"/>
+                        <img class="users-likes-avatar" v-else :src="getPhotoPath()"/>
+                    </router-link>
                     <div class="users-name">{{ item.username }}</div>
-                    <a class="users-link" href="#">Подписаться</a>
+                    <a class="users-subscribe" href="#">Подписаться</a>
                 </li>
             </ul>
         </div>
@@ -23,10 +27,20 @@
     props: {
       media: Object
     },
+    computed: {
+      getUsername() {
+        return this.$store.getters['username'];
+      },
+    },
     methods: {
       getDate(string) {
         let date = new Date(string);
         return new Intl.DateTimeFormat('ru-RU').format(date);
+      },
+      getPhotoPath() {
+        const path = this.$store.getters['profilePath'];
+        const { profile_photo_url } = this.$store.getters['personalData'];
+        return profile_photo_url ? `${ path }${ profile_photo_url }` : null;
       }
     }
   };
@@ -36,6 +50,7 @@
     .media {
         padding: 10px;
         margin-bottom: 25px;
+        width: 50%;
         max-width: 640px;
         border: 1px solid #ccc;
         border-radius: 5px;
@@ -58,11 +73,6 @@
             margin-bottom: 7px;
             max-width: 480px;
         }
-
-        &-likes__link {
-            color: #13899c;
-            text-decoration: none;
-        }
     }
 
     .users {
@@ -71,5 +81,22 @@
             justify-content: space-between;
             align-items: center;
         }
+        &-likes-link {
+            margin-right: 10px;
+            color: #a7a7a7;
+            & svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        &-likes-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        &-subscribe {
+            margin-left: auto;
+        }
     }
+
 </style>

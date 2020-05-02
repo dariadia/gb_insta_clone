@@ -29,7 +29,7 @@
             <div class="comment__container">
                 <textarea v-model="comment" class="materialize-textarea comment"></textarea>
             </div>
-            <div class="comment__submit" @click="publishComment">Опубликовать</div>
+            <button class="comment__submit" @click="publishComment">Опубликовать</button>
         </div>
 
     </div>
@@ -100,7 +100,6 @@
         width: 30%;
         padding: 20px 10px 0;
         border: 1px solid #dddddd;
-        height: 100%;
         border-radius: 4px;
 
         .details_top {
@@ -125,34 +124,38 @@
             border-top: 1px solid #dddddd;
             padding-top: 10px;
             display: flex;
-            justify-content: space-around;
-            align-items: center;
-
+            flex-direction: column;
+            align-items: flex-end;
 
             .comment__container {
+                width: 100%;
                 max-height: 100px;
                 overflow: auto;
                 flex-grow: 1;
-                margin-right: 10px;
                 margin-bottom: 10px;
 
                 .comment {
                     margin: 0;
                     padding-bottom: 0;
+                    font-size: 14px;
                     &:active {
                         border: unset;
                     }
                 }
             }
             .comment__submit {
-                cursor: pointer;
-                color: #0a73bb;
-                font-weight: bold;
+                margin-bottom: 10px;
+                padding: 5px 10px;
+                border: 1px solid #26a69a;
+                background: #fff;
+                color: #26a69a;
                 font-size: small;
-                transition: 0.2s;
+                cursor: pointer;
+                transition: 0.25s;
 
                 &:hover {
-                    color: #04446f;
+                    color: #fff;
+                    background: #26a69a;
                 }
 
                 &.disabled {

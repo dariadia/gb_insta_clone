@@ -97,7 +97,7 @@
 <style scoped lang="scss">
     
     .comments__container {
-        height: 326px;
+        height: 100%;
     }
     
     .comment {
@@ -117,7 +117,6 @@
             .photo_icon {
                 width: 30px;
                 height: 30px;
-                margin-right: 16px;
                 border-radius: 50%;
                 color: #a7a7a7;
             }
@@ -125,6 +124,7 @@
         &__message {
             flex-grow: 1;
             margin: 0 10px;
+            line-height: 1.15rem;
         }
     
         &:hover &__controls {

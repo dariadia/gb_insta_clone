@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers;
 
+use app\models\Comment;
 use app\models\Likes;
 use app\modules\v1\controllers\_base\BaseRestController;
 use app\modules\v1\models\Media;
@@ -93,6 +94,7 @@ class MediaController extends BaseRestController
         $mediaId = Yii::$app->request->get('id');
 
         Likes::deleteAll(['media_id' => $mediaId]);
+        Comment::deleteAll(['media_id' => $mediaId]);
 
         $media = Media::find()->where(['id' => $mediaId])->one();
 

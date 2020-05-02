@@ -2,12 +2,9 @@
     <div class="media__preview">
         <div class="media">
             <div class="media-header">
-                <!--      <figure class="image is-32x32">-->
-                <!--        <img :src="media.userImage" />-->
-                <!--      </figure>-->
                 <router-link :to="{ name: 'User', params: { username: media.username } }"
                              class="media-username">
-                    {{media.name}}
+                    {{media.name || media.username }}
                 </router-link>
             </div>
             <div class="media-body">
@@ -57,17 +54,27 @@
     },
     data() {
       return {
-          mediaPath: this.$store.getters[ 'mediaPath' ]
+        mediaPath: this.$store.getters[ 'mediaPath' ],
+        isFetching: false,
       }
     },
 
     methods: {
       doLike() {
-          const { id } = this.media;
+        if (this.isFetching) return false;
 
-        this.hasBeenLiked ? deleteLike(id) : doLike(id);
-        // ? this.media.likes-- : this.media.likes++;
-        // this.media.hasBeenLiked = !this.media.hasBeenLiked;
+        this.isFetching = true;
+        const { id } = this.media;
+
+        if (this.hasBeenLiked) {
+          deleteLike(id).then(() => {
+            this.isFetching = false;
+          });
+        } else {
+          doLike(id).then(() => {
+            this.isFetching = false;
+          });
+        }
       },
       //  comment() {
       //    (might cause an issue, so TODO)
@@ -89,11 +96,12 @@
         margin-bottom: 25px;
         width: 100%;
         display: flex;
-        height: 100%;
+        align-items: stretch;
         justify-content: center;
     }
 
     .media {
+        margin-right: 3px;
         padding: 10px;
         max-width: 640px;
         border: 1px solid #ccc;

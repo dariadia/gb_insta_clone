@@ -63,14 +63,13 @@
       </div>
 
       <div class="buttons">
-        <button class="waves-effect waves-light btn" v-on:click="doSignUp">Зарегистрироватся</button>
+        <button class="waves-effect waves-light btn btn-submit" v-on:click="doSignUp">Зарегистрироватся</button>
         <button class="waves-effect waves-light btn red" v-on:click="onClose">Отмена</button>
       </div>
     </div>
 
     <modal :show="showConfirm" :closeHandler="handleClose">
       <div class="center">Регистрация прошла успешно</div>
-      <div class="center">Теперь вы можете войти в свой аккаунт</div>
       <hr/>
       <div class="flex center">
         <button class="waves-effect waves-light btn" v-on:click="handleClose">OK</button>
@@ -84,13 +83,20 @@
   import { signUp } from '../vuex/modules/userModule/actions/signUp';
   import Modal from "./ui/Modal";
   import Preloader from "./ui/Preloader";
+  import {getProfile} from "../vuex/modules/userModule/actions/getProfile";
 
   export default {
     name: "RegisterForm",
     props: {
       onClose: Function
     },
-
+    mounted() {
+      document.querySelector('#username').focus();
+      document.onkeydown = (e) => {
+        const btnSubmit = document.querySelector('.btn-submit');
+        if (btnSubmit && !btnSubmit.disabled && 'Enter' === e.key) this.doSignUp();
+      };
+    },
     data() {
       return {
         loading: false,
@@ -136,6 +142,14 @@
                   });
               }
               this.showConfirm = true;
+              await getProfile().then( () => {
+                this.$router.push({
+                  name: 'User',
+                  params: {
+                    username: this.$store.getters['personalData'].username
+                  }
+                });
+              });
           });
       },
       validateFields() {

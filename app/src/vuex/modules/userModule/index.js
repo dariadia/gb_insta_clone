@@ -63,11 +63,15 @@ export default {
      * Действия при регистрации, Коммитить не обядательно действия 1 в 1 как было то что вызванно,
      * коммитить можно любые другие действия, потому что мы можем пойти по разным веткам
      **/
-    [ REGISTER_SUCCESS ]:  ( state, response ) => {
+    [ REGISTER_SUCCESS ]:  ( state, token ) => {
       /** с ответа скорее всего будем получать некий токен, либо id сессии*/
-      const { token } = response;
       state.token = token;
+
+      state.isGuest = false;
       state.errors.register = null;
+
+      userApi.setToken( token );
+      document.cookie = `token=${ token }`;
     },
     [ REGISTER_ERROR ]:  ( state, errors ) => {
       state.errors.register = _.mapKeys( errors, (value, key) => _.camelCase(key) );
